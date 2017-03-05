@@ -63,7 +63,6 @@ public class HtmlUtils {
     public static boolean isElementPresentOnPageByClass(String html, String className) {
         try {
             Document doc = Jsoup.parse(html);
-            Jsoup.parse()
             return doc.getElementsByClass(className).size() > 0;
         } catch (Exception e) {
             return false;

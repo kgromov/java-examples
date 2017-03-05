@@ -10,14 +10,15 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>Database</module>
-        <module>excel</module>
         <module>Excel</module>
         <module>HTML</module>
+        <module>JSON</module>
+        <module>XML</module>
+        <module>thread-examples</module>
+        <module>Multithreading</module>
     </modules>
 
     <properties>
-        <selenium-java.version>2.53.1</selenium-java.version>
-        <testng.suite>${basedir}/src/test/resources/testsuites/default_console_suite.xml</testng.suite>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -33,7 +34,7 @@
                 <configuration>
                     <locales>en</locales>
                     <inputEncoding>${project.build.sourceEncoding}</inputEncoding>
-                    <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
+                    <outputEncoding>${project.reporting.outputEncoding}</outputEncoding>
                 </configuration>
             </plugin>
 
