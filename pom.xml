@@ -14,7 +14,7 @@
         <module>HTML</module>
         <module>JSON</module>
         <module>XML</module>
-        <module>thread-examples</module>
+        <module>Selenium</module>
         <module>Multithreading</module>
     </modules>
 
