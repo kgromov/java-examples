@@ -1,13 +1,16 @@
 package excel;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.poi.hssf.util.CellReference;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -53,143 +56,6 @@ public class ExcelUtils {
             }
             writeToWorkbook(workbook, pathToWorkbook);
             log.info(String.format("Create workbook sheet '%s'", sheetName));
-        }
-    }
-
-    public static void addDataToSheet(PollData pollData) {
-        if (pollData == null) return;
-        String type = pollData.isMobile() ? "Mobile" : "Desktop";
-        createSheetByName(getWorkbook(pathToWorkbook), type);
-        Workbook workbook = getWorkbook(pathToWorkbook);
-        Sheet sheet = workbook.getSheet(type);
-        List<String> headerList = getHeadersList(sheet);
-        Row row = sheet.createRow(sheet.getPhysicalNumberOfRows());
-        Row headerRow = sheet.getRow(0);
-        CellStyle style = getCellStyle(workbook);
-        // Date
-        Cell cell = row.createCell(0);
-        cell.setCellValue(DataHelper.getDateByFormatSimple(DataHelper.REPORT_PATTERN));
-        cell.setCellStyle(style);
-        // position
-        cell = row.createCell(1);
-        cell.setCellValue(pollData.getPosition());
-        cell.setCellStyle(style);
-        for (Map.Entry<String, String> question : pollData.getPollMap().entrySet()) {
-            String questionValue = question.getKey().replaceAll("<br>", "");
-            // question
-            if (!headerList.contains(questionValue)) {
-                cell = headerRow.createCell(headerList.size());
-                cell.setCellValue(questionValue);
-                cell.setCellStyle(style);
-                headerList.add(questionValue);
-            }
-            // answer
-            cell = row.createCell(headerList.indexOf(questionValue));
-            cell.setCellValue(question.getValue());
-            cell.setCellStyle(style);
-        }
-        // add image
-//        addImage(workbook, sheet, pollData.getScreenPath(), row.getRowNum());
-        // merge cells
-//        sheet.addMergedRegion(new CellRangeAddress(row.getRowNum(), sheet.getPhysicalNumberOfRows() - 1, 0, 0));
-        // adjust width of the first column
-//        adjustColumnWidth(sheet);
-        writeToWorkbook(workbook, pathToWorkbook);
-    }
-
-    public static void addDataToSheet(PollData pollData, Sheet sheet, CellStyle style, Row row) {
-        if (pollData == null || !pollData.isPollMapExists()) return;
-        List<String> headerList = getHeadersList(sheet);
-        Row headerRow = sheet.getRow(0);
-        // Date
-        Cell cell = row.createCell(0);
-        cell.setCellValue(pollData.getPollDate());
-        cell.setCellStyle(style);
-        // version
-        cell = row.createCell(1);
-        cell.setCellValue(pollData.getVersion());
-        cell.setCellStyle(style);
-        // status possibly extend with column of unreliable automation results
-        cell = row.createCell(2);
-        cell.setCellValue(pollData.getStatus());
-        cell.setCellStyle(style);
-        // position
-        if (pollData.isSuccess()) {
-            cell = row.createCell(3);
-            cell.setCellValue(pollData.getPosition());
-            cell.setCellStyle(style);
-        }
-        for (Map.Entry<String, String> question : pollData.getPollMap().entrySet()) {
-            String questionValue = question.getKey().replaceAll("<br>", "");
-            // question
-            if (!headerList.contains(questionValue)) {
-                cell = headerRow.createCell(headerList.size());
-                cell.setCellValue(questionValue);
-                cell.setCellStyle(style);
-                headerList.add(questionValue);
-            }
-            // answer
-            cell = row.createCell(headerList.indexOf(questionValue));
-            cell.setCellValue(question.getValue());
-            cell.setCellStyle(style);
-        }
-    }
-
-    public static void addDataToSheet(BuildData buildData) {
-        if (buildData == null || !buildData.isPollDataPresent()) return;
-        String sheetName = DataHelper.getFullMonthByDate(DataHelper.REPORT_PATTERN, buildData.getBuildDate());
-//        String sheetName =  buildData.getFormType();
-        createSheetByName(getWorkbook(pathToWorkbook), sheetName);
-        Workbook workbook = getWorkbook(pathToWorkbook);
-        Sheet sheet = workbook.getSheet(sheetName);
-        Row row = sheet.createRow(sheet.getPhysicalNumberOfRows());
-        CellStyle style = getCellStyle(workbook);
-        // create hyperlink
-        try {
-            Cell hyperLinkCell = row.createCell(4);
-            hyperLinkCell.setCellValue("ReportNG report");
-            Hyperlink link = workbook.getCreationHelper().createHyperlink(Hyperlink.LINK_URL);
-            link.setAddress(buildData.getBuildLink());
-            hyperLinkCell.setHyperlink(link);
-            hyperLinkCell.setCellStyle(style);
-        } catch (Exception e) {
-            log.severe("Unable to make hyperlink cell\n" + e.getMessage());
-        }
-        // polldata
- /*       String type = buildData.getFormType();
-        int mergeFrom = row.getRowNum();*/
-        for (int i = 0; i < buildData.getPollDataList().size(); i++) {
-            Row row1 = i > 0 ? sheet.createRow(row.getRowNum() + i) : row;
-            addDataToSheet(buildData.getPollDataList().get(i), sheet, style, row1);
-          /*  if (!type.equals(buildData.getPollDataList().get(i).getVersion())) {
-                // merge version while the same - improvement
-                type = buildData.getPollDataList().get(i).getVersion();
-                sheet.addMergedRegion(new CellRangeAddress(mergeFrom, sheet.getPhysicalNumberOfRows() - 1, 1, 1));
-                mergeFrom = sheet.getPhysicalNumberOfRows();
-            }*/
-        }
-        // merge cells
-//        sheet.addMergedRegion(new CellRangeAddress(row.getRowNum(), sheet.getPhysicalNumberOfRows() - 1, 0, 0));
-        if (row.getRowNum() < sheet.getPhysicalNumberOfRows() - 1) {
-            sheet.addMergedRegion(new CellRangeAddress(row.getRowNum(), sheet.getPhysicalNumberOfRows() - 1, 4, 4));
-        }
-        // adjust width of the first column
-//        adjustColumnWidth(sheet);
-        writeToWorkbook(workbook, pathToWorkbook);
-    }
-
-    public static void addDataToSheet() {
-        File file = new File(pathToWorkbook);
-        if (file.exists()) file.delete();
-        // 20 invocation
-        File builds = new File(pathToBuild);
-        for (File build : builds.listFiles(File::isDirectory)) {
-            addDataToSheet(HtmlUtils.getBuildDataFromHTML(build.getAbsolutePath() + "\\testng-report\\html\\suite1_test1_results.html"));
-        }
-        // 50 invocation
-        builds = new File(pathToBuild.replace("20", "50"));
-        for (File build : builds.listFiles(File::isDirectory)) {
-            addDataToSheet(HtmlUtils.getBuildDataFromHTML(build.getAbsolutePath() + "\\testng-report\\html\\suite1_test1_results.html"));
         }
     }
 
@@ -296,12 +162,35 @@ public class ExcelUtils {
         return headerList;
     }
 
-    public static void main(String[] args) {
-        addDataToSheet();
-//        ExcelUtils.addDataToSheet(new PollData(ContactFactory.getContact()));
-//        createWorkbook("C:\\Users\\kgr\\Desktop\\test\\workbook.xlsx");
-//        addDataToSheet();
-//        addSheetAfterMethod();
-//        updateSheet();
+    public static void main(String[] args) throws IOException {
+//        POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(new File("C:\\Users\\kgr\\Downloads\\Gym\\xlsx")));
+        try {
+            Workbook workbook = new XSSFWorkbook(new File("C:\\Users\\kgr\\Downloads\\Gym.xlsx"));
+            Sheet sheet = workbook.getSheet("volume_nikolay");
+
+            CellReference ref = new CellReference("B12");
+            Row r = sheet.getRow(ref.getRow());
+            if (r != null) {
+                Cell c = r.getCell(ref.getCol());
+            }
+
+            List<Hyperlink> hyperLinks = (List<Hyperlink>) sheet.getHyperlinkList();
+            Iterator<Row> rowIterator = sheet.rowIterator();
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                Iterator<Cell> cellIterator = row.cellIterator();
+                while (cellIterator.hasNext()) {
+                    Cell cell = cellIterator.next();
+                    Comment comment = cell.getCellComment();
+                    Hyperlink hyperlink = cell.getHyperlink();
+                    if (comment != null)
+                        System.out.println("Comment = " + comment.getString().getString());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
 }
