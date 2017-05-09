@@ -3,7 +3,6 @@ package golovach.lab01;
 import golovach.Node;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 
 /**
  * Created by konstantin on 06.05.2017.
@@ -63,10 +62,7 @@ public class NodeUtils {
     }
 
     public static int max2(Node node) {
-        int max = node.value;
-        if (node.next != null)
-            max = max2(node.next) - max > 0 ? node.value : max;
-        return max;
+       return Math.max((node.next != null) ? max(node.next) : node.value, node.value);
     }
 
     // lab 2
@@ -76,7 +72,7 @@ public class NodeUtils {
     }
 
     public static void add(Node list, int value, int index) {
-        if(index == 0){
+        if (index == 0) {
             list = new Node(value, list);
             return;
         }
