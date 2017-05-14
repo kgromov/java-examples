@@ -15,4 +15,34 @@ public class DNode {
         this.prev = prev;
         this.next = next;
     }
+
+    public DNode(int value) {
+        this.value = value;
+    }
+
+    public DNode getHead() {
+        DNode node = this.next;
+        while (node.next != null) {
+            node = node.next;
+            if (!node.hasNext(node)) return node;
+        }
+        return null;
+    }
+
+    public DNode getTail() {
+        DNode node = this.prev;
+        while (node.prev != null) {
+            node = node.prev;
+            if (!node.hasPrev(node)) return node;
+        }
+        return null;
+    }
+
+    public boolean hasNext(DNode node) {
+        return node.next != null;
+    }
+
+    public boolean hasPrev(DNode node) {
+        return node.prev != null;
+    }
 }
