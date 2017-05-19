@@ -1,4 +1,4 @@
-package golovach;
+package golovach.lecture04;
 
 /**
  * Created by konstantin on 06.05.2017.

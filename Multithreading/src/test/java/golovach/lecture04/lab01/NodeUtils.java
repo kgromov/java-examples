@@ -1,6 +1,6 @@
-package golovach.lab01;
+package golovach.lecture04.lab01;
 
-import golovach.Node;
+import golovach.lecture04.Node;
 
 import java.util.Arrays;
 

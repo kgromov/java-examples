@@ -1,6 +1,6 @@
-package golovach.lab04;
+package golovach.lecture04.lab04;
 
-import golovach.lab03.TNode;
+import golovach.lecture04.lab03.TNode;
 
 /**
  * Created by konstantin on 09.05.2017.

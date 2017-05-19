@@ -1,6 +1,4 @@
-package golovach.lab02;
-
-import golovach.Node;
+package golovach.lecture04.lab02;
 
 /**
  * Created by konstantin on 06.05.2017.
