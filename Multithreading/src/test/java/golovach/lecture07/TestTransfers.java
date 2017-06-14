@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class TestTransfers {
     public static void main(String[] args) {
         for (int k = 0; k < 1000; k++) {
+            System.out.println("\n" + k + " transfer attempt");
             final Random random = new Random();
             final AtomicBoolean isTransferFails = new AtomicBoolean(false);
             TransactionManager manager = new BankTransferManager();
@@ -20,9 +21,17 @@ public class TestTransfers {
             };
             int[] moneys = {-1, -1, 2};
             boolean ok = manager.transfer(accounts, moneys);
+            BankTransferManager.isTransferFailed = false;
             System.out.println("Transfer result is " + (ok ? "SUCCESSFUL" : "FAILED"));
-            for (BankAccount account : accounts)
-                System.out.println(account);
+            for (int i = 0; i < accounts.length; i++) {
+                if (ok & accounts[i].getHistory() != moneys[i])
+                    throw new AssertionError("Invalid transfer\t" + Arrays.toString(accounts));
+                else if (!ok & accounts[i].getHistory() != 0)
+                    throw new AssertionError("Invalid transfer\t" + Arrays.toString(accounts));
+
+            }
+            Arrays.stream(accounts).forEach(account -> System.out.println(account.toString()));
+            System.out.println();
         }
 
     }

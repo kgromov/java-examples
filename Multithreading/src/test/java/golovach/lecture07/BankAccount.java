@@ -18,9 +18,23 @@ public class BankAccount implements Account {
     @Override
     public void change(int delta) throws TransactionException, TransferException {
         if (random.nextBoolean()) throw new TransactionException();
-//        if (random.nextInt(10) == 9) throw new TransferException("");
-        if (random.nextBoolean()) throw new TransferException("");
-        this.history = delta;
+        if (!BankTransferManager.isTransferFailed && random.nextBoolean()) {
+            this.isTransferFailed = true;
+            throw new TransferException("Transfer crash");
+        }
+        this.history += delta;
+    }
+
+    public boolean isTransferFailed() {
+        return isTransferFailed;
+    }
+
+    public int getHistory() {
+        return history;
+    }
+
+    public void setTransferFailed(boolean transferFailed) {
+        isTransferFailed = transferFailed;
     }
 
     @Override
