@@ -12,6 +12,7 @@ public class ConsumerTimed implements Runnable {
     public ConsumerTimed(int timeout, SingleElementBufferTimed buffer) {
         this.timeout = timeout;
         this.buffer = buffer;
+        ++SingleElementBufferTimed_v2.consumerCount;
     }
 
     @Override
@@ -20,7 +21,7 @@ public class ConsumerTimed implements Runnable {
             try {
                 System.out.println(buffer.get(timeout) + " consumed");
             } catch (InterruptedException | TimeoutException e) {
-                System.out.println(Thread.currentThread().getName());
+                System.out.println(Thread.currentThread().getName() + " time out");
                 return;
             }
         }
