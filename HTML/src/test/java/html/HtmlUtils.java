@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 */
 public class HtmlUtils {
     protected static final Logger log = Logger.getLogger(HtmlUtils.class.getName());
-
+/*
     public static BuildData getBuildDataFromHTML(String path) {
         File htmlReport = new File(path);
         if (!htmlReport.exists()) return null;
@@ -79,8 +79,8 @@ public class HtmlUtils {
         return Jsoup.clean(unsafe, whitelist);
     }
 
-    public static void main(String[] args) {
+ /*   public static void main(String[] args) {
 //        String html = FileSystem.getFileContent("C:\\Users\\kgr\\Desktop\\test\\builds\\20132\\testng-report\\html\\suite1_test1_results.html");
         getBuildDataFromHTML("C:\\Users\\kgr\\Desktop\\test\\builds\\22609\\suite1_test1_results.html");
-    }
+    }*/
 }

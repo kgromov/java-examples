@@ -17,5 +17,19 @@
             <artifactId>jsoup</artifactId>
             <version>1.10.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>6.10</version>
+        </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>green-test</id>
+            <properties>
+                <testng.suite>${basedir}/src/test/java/html/green_dummy_test.xml</testng.suite>
+            </properties>
+        </profile>
+    </profiles>
 </project>

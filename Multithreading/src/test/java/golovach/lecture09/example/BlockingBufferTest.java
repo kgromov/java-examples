@@ -1,7 +1,6 @@
 
 package golovach.lecture09.example;
 
-import golovach.lecture09.lab01.SingleElementBuffer_v1;
 import golovach.lecture09.lab02.SingleElementBuffer_v2;
 
 /**
