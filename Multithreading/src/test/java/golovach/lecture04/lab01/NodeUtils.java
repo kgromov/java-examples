@@ -62,7 +62,7 @@ public class NodeUtils {
     }
 
     public static int max2(Node node) {
-       return Math.max((node.next != null) ? max(node.next) : node.value, node.value);
+        return Math.max((node.next != null) ? max(node.next) : node.value, node.value);
     }
 
     // lab 2
@@ -120,6 +120,19 @@ public class NodeUtils {
     }
 
     public static void main(String[] args) {
+        Node node = new Node(1, null);
+        node.next = new Node(2, null);
+        Node tail = node;
+        Node iterator = node;
+        while (iterator != null) {
+            iterator = iterator.next;
+            tail = iterator != null ? iterator : tail;
+        }
+        tail.next = new Node(3, null);
+        remove(node);
+        remove(tail);
+        remove(tail);
+        System.out.println(node.toString());
         Node list = createQueue(5);
         Node list2 = createQueue2(5);
         System.out.println(list.toString());
