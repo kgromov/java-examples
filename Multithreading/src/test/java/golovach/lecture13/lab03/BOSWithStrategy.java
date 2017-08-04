@@ -32,6 +32,14 @@ public class BOSWithStrategy extends OutputStream {
         this.bufferList.add(new byte[startSize]);
     }
 
+    public byte[] toByteArray() {
+        throw new UnsupportedOperationException();
+    }
+
+    public void writeTo(OutputStream out) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
     @Override
     public void write(int b) throws IOException {
         byte[] lastBuff = bufferList.get(bufferList.size() - 1);
@@ -40,7 +48,19 @@ public class BOSWithStrategy extends OutputStream {
             byte[] newLastBuff = new byte[newSize];
             bufferList.add(newLastBuff);
             count = 0;
+            lastBuff = newLastBuff;
         }
         lastBuff[count++] = (byte) b;
     }
+
+    @Override
+    public void write(byte[] b) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void write(byte[] b, int off, int len) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
 }
