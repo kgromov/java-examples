@@ -1,8 +1,5 @@
 package golovach.lecture10;
 
-/**
- * Created by kgr on 7/12/2017.
- */
 public class InterruptedConsumer implements Runnable {
     private final InterruptBuffer buffer;
 

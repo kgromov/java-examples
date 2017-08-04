@@ -1,8 +1,5 @@
 package golovach.lecture10;
 
-/**
- * Created by kgr on 7/12/2017.
- */
 public class InterruptedProducer implements Runnable {
     private int startValue;
     private final InterruptBuffer buffer;

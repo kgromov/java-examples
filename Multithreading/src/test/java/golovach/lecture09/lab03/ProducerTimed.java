@@ -16,6 +16,7 @@ public class ProducerTimed implements Runnable {
         this.period = period;
         this.timeout = timeout;
         this.buffer = buffer;
+        ++SingleElementBufferTimed_v2.producerCount;
     }
 
     @Override
@@ -26,7 +27,7 @@ public class ProducerTimed implements Runnable {
                 buffer.put(startValue++, timeout);
                 Thread.sleep(period);
             } catch (InterruptedException | TimeoutException e) {
-                System.out.println(Thread.currentThread().getName());
+                System.out.println(Thread.currentThread().getName() + " time out");
                 return;
             }
         }

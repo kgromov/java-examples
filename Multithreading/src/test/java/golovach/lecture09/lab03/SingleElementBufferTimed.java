@@ -16,6 +16,10 @@ public class SingleElementBufferTimed {
             long end = System.currentTimeMillis();
             waitTime -= (end - start);
         }
+        if (elem != null) {
+//            System.out.println("Consumer did not get elem after timeout = " + timeout);
+            throw new TimeoutException();
+        }
         this.elem = newElem;
         this.notifyAll();
     }
@@ -27,6 +31,10 @@ public class SingleElementBufferTimed {
             this.wait(waitTime);
             long end = System.currentTimeMillis();
             waitTime -= (end - start);
+        }
+        if (elem == null) {
+//            System.out.println("Producer did not put elem after timeout = " + timeout);
+            throw new TimeoutException();
         }
         int result = elem;
         elem = null;
