@@ -33,11 +33,21 @@ public class BOSWithStrategy extends OutputStream {
     }
 
     public byte[] toByteArray() {
-        throw new UnsupportedOperationException();
+//        byte[] buff = !bufferList.isEmpty() ? bufferList.get(0) : null;
+        byte[] buff = new byte[1024];
+        int position = 0;
+        for (int i = 0; i < bufferList.size() - 1; i++) {
+            byte[] current = bufferList.get(i);
+            System.arraycopy(current, position, buff, current.length - 1, current.length);
+            position += current.length;
+        }
+        // last buff
+        System.arraycopy(bufferList.get(bufferList.size() - 1), 0, buff, buff.length , count);
+        return buff;
     }
 
     public void writeTo(OutputStream out) throws IOException {
-        throw new UnsupportedOperationException();
+        out.write(this.toByteArray());
     }
 
     @Override

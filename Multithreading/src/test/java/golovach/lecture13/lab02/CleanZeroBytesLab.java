@@ -13,12 +13,22 @@ import java.io.OutputStream;
  */
 public class CleanZeroBytesLab {
     public static void copyCleanZerosByByte(InputStream in, OutputStream out) throws IOException {
+        byte[] buff = new byte[64 * 1024];
         int k;
-        while ((k = in.read()) != -1) {
+        while ((k = in.read(buff)) != -1) {
             out.write(k);
         }
+
         // catch
         // closeQuietly(in)
         // closeQuietlyAndFlush(out)
+    }
+
+    private static void closeQuietly(InputStream in) {
+        try {
+            in.close();
+        } catch (IOException e) {
+
+        }
     }
 }
