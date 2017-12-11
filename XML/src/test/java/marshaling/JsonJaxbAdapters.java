@@ -1,7 +1,12 @@
 package marshaling;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.AnnotationIntrospector;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
+import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 import org.eclipse.persistence.jaxb.JAXBContextProperties;
 
 import javax.xml.bind.JAXBContext;
@@ -20,6 +25,9 @@ public class JsonJaxbAdapters {
 
     public static <T> T jsonToObject(String jsonData, Class<T> clazz) {
         try {
+           /* ObjectMapper mapper = new ObjectMapper();
+            mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+            mapper.setVisibilityChecker(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));*/
             return new ObjectMapper().readValue(jsonData, clazz);
         } catch (IOException e) {
             throw new AssertionError(String.format("Unable to unmarshall json %s to object bu class %s", jsonData, clazz), e);
@@ -28,9 +36,9 @@ public class JsonJaxbAdapters {
 
     public static String objectToJSON(Object object) {
         ObjectMapper mapper = new ObjectMapper();
-//        AnnotationIntrospector introspector
-//                = new JaxbAnnotationIntrospector();
-//        mapper.setAnnotationIntrospector(introspector);
+    /*    AnnotationIntrospector introspector
+                = new JaxbAnnotationIntrospector();
+        mapper.setAnnotationIntrospector(introspector);*/
         try {
             return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
         } catch (JsonProcessingException e) {
@@ -92,12 +100,13 @@ public class JsonJaxbAdapters {
         Template employee = new Template();
         employee.setFirstName("Dan");
         employee.setLastName("Brawn");
+        employee.setGender("Male");
         String result = objectToJSON(employee);
         String result2 = objectToJSONJaxb(employee, Template.class);
 
 
         System.out.println(result);
         Template clone = jsonToObject(result, Template.class);
-        Template clone2 = jsonToObjectJaxb(result, Template.class);
+        Template clone2 = jsonToObjectJaxb(result2, Template.class);
     }
 }

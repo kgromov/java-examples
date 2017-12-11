@@ -1,5 +1,7 @@
 package marshaling;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -10,9 +12,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Template {
 
     @XmlElement(name = "FirstName")
+    @JsonProperty("FirstName")
     private String firstName;
 
     @XmlElement(name = "LastName")
+    @JsonProperty("LN")
     private String lastName;
 
     private String gender;
