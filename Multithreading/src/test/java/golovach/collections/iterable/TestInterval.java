@@ -1,31 +1,46 @@
 package golovach.collections.iterable;
 
 import static golovach.collections.iterable.IteratorUtils.interval;
+import static golovach.collections.iterable.IteratorUtils.merge;
+import static golovach.collections.iterable.IteratorUtils.squareInterval;
 
 /**
  * Created by konstantin on 08.12.2017.
  */
 public class TestInterval {
     public static void main(String[] args) {
-        double[] array = {0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5};
-
-        for (int index : interval(0, array.length)) {
-            System.out.print(" " + index);
+        for (int k : merge(interval(10, 12), interval(10, 12))) {
+            System.out.print(" " + k);
         }
         System.out.println();
 
-        for (int index : interval(0, array.length)) {
-            System.out.print(" " + array[index]);
+        for (int k : merge(interval(10, 10), interval(10, 12))) {
+            System.out.print(" " + k);
         }
         System.out.println();
 
-        for (int index : interval(4, 8)) {
-            System.out.print(" " + index);
+        for (int k : merge(interval(10, 12), interval(10, 10))) {
+            System.out.print(" " + k);
         }
         System.out.println();
 
-        for (int index : interval(4, 8)) {
-            System.out.print(" " + array[index]);
+        for (int k : merge(interval(10, 10), interval(10, 10))) {
+            System.out.print(" " + k);
+        }
+        System.out.println();
+
+        for (int k : merge(interval(0, 10), interval(1000, 1002))) {
+            System.out.print(" " + k);
+        }
+        System.out.println();
+
+        for (int k : merge(interval(1000, 1002), interval(0, 10))) {
+            System.out.print(" " + k);
+        }
+        System.out.println();
+
+        for (int k : merge(interval(0, 10), interval(5, 15))) {
+            System.out.print(" " + k);
         }
         System.out.println();
     }
