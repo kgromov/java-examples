@@ -10,9 +10,6 @@ import static java.lang.Math.max;
 /*
 1) remove(Object value)
 2) iterator()
-3) toString()
-4) equals(Object other)
-5) hashCode()
  */
 public class SimpleArrayList<E> implements SimpleList<E> {
     private static final int DEFAULT_INITIAL_CAPACITY = 16;
@@ -53,7 +50,7 @@ public class SimpleArrayList<E> implements SimpleList<E> {
 
     @Override
     public Iterator<E> iterator() {
-        throw new UnsupportedOperationException();
+        return new ArrayIterator();
     }
 
     // *** *** *** CHECK *** *** ***
@@ -97,7 +94,16 @@ public class SimpleArrayList<E> implements SimpleList<E> {
     // *** *** *** REMOVE *** *** ***
     @Override
     public boolean remove(Object element) {
-        throw new UnsupportedOperationException();
+        for (int i = 0; i < size; i++) {
+            E e = data[i];
+            if (e == null ? element == null : e.equals(element)) {
+                int numMoved = size - i - 1;
+                System.arraycopy(data, i + 1, data, i, numMoved);
+                data[--size] = null;
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -113,17 +119,38 @@ public class SimpleArrayList<E> implements SimpleList<E> {
     // *** *** *** OBJECT METHODS *** *** ***
     @Override
     public boolean equals(Object o) {
-        throw new UnsupportedOperationException();
+        if (o == null || !(o instanceof SimpleList)) return false;
+        Iterator<E> it1 = this.iterator();
+        Iterator<?> it2 = ((SimpleArrayList<?>) o).iterator();
+        while (it1.hasNext() && it2.hasNext()) {
+            E o1 = it1.next();
+            Object o2 = it2.next();
+            if (!(o1 == null ? o2 == null : o1.equals(o2))) return false;
+        }
+        return !(it1.hasNext() || it2.hasNext());
     }
 
     @Override
     public int hashCode() {
-        throw new UnsupportedOperationException();
+        int hash = 1;
+        for (E element : data) {
+            hash += hash * (element != null ? 31 * element.hashCode() : 1);
+        }
+        return hash;
     }
 
     @Override
     public String toString() {
-        throw new UnsupportedOperationException();
+        StringBuilder builder = new StringBuilder("[");
+        if (size > 0) {
+            for (int i = 0; i < size - 1; i++) {
+                E element = data[i];
+                builder.append(element != null ? element.toString() : "null").append(", ");
+            }
+            builder.append(data[size - 1] != null ? data[size - 1].toString() : "null");
+        }
+        builder.append("]");
+        return builder.toString();
     }
 
     // ---------- internals ----------
@@ -139,6 +166,24 @@ public class SimpleArrayList<E> implements SimpleList<E> {
             E[] newData = (E[]) new Object[newCapacity];
             System.arraycopy(data, 0, newData, 0, data.length);
             this.data = newData;
+        }
+    }
+
+    private final class ArrayIterator implements Iterator<E> {
+        int currentIndex;
+
+        @Override
+        public boolean hasNext() {
+            return currentIndex != size;
+        }
+
+        @Override
+        public E next() {
+            try {
+                return data[currentIndex];
+            } finally {
+                ++currentIndex;
+            }
         }
     }
 }
