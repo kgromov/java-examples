@@ -5,13 +5,6 @@ import java.util.Iterator;
 /**
  * Created by konstantin on 11.12.2017.
  */
-/*
-1) remove(Object value)
-2) iterator()
-3) toString()
-4) equals(Object other)
-5) hashCode()
- */
 public class SimpleLinkedList<E> implements SimpleList<E> {
     private Node<E> first = null; // head
     private Node<E> last = null; // tail
@@ -47,7 +40,7 @@ public class SimpleLinkedList<E> implements SimpleList<E> {
     }
 
     public Iterator<E> iterator() {
-        throw new UnsupportedOperationException();
+        return new LinkedListIterator();
     }
 
     // *** *** *** CHECK *** *** ***
@@ -74,7 +67,15 @@ public class SimpleLinkedList<E> implements SimpleList<E> {
 
     // *** *** *** REMOVE *** *** ***
     public boolean remove(Object o) {
-        throw new UnsupportedOperationException();
+        for (int i = 0; i < size(); i++) {
+            for (Node<E> node = first; node != null; node = node.next) {
+                if (o == null ? node.item == null : node.item.equals(o)) {
+                    unlink(node);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public E remove(int index) {
@@ -85,17 +86,47 @@ public class SimpleLinkedList<E> implements SimpleList<E> {
     // *** *** *** OBJECT METHODS *** *** ***
     @Override
     public boolean equals(Object o) {
-        throw new UnsupportedOperationException();
+        if (o == null || !(o instanceof SimpleList)) return false;
+        Iterator<E> it1 = this.iterator();
+        Iterator<?> it2 = ((SimpleList<?>) o).iterator();
+        while (it1.hasNext() && it2.hasNext()) {
+            E o1 = it1.next();
+            Object o2 = it2.next();
+            if (!(o1 == null ? o2 == null : o1.equals(o2))) return false;
+        }
+        return !(it1.hasNext() || it2.hasNext());
     }
 
     @Override
     public int hashCode() {
-        throw new UnsupportedOperationException();
+        int hash = 1;
+        Node<E> temp = first;
+        hash = hash * (temp.item != null ? temp.item.hashCode() : 1);
+        while (temp.next != null) {
+            temp = temp.next;
+            hash = hash * (temp.item != null ? temp.item.hashCode() : 1);
+        }
+        return hash;
     }
 
     @Override
     public String toString() {
-        throw new UnsupportedOperationException();
+        StringBuilder builder = new StringBuilder("[");
+        Iterator<E> it = iterator();
+       /* // 1st case
+        while (it.hasNext()) {
+            E o = it.next();
+            builder.append(o != null ? o.toString() : "null").append(", ");
+        }*/
+        // 2nd case
+        Node<E> temp = first;
+        while (temp.next != null) {
+            builder.append(temp.item != null ? temp.item.toString() : "null").append(", ");
+            temp = temp.next;
+        }
+        builder.append(temp.item != null ? temp.item.toString() : "null");
+        builder.append("]");
+        return builder.toString();
     }
 
     // ---------- internals ----------
@@ -200,6 +231,45 @@ public class SimpleLinkedList<E> implements SimpleList<E> {
             this.prev = prev;
             this.item = item;
             this.next = next;
+        }
+    }
+
+    private final class LinkedListIterator implements Iterator<E> {
+        Node<E> cursor = first;
+
+        @Override
+        public boolean hasNext() {
+            return cursor != null;
+        }
+
+        @Override
+        public E next() {
+            try {
+                return cursor.item;
+            } finally {
+                cursor = cursor.next;
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        String[] array = {"a", "b", "c"};
+        SimpleLinkedList<String> list1 = new SimpleLinkedList<>();
+        SimpleLinkedList<String> list2 = new SimpleLinkedList<>();
+        SimpleArrayList<String> sList = new SimpleArrayList<>();
+        for (String str : array) {
+            list1.add(str);
+            list2.add(str);
+            sList.add(str);
+        }
+        boolean isEq = list1.equals(list2);
+        isEq = list1.equals(sList);
+        list1.add("d");
+        list1.remove("a");
+        sList.remove("a");
+        isEq = list1.equals(list2);
+        for (Iterator<String> it = list1.iterator(); it.hasNext(); ) {
+            System.out.print(it.next() + " ");
         }
     }
 }

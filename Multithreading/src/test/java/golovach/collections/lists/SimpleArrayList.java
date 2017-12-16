@@ -121,7 +121,7 @@ public class SimpleArrayList<E> implements SimpleList<E> {
     public boolean equals(Object o) {
         if (o == null || !(o instanceof SimpleList)) return false;
         Iterator<E> it1 = this.iterator();
-        Iterator<?> it2 = ((SimpleArrayList<?>) o).iterator();
+        Iterator<?> it2 = ((SimpleList<?>) o).iterator();
         while (it1.hasNext() && it2.hasNext()) {
             E o1 = it1.next();
             Object o2 = it2.next();
