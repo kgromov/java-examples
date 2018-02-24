@@ -2,10 +2,7 @@ package db;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -34,14 +31,41 @@ public abstract class DataBase {
         return false;
     }
 
-    public boolean insert(String tableName, List<String> columns, List<String> values) {
+    public void insert(String tableName, List<String> columns, List<String> values) {
+        long start = System.currentTimeMillis();
         String query = String.format("INSERT INTO %s.%s (%s) VALUES (%s)", db, tableName, StringUtils.join(columns, ","), StringUtils.join(values, ","));
         try {
             statement.executeUpdate(query);
+            logger.info(String.format("Time to execute 1 insert via statement with DML query directly = %d ms", System.currentTimeMillis() - start));
         } catch (SQLException e) {
             throw new RuntimeException(String.format("Unable to execute update SQL query '%s'\nCause of: %s", query, e.getMessage()));
         }
-        return true;
+    }
+
+    public void insertWithPreparedStatement(PreparedStatement statement, List<String> values) {
+        long start = System.currentTimeMillis();
+        try {
+            for (int i = 1; i <= values.size(); i++) {
+                statement.setObject(i, values.get(i - 1));
+            }
+            statement.executeUpdate();
+            logger.info(String.format("Time to execute 1 insert via PreparedStatement with DML = %d ms", System.currentTimeMillis() - start));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void insertWithPreparedStatementAndBatch(PreparedStatement statement, List<String> values) {
+        long start = System.currentTimeMillis();
+        try {
+            for (int i = 1; i <= values.size(); i++) {
+                statement.setObject(i, values.get(i - 1));
+            }
+            statement.addBatch();
+            logger.info(String.format("Time to add to batch 1 insert via PreparedStatement = %d ms", System.currentTimeMillis() - start));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean update() {
@@ -96,5 +120,10 @@ public abstract class DataBase {
         } catch (SQLException e) {
             logger.severe(String.format("Unable to close connection for '%s' Driver, DB '%s' cause of\n%s", this.getClass().getSimpleName(), db, e.getMessage()));
         }
+    }
+
+    // temp
+    public Connection getConnection() {
+        return connection;
     }
 }
