@@ -1,5 +1,6 @@
 package core;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -8,9 +9,12 @@ import java.util.stream.IntStream;
 /**
  * Created by konstantin on 24.02.2018.
  */
-public class CheckPerformanceInt {
+public class CheckPerformanceInt <T extends Runnable & Serializable> {
+    <T extends Runnable & Serializable> void execute(T t) {}
 
     public static void main(String[] args) {
+        new CheckPerformanceInt().execute((Runnable & Serializable) (() -> {}));
+
         int length = 1_000_000;
         Integer [] array = new Integer[length];
         // fill in
