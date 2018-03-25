@@ -1,35 +1,41 @@
 package jenkins;
 
-import com.offbytwo.jenkins.JenkinsServer;
-import com.offbytwo.jenkins.model.Build;
-import com.offbytwo.jenkins.model.BuildWithDetails;
-import com.offbytwo.jenkins.model.Job;
-import com.offbytwo.jenkins.model.JobWithDetails;
+import org.testng.annotations.Test;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Map;
 
 /**
  * Created by konstantin on 11.03.2018.
  */
 public class JenkinsClientTest {
-    public static void main(String[] args) throws URISyntaxException, IOException {
-        JenkinsServer jenkins = new JenkinsServer(new URI("http://127.0.0.1:8080/"), "admin", "admin");
-        Map<String, Job> jobs = jenkins.getJobs();
-        try {
-            JobWithDetails jobDetails = jobs.get("hello").details();
-            Build lastBuild = jobDetails.getLastBuild();
-            /*lastBuild.getTestResult();
-            lastBuild.getTestReport();*/
+    private String jobName;
+    private int buildNumber;
 
-            BuildWithDetails buildWithDetails = lastBuild.details();
-            buildWithDetails.getParameters();
-            buildWithDetails.getConsoleOutputText();
-        } catch (IOException e) {
-            e.printStackTrace();
+    @Test
+    // TODO: pass properties file as parameter and then read its properties  - so create init method
+    public void checkBuild() {
+        JenkinsUtils.authenticate("http://akela-dev.nds.ext.here.com:8080/", "kgromov", "Here1501!");
+        // provide here jobName and build via parameters
+        JobInfo jobInfo = new JobInfo(jobName, buildNumber);
+        // check for consoleOutput and downstreamJobs
+        Report.writeJobsInfoToXml(jobInfo);
+    }
+
+    public static void main(String[] args) throws IOException {
+        // read consoleLog to test
+//        File log = new File("D:\\\\workspace\\\\konstantin-examples\\\\HTML\\\\src\\\\main\\\\resources\\\\jenkins_logs\\consoleText_auto_fail.txt");
+        File log = new File("D:\\workspace\\konstantin-examples\\HTML\\src\\main\\resources\\jenkins_logs\\consoleText_dev_fail.txt");
+        BufferedReader reader = new BufferedReader(new FileReader(log));
+        String inputLine;
+        StringBuilder buffer = new StringBuilder();
+        // read file - ability to operate indexes
+        while ((inputLine = reader.readLine()) != null) {
+//            buffer.append(inputLine).append("\n");
+            buffer.append(inputLine);
         }
-
+        JobInfo jobInfo = new JobInfo(buffer.toString());
     }
 }
