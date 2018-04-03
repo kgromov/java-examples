@@ -1,33 +1,57 @@
 package jenkins;
 
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 /**
  * Created by konstantin on 11.03.2018.
  */
 public class JenkinsClientTest {
-    private String jobName;
-    private int buildNumber;
+    private static final String DEFAULT_MY_PROPERTIES = "templates/build_config.properties";
+    private Settings settings;
+
+    @BeforeTest
+    public void initSettings() {
+        String pathToProperties = System.getProperty("my.properties", DEFAULT_MY_PROPERTIES);
+        if (pathToProperties != null && !pathToProperties.isEmpty()) {
+            Properties prop = new Properties();
+            try(InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(DEFAULT_MY_PROPERTIES)) {
+//                prop.load(new FileReader(new File(pathToProperties)));
+                prop.load(is);
+                this.settings = new Settings(prop);
+                System.out.println(settings);
+            } catch (IOException ignored) {
+            }
+        }
+    }
 
     @Test
-    // TODO: pass properties file as parameter and then read its properties  - so create init method
     public void checkBuild() {
-        JenkinsUtils.authenticate("http://akela-dev.nds.ext.here.com:8080/", "kgromov", "Here1501!");
+        if (settings == null) {
+            throw new RuntimeException("Settings were not instantiated cause " +
+                    "of incorrect file or file format passed by " + System.getProperty("my.properties"));
+        }
+//        JenkinsUtils.authenticate("http://akela-dev.nds.ext.here.com:8080/", "kgromov", "Here1501!");
+        JenkinsUtils.authenticate(settings.getJenkinsURL(), settings.getLogin(), settings.getPassword());
         // provide here jobName and build via parameters
-        JobInfo jobInfo = new JobInfo(jobName, buildNumber);
+        JobInfo jobInfo = new JobInfo(settings.getJobName(), settings.getBuildNumber());
+        // log all jobs info
+        System.out.println(jobInfo);
+        jobInfo.getDownstreamJobs().forEach(System.out::println);
         // check for consoleOutput and downstreamJobs
-        Report.writeJobsInfoToXml(jobInfo);
+        Report.copyTemplates();
+        Report.writeToReport(jobInfo);
     }
 
     public static void main(String[] args) throws IOException {
-        // read consoleLog to test
-//        File log = new File("D:\\\\workspace\\\\konstantin-examples\\\\HTML\\\\src\\\\main\\\\resources\\\\jenkins_logs\\consoleText_auto_fail.txt");
-        File log = new File("D:\\workspace\\konstantin-examples\\HTML\\src\\main\\resources\\jenkins_logs\\consoleText_dev_fail.txt");
+        File log = new File("C:\\Users\\kgromov\\Desktop\\jenkinsAPI\\consoleText_dev_fail.txt");
         BufferedReader reader = new BufferedReader(new FileReader(log));
         String inputLine;
         StringBuilder buffer = new StringBuilder();
@@ -36,6 +60,9 @@ public class JenkinsClientTest {
 //            buffer.append(inputLine).append("\n");
             buffer.append(inputLine);
         }
-        JobInfo jobInfo = new JobInfo(buffer.toString());
+        String consoleLog = buffer.toString();
+        int index = consoleLog.lastIndexOf("s3://");
+        String sub = consoleLog.substring(index);
+
     }
 }

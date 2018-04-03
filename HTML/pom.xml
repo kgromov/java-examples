@@ -10,6 +10,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>html-examples</artifactId>
+    <name>html-examples</name>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

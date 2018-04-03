@@ -11,25 +11,34 @@
 				td.description {padding: 2px; vertical-align: top; text-align: left; }
 			</style>
 			<body>
-				<h2 align="center">Exceptions in log file
-					<xsl:value-of select="/Records/@log"/>
-					on branch <xsl:value-of select="/Records/@branch"/>
-				</h2>
+				<!-- probably add buildName/buildNumber and time stamp to builds attributes
+                    <h2 align="center">Exceptions in log file
+                        <xsl:value-of select="/Builds/@log"/>
+                        on branch <xsl:value-of select="/Builds/@branch"/>
+                    </h2> -->
+				<h2 align="center">Build with downstream jobs consolidated information</h2>
 				<table class="main" border="2" width = "100%">
 					<tr bgcolor="#9acd32">
-						<th width = "10%">Time</th>
-						<th width = "10%">Type</th>
 						<th width = "10%">Name</th>
-						<th width = "35%%">StackTrace</th>
-						<th width = "35%">PreviousSteps</th>
+						<th width = "5%">Number</th>
+						<th width = "25%%">Parameters</th>
+						<th width = "5%">LogSize</th>
+						<th width = "5%">BuildTime</th>
+						<th width = "35%">StackTrace</th>
+						<th width = "5%">BuildResult</th>
+						<th width = "10%">PathToResult</th>
 					</tr>
-					<xsl:for-each select="//Record">
+					<xsl:for-each select="//Build">
 						<tr>
 							<xsl:variable name="id_gen" select="concat('exception-', position())"/>
 							<xsl:variable name="desc" select="Description"/>
-							<td class="name"><xsl:value-of select="Time"/></td>
-							<td class="name"><xsl:value-of select="Type"/></td>
 							<td class="name"><xsl:value-of select="Name"/></td>
+							<td class="name"><xsl:value-of select="Number"/></td>
+							<td class="name"><xsl:value-of select="Parameters"/></td>
+							<td class="name"><xsl:value-of select="LogSize"/></td>
+							<td class="name"><xsl:value-of select="BuildTime"/></td>
+							<td class="name"><xsl:value-of select="BuildResult"/></td>
+							<td class="name"><xsl:value-of select="PathToResult"/></td>
 							<td class="description">
 								<!--<xsl:value-of select="StackTrace"><xsl:text></xsl:text></xsl:value-of>-->
 								<a href="javascript:toggleElement('{$id_gen}', 'block')">Click to expand/collapse Stack trace</a>
@@ -37,7 +46,7 @@
 									<xsl:value-of select="StackTrace"><xsl:text/></xsl:value-of>
 								</div>
 							</td>
-							<td class="description"><xsl:value-of select="PreviousSteps"/></td>
+							<!--<td class="description"><xsl:value-of select="PreviousSteps"/></td>-->
 						</tr>
 					</xsl:for-each>
 				</table>

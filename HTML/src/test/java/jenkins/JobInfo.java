@@ -5,16 +5,28 @@ import com.offbytwo.jenkins.model.BuildWithDetails;
 import javafx.util.Pair;
 
 import java.io.IOException;
-import java.util.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class JobInfo {
     // "\\w{4,}\\s*#\\d+"
-    private static final Pattern JOB_BUILD = Pattern.compile("[^\\d]{4,}\\s*#\\d+"); // or strictly specify job names
+//    private static final Pattern JOB_BUILD = Pattern.compile("[^\\d]{4,}\\s*#\\d+"); // or strictly specify job names
     private static final String BUILD_PREFIX = "\\s*#%d";
-    //    private static final Pattern JOB_BUILD = Pattern.compile("(Compile|Merge|Validation_Suite)\\s*#\\d+");
+    private static final Pattern JOB_BUILD = Pattern.compile("(Compile|Merge|Validation_Suite)\\s*#\\d+");
+    private static final Pattern PATH_TO_RESULT_PATTERN = Pattern.compile("^.*(s3://akela-artifacts).*$"); // (s3://akela-artifacts).*$
     private static final String PATH_TO_RESULT = "s3://"; // and aws and ticket (auto) and .sq3
+    private static final Predicate<String> IS_FOLDER = path -> path.charAt(path.length() - 1) == '/';
     // patters
 //    private final static Pattern EXCEPTION_PATTERN = Pattern.compile("Exception\\b:");
     private final static Pattern EXCEPTION_PATTERN = Pattern.compile("Caused\\s?by\\b:");
@@ -23,17 +35,19 @@ public class JobInfo {
     // fields
     private String buildName;
     private int buildNumber;
-    private int logSize; // round to bigger part, change type to float:
-    // NumberFormat.getInstance().format(Float.valueOf(consoleOutput.length())/1024) or via BigDecimal
+    private float logSize;
+    private long buildTime;
     private BuildResult result;
     private boolean isPassed;  // like double check
     private String pathToS3;
     private Set<String> exceptions;
+    private Map<String, String> parameters;
 
     // to parse console output
     public JobInfo(String consoleOutput) {
         // consoleOutput
-        this.logSize = consoleOutput.getBytes().length / 1024;
+        BigDecimal decimal = BigDecimal.valueOf(consoleOutput.getBytes().length);
+        this.logSize = decimal.divide(BigDecimal.valueOf(1024), 2, RoundingMode.HALF_UP).floatValue();
         this.downstreamJobs = new ArrayList<>();
         // parse consoleOutput
         parseConsoleLog(consoleOutput).forEach(job ->
@@ -48,12 +62,15 @@ public class JobInfo {
         build.ifPresent(info ->
         {
             this.buildName = info.getDisplayName(); // or set with jobName ?
+            this.buildTime = TimeUnit.SECONDS.convert(info.getDuration(), TimeUnit.MILLISECONDS);
+            this.parameters = info.getParameters();
             this.result = info.getResult();
             this.isPassed = result == BuildResult.SUCCESS;
             // consoleOutput
             try {
                 String consoleOutput = info.getConsoleOutputText();
-                this.logSize = consoleOutput.getBytes().length / 1024;
+                BigDecimal decimal = BigDecimal.valueOf(consoleOutput.getBytes().length);
+                this.logSize = decimal.divide(BigDecimal.valueOf(1024), 2, RoundingMode.HALF_UP).floatValue();
                 this.downstreamJobs = new ArrayList<>();
                 // parse consoleOutput
                 parseConsoleLog(consoleOutput).forEach(job ->
@@ -81,6 +98,7 @@ public class JobInfo {
      * @return list of downstream jobs in form: JobName + buildNumber
      */
     private List<Pair<String, Integer>> parseConsoleLog(String consoleOutput) {
+        // downstream jobs
         List<Pair<String, Integer>> jobs = new ArrayList<>();
         Matcher matcher = JOB_BUILD.matcher(consoleOutput);
         while (matcher.find()) {
@@ -92,7 +110,51 @@ public class JobInfo {
             } catch (NumberFormatException ignored) {
             }
         }
+        // parse for result files/folders
+        String searchIn = consoleOutput.substring(consoleOutput.lastIndexOf(PATH_TO_RESULT));
+        matcher = PATH_TO_RESULT_PATTERN.matcher(searchIn);
+        while (matcher.find()) {
+            String path = matcher.group();
+            this.pathToS3 = IS_FOLDER.test(path) ? path : path.substring(0, path.lastIndexOf('/'));
+        }
+        // parse for exceptions
         return jobs;
+    }
+
+    public String getBuildName() {
+        return buildName;
+    }
+
+    public int getBuildNumber() {
+        return buildNumber;
+    }
+
+    public long getBuildTime() {
+        return buildTime;
+    }
+
+    public float getLogSize() {
+        return logSize;
+    }
+
+    public String getResult() {
+        return result.name();
+    }
+
+    public boolean isPassed() {
+        return isPassed;
+    }
+
+    public String getPathToS3() {
+        return pathToS3;
+    }
+
+    public Map<String, String> getParameters() {
+        return parameters;
+    }
+
+    public String getExceptions() {
+        return exceptions == null ? "" : exceptions.stream().collect(Collectors.joining("\n")); // or tokenize in a proper wqy in xslt
     }
 
     @Override
@@ -113,13 +175,15 @@ public class JobInfo {
     @Override
     public String toString() {
         return "JobInfo{" +
-                "downstreamJobs=" + downstreamJobs +
                 ", buildName='" + buildName + '\'' +
                 ", buildNumber=" + buildNumber +
                 ", logSize=" + logSize +
+                ", buildTime=" + buildTime +
                 ", result=" + result +
-                ", pathToS3='" + pathToS3 + '\'' +
                 ", isPassed=" + isPassed +
+                ", pathToS3='" + pathToS3 + '\'' +
+                ", exceptions=" + exceptions +
+                ", parameters=" + parameters +
                 '}';
     }
 }

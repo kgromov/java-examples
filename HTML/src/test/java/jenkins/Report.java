@@ -1,27 +1,47 @@
 package jenkins;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 /**
  * Created by konstantin on 25.03.2018.
  */
 public class Report {
-    private static final String LOG_FOLDER = "C:\\Windows\\System32\\LogFiles\\PXUI\\";
-    //    private static final String LOG_FOLDER = "C:\\Users\\kgromov\\Desktop\\";
-    private static final String TEMPLATES_DIR = "./src/test/resources/templates/ui-logs/";
-    private static final String OUTPUT_DIR = "./target/ui-logs/";
-    private static final String OUTPUT_XML = "./target/ui-logs/index.xml";
+    private static final String TEMPLATES_DIR = "C:\\Projects\\java-examples\\HTML\\src\\main\\resources\\templates";
+    private static final String OUTPUT_DIR = "C:\\Projects\\java-examples\\HTML\\target\\jenkins-builds";
+    private static final String OUTPUT_XML = OUTPUT_DIR + "\\index.xml";
 
-    private Report(){}
-
-    public static void writeJobsInfoToXml(JobInfo root)
-    {
-        // write root info
-        // write all children
-        root.getDownstreamJobs().forEach(Report::writeJobsInfoToXml);
+    private Report() {
     }
 
-    /*
-     public static void writeToReport(List<Record> records) {
-        long start = System.currentTimeMillis();
+    // first: create root and than append all build to root -> <Builds>
+    public static void writeJobsInfoToXml(JobInfo rootJob) {
+        // write root info
+        writeToReport(rootJob);
+        // write all children
+        rootJob.getDownstreamJobs().forEach(Report::writeJobsInfoToXml);
+    }
+
+    public static void writeToReport(JobInfo rootBuild) {
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             // use factory to get an instance of document builder
@@ -29,31 +49,11 @@ public class Report {
             // create instance of DOM
             Document document = db.newDocument();
             // create the root element
-            Element root = document.createElement("Records");
-            root.setAttribute("branch", BRANCH_NAME);
-            root.setAttribute("log", DATE_NAME);
-            records.forEach(item -> {
-                // record element
-                Element record = document.createElement("Record");
-                Element time = document.createElement("Time");
-                time.setTextContent(item.getTime());
-                Element type = document.createElement("Type");
-                type.setTextContent(item.getType());
-                Element name = document.createElement("Name");
-                name.setTextContent(item.getName());
-                Element stackTrace = document.createElement("StackTrace");
-                stackTrace.setTextContent(item.getStackTrace());
-                Element prevSteps = document.createElement("PreviousSteps");
-                prevSteps.setTextContent(item.getPreviousSteps());
-                // append to record
-                record.appendChild(time);
-                record.appendChild(type);
-                record.appendChild(name);
-                record.appendChild(stackTrace);
-                record.appendChild(prevSteps);
-                // append records
-                root.appendChild(record);
-            });
+            Element root = document.createElement("Builds");
+          /*  root.setAttribute("branch", BRANCH_NAME);
+            root.setAttribute("log", DATE_NAME);*/
+            // append jobs
+            appendBuilds(document, root, rootBuild);
             // append root
             document.appendChild(root);
             // add xsl
@@ -75,22 +75,96 @@ public class Report {
             }
         } catch (ParserConfigurationException pce) {
             System.out.println("UsersXML: Error trying to instantiate DocumentBuilder " + pce);
-        } finally {
-            System.out.println(String.format("Time to write xml with %d records = %d ms", records.size(), System.currentTimeMillis() - start));
         }
     }
 
+    private static void appendBuilds(Document document, Element builds, JobInfo buildInfo) {
+        // append job
+        appendBuild(document, builds, buildInfo);
+        // append downstream jobs
+        buildInfo.getDownstreamJobs().forEach(info -> appendBuilds(document, builds, info));
+    }
+
+    private static void appendBuild(Document document, Element builds, JobInfo buildInfo) {
+        // record element
+        Element record = document.createElement("Build");
+        Element name = document.createElement("Name");
+        name.setTextContent(buildInfo.getBuildName());
+        Element number = document.createElement("Number");
+        number.setTextContent(String.valueOf(buildInfo.getBuildNumber()));
+        Element parameters = document.createElement("Parameters");
+        parameters.setTextContent(String.valueOf(buildInfo.getParameters()));
+        Element logSize = document.createElement("LogSize");
+        logSize.setTextContent(String.valueOf(buildInfo.getLogSize()));
+        Element time = document.createElement("BuildTime");
+        time.setTextContent(String.valueOf(buildInfo.getBuildTime()));
+        Element stackTrace = document.createElement("StackTrace");
+        stackTrace.setTextContent(buildInfo.getExceptions());
+        Element result = document.createElement("BuildResult");
+        result.setTextContent(buildInfo.getResult());
+        Element pathToResult = document.createElement("PathToResult");
+        pathToResult.setTextContent(buildInfo.getPathToS3());
+        // append to record
+        record.appendChild(name);
+        record.appendChild(number);
+        record.appendChild(parameters);
+        record.appendChild(logSize);
+        record.appendChild(time);
+        record.appendChild(stackTrace);
+        record.appendChild(result);
+        record.appendChild(pathToResult);
+        // append builds
+        builds.appendChild(record);
+    }
+
     public static void copyTemplates() {
-        try {
-            File reporterDir = new File(OUTPUT_DIR);
-            if (!reporterDir.exists()) reporterDir.mkdir();
-            File[] templates = new File(TEMPLATES_DIR).listFiles();
-            for (File template : templates) {
-                FileUtils.copyFileToDirectory(template, reporterDir);
+        File reporterDir = new File(OUTPUT_DIR);
+        String reporterDirPath = reporterDir.getAbsolutePath();
+        if (!reporterDir.exists()) reporterDir.mkdir();
+        File[] templates = new File(TEMPLATES_DIR).listFiles();
+        for (File template : templates) {
+//                FileUtils.copyFileToDirectory(template, reporterDir);
+            copyFile2(template, new File(reporterDirPath + File.separator + template.getName()));
+        }
+    }
+
+    public static void copyFile(File source, File dest) {
+        try (InputStream is = new BufferedInputStream(new FileInputStream(source));
+             OutputStream os = new BufferedOutputStream(new FileOutputStream(dest))
+        ) {
+            int length;
+            while ((length = is.read()) > 0) {
+                os.write(length);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-     */
+
+    public static void copyFile2(File source, File dest) {
+        try (InputStream is = new FileInputStream(source);
+             OutputStream os = new FileOutputStream(dest)
+        ) {
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = is.read(buffer)) > 0) {
+                os.write(buffer, 0, length);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        File source = new File("C:\\Users\\kgromov\\Desktop\\jenkinsAPI\\consoleText_dev_compile.txt");
+        File dest1 = new File("C:\\Users\\kgromov\\Desktop\\consoleText_dev_compile1.txt");
+        File dest2 = new File("C:\\Users\\kgromov\\Desktop\\consoleText_dev_compile2.txt");
+        long start1 = System.nanoTime();
+        copyFile(source, dest1);
+        System.out.println("Time to copy =" + (System.nanoTime() - start1));
+        long start2 = System.nanoTime();
+        copyFile(source, dest2);
+        System.out.println("Time to copy =" + (System.nanoTime() - start2));
+    }
+
 }

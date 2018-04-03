@@ -4,7 +4,6 @@ import com.offbytwo.jenkins.JenkinsServer;
 import com.offbytwo.jenkins.model.BuildWithDetails;
 import com.offbytwo.jenkins.model.Job;
 import com.offbytwo.jenkins.model.JobWithDetails;
-import com.sun.org.apache.regexp.internal.RE;
 
 import java.io.IOException;
 import java.net.URI;
@@ -31,7 +30,7 @@ public class JenkinsUtils {
 
     public static JobWithDetails getJobByName(String jobName) {
         try {
-            return jobs.get("Compile").details();
+            return jobs.get(jobName).details();
         } catch (IOException | NullPointerException e) {
             throw new RuntimeException("There is no job by name " + jobName);
         }
@@ -40,8 +39,9 @@ public class JenkinsUtils {
     public static Optional< BuildWithDetails> getBuildLogNyNumber(String jobName, int buildNumber) {
         try {
             return Optional.ofNullable(getJobByName(jobName).getBuildByNumber(buildNumber).details());
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
 //            throw new RuntimeException(String.format("Job '%s' does not have build by number '%d'", jobName, buildNumber));
+            System.out.println(String.format("Job '%s' does not have build by number '%d'", jobName, buildNumber));
             return Optional.empty();
         }
     }
@@ -49,8 +49,9 @@ public class JenkinsUtils {
     public static Optional< BuildWithDetails> getBuildLogNyNumber(JobWithDetails job, int buildNumber) {
         try {
             return Optional.ofNullable(job.getBuildByNumber(buildNumber).details());
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
 //            throw new RuntimeException(String.format("Job '%s' does not have build by number '%d'", job.getDisplayName(), buildNumber));
+            System.out.println(String.format("Job '%s' does not have build by number '%d'", job.getDisplayName(), buildNumber));
             return Optional.empty();
         }
     }
