@@ -19,22 +19,24 @@
 				<h2 align="center">Build with downstream jobs consolidated information</h2>
 				<table class="main" border="2" width = "100%">
 					<tr bgcolor="#9acd32">
-						<th width = "10%">Name</th>
+						<th width = "10%">JobName</th>
+						<th width = "10%">DisplayName</th>
 						<th width = "5%">Number</th>
-						<th width = "25%%">Parameters</th>
-						<th width = "5%">LogSize</th>
-						<th width = "5%">BuildTime</th>
-						<th width = "35%">StackTrace</th>
+						<th width = "15%%">Parameters</th>
+						<th width = "5%">LogSize, KB</th>
+						<th width = "5%">BuildTime, sec</th>						
 						<th width = "5%">BuildResult</th>
 						<th width = "10%">PathToResult</th>
+						<th width = "35%">StackTrace</th>
 					</tr>
 					<xsl:for-each select="//Build">
 						<tr>
 							<xsl:variable name="id_gen" select="concat('exception-', position())"/>
 							<xsl:variable name="desc" select="Description"/>
+							<td class="name"><xsl:value-of select="JobName"/></td>
 							<td class="name"><xsl:value-of select="Name"/></td>
 							<td class="name"><xsl:value-of select="Number"/></td>
-							<td class="name"><xsl:value-of select="Parameters"/></td>
+							<td class="description"><xsl:value-of select="Parameters"/></td>
 							<td class="name"><xsl:value-of select="LogSize"/></td>
 							<td class="name"><xsl:value-of select="BuildTime"/></td>
 							<td class="name"><xsl:value-of select="BuildResult"/></td>

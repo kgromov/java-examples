@@ -82,7 +82,7 @@ public class Report {
         // append job
         appendBuild(document, builds, buildInfo);
         // append downstream jobs
-        buildInfo.getDownstreamJobs().forEach(info -> appendBuilds(document, builds, info));
+        buildInfo.getDownstreamJobs().stream().filter(JobInfo::isFound).forEach(info -> appendBuilds(document, builds, info));
     }
 
     private static void appendBuild(Document document, Element builds, JobInfo buildInfo) {
@@ -90,6 +90,8 @@ public class Report {
         Element record = document.createElement("Build");
         Element name = document.createElement("Name");
         name.setTextContent(buildInfo.getBuildName());
+        Element jobName = document.createElement("JobName");
+        jobName.setTextContent(String.valueOf(buildInfo.getJobName()));
         Element number = document.createElement("Number");
         number.setTextContent(String.valueOf(buildInfo.getBuildNumber()));
         Element parameters = document.createElement("Parameters");
@@ -106,6 +108,7 @@ public class Report {
         pathToResult.setTextContent(buildInfo.getPathToS3());
         // append to record
         record.appendChild(name);
+        record.appendChild(jobName);
         record.appendChild(number);
         record.appendChild(parameters);
         record.appendChild(logSize);

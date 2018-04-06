@@ -23,17 +23,19 @@ public class JobInfo {
     // "\\w{4,}\\s*#\\d+"
 //    private static final Pattern JOB_BUILD = Pattern.compile("[^\\d]{4,}\\s*#\\d+"); // or strictly specify job names
     private static final String BUILD_PREFIX = "\\s*#%d";
-    private static final Pattern JOB_BUILD = Pattern.compile("(Compile|Merge|Validation_Suite)\\s*#\\d+");
-    private static final Pattern PATH_TO_RESULT_PATTERN = Pattern.compile("^.*(s3://akela-artifacts).*$"); // (s3://akela-artifacts).*$
+    private static final Pattern JOB_BUILD = Pattern.compile("(Compile|Merge|Validation_Suite|Compile Market)\\s*#\\d+");
+//    private static final Pattern PATH_TO_RESULT_PATTERN = Pattern.compile("^.*(s3://akela-artifacts).*$"); // (s3://akela-artifacts).*$
+    private static final Pattern PATH_TO_RESULT_PATTERN = Pattern.compile(".*(s3://akela-artifacts).*"); // (s3://akela-artifacts).*$
     private static final String PATH_TO_RESULT = "s3://"; // and aws and ticket (auto) and .sq3
     private static final Predicate<String> IS_FOLDER = path -> path.charAt(path.length() - 1) == '/';
     // patters
 //    private final static Pattern EXCEPTION_PATTERN = Pattern.compile("Exception\\b:");
-    private final static Pattern EXCEPTION_PATTERN = Pattern.compile("Caused\\s?by\\b:");
+    private final static Pattern EXCEPTION_PATTERN = Pattern.compile("(?s)(?<=Exception occured:).*?(?=Caused)");
     // to build composite pattern
     private List<JobInfo> downstreamJobs;
     // fields
     private String buildName;
+    private String jobName;
     private int buildNumber;
     private float logSize;
     private long buildTime;
@@ -57,6 +59,7 @@ public class JobInfo {
 
     // to get job directly from Jenkins
     public JobInfo(String jobName, int buildNumber) {
+        this.jobName = jobName;
         this.buildNumber = buildNumber;
         Optional<BuildWithDetails> build = JenkinsUtils.getBuildLogNyNumber(jobName, buildNumber);
         build.ifPresent(info ->
@@ -98,6 +101,7 @@ public class JobInfo {
      * @return list of downstream jobs in form: JobName + buildNumber
      */
     private List<Pair<String, Integer>> parseConsoleLog(String consoleOutput) {
+        System.out.println(String.format("Parse consoleOutput of job: name=%s, displayName=%s, build=%d", jobName, buildName, buildNumber));
         // downstream jobs
         List<Pair<String, Integer>> jobs = new ArrayList<>();
         Matcher matcher = JOB_BUILD.matcher(consoleOutput);
@@ -118,11 +122,19 @@ public class JobInfo {
             this.pathToS3 = IS_FOLDER.test(path) ? path : path.substring(0, path.lastIndexOf('/'));
         }
         // parse for exceptions
+        matcher = EXCEPTION_PATTERN.matcher(consoleOutput);
+        while (matcher.find()) {
+            exceptions.add(matcher.group());
+        }
         return jobs;
     }
 
     public String getBuildName() {
         return buildName;
+    }
+
+    public String getJobName() {
+        return jobName;
     }
 
     public int getBuildNumber() {
@@ -149,12 +161,18 @@ public class JobInfo {
         return pathToS3;
     }
 
-    public Map<String, String> getParameters() {
-        return parameters;
+    public String getParameters() {
+        return parameters == null ? "" : parameters.entrySet().stream()
+                .map(entry -> entry.getKey() + "=" + entry.getValue())
+                .collect(Collectors.joining("\r\n"));
     }
 
     public String getExceptions() {
-        return exceptions == null ? "" : exceptions.stream().collect(Collectors.joining("\n")); // or tokenize in a proper wqy in xslt
+        return exceptions == null ? "" : exceptions.stream().collect(Collectors.joining("\r\n")); // or tokenize in a proper wqy in xslt
+    }
+
+    public boolean isFound() {
+        return result != null;
     }
 
     @Override
@@ -176,6 +194,7 @@ public class JobInfo {
     public String toString() {
         return "JobInfo{" +
                 ", buildName='" + buildName + '\'' +
+                ", jobName='" + jobName + '\'' +
                 ", buildNumber=" + buildNumber +
                 ", logSize=" + logSize +
                 ", buildTime=" + buildTime +
