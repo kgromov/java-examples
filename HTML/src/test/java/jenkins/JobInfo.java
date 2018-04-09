@@ -7,12 +7,7 @@ import javafx.util.Pair;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
@@ -69,6 +64,7 @@ public class JobInfo {
             this.parameters = info.getParameters();
             this.result = info.getResult();
             this.isPassed = result == BuildResult.SUCCESS;
+            this.exceptions = new LinkedHashSet<>();
             // consoleOutput
             try {
                 String consoleOutput = info.getConsoleOutputText();
