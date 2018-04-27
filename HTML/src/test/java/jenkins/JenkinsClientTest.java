@@ -1,5 +1,6 @@
 package jenkins;
 
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -32,12 +33,17 @@ public class JenkinsClientTest {
         }
     }
 
-    @Test
-    public void checkBuild() {
+    @BeforeMethod
+    private void checkSettings()
+    {
         if (settings == null) {
             throw new RuntimeException("Settings were not instantiated cause " +
                     "of incorrect file or file format passed by " + System.getProperty("my.properties"));
         }
+    }
+
+    @Test(enabled = true)
+    public void checkBuild() {
 //        JenkinsUtils.authenticate("http://akela-dev.nds.ext.here.com:8080/", "kgromov", "Here1501!");
         JenkinsUtils.authenticate(settings.getJenkinsURL(), settings.getLogin(), settings.getPassword());
         // provide here jobName and build via parameters
@@ -48,6 +54,13 @@ public class JenkinsClientTest {
         // check for consoleOutput and downstreamJobs
         Report.copyTemplates();
         Report.writeToReport(jobInfo);
+    }
+
+    @Test(enabled = false)
+    public void listCrossProductBuilds()
+    {
+        JenkinsUtils.authenticate(settings.getJenkinsURL(), settings.getLogin(), settings.getPassword());
+        JenkinsUtils.findCrossProductBuilds();
     }
 
     public static void main(String[] args) throws IOException {
@@ -63,6 +76,6 @@ public class JenkinsClientTest {
         String consoleLog = buffer.toString();
         int index = consoleLog.lastIndexOf("s3://");
         String sub = consoleLog.substring(index);
-
     }
+
 }

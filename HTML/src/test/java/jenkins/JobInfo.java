@@ -111,11 +111,16 @@ public class JobInfo {
             }
         }
         // parse for result files/folders
-        String searchIn = consoleOutput.substring(consoleOutput.lastIndexOf(PATH_TO_RESULT));
-        matcher = PATH_TO_RESULT_PATTERN.matcher(searchIn);
-        while (matcher.find()) {
-            String path = matcher.group();
-            this.pathToS3 = IS_FOLDER.test(path) ? path : path.substring(0, path.lastIndexOf('/'));
+        try {
+            String searchIn = consoleOutput.substring(consoleOutput.lastIndexOf(PATH_TO_RESULT));
+            matcher = PATH_TO_RESULT_PATTERN.matcher(searchIn);
+            while (matcher.find()) {
+                String path = matcher.group();
+                this.pathToS3 = IS_FOLDER.test(path) ? path : path.substring(0, path.lastIndexOf('/'));
+            }
+        } catch (IndexOutOfBoundsException e)
+        {
+
         }
         // parse for exceptions
         matcher = EXCEPTION_PATTERN.matcher(consoleOutput);
