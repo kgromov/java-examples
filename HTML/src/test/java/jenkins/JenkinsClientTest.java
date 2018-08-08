@@ -63,6 +63,14 @@ public class JenkinsClientTest {
         JenkinsUtils.findCrossProductBuilds();
     }
 
+    @Test(enabled = false)
+    public void listRegionBuilds()
+    {
+        JenkinsUtils.authenticate(settings.getJenkinsURL(), settings.getLogin(), settings.getPassword());
+        JenkinsUtils.findBuildsByCommitMessage(message -> message.contains("DEU_G1_NO") && message.contains("KEEPUSER"));
+    }
+
+
     public static void main(String[] args) throws IOException {
         File log = new File("C:\\Users\\kgromov\\Desktop\\jenkinsAPI\\consoleText_dev_fail.txt");
         BufferedReader reader = new BufferedReader(new FileReader(log));
