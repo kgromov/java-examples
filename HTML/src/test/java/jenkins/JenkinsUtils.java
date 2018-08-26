@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class JenkinsUtils {
@@ -41,11 +42,9 @@ public class JenkinsUtils {
         }
     }
 
-    public static boolean isCrossProductBuild(String value)
-    {
+    public static boolean isCrossProductBuild(String value) {
         int index = value.indexOf("REGIONS");
-        if(index == -1)
-        {
+        if (index == -1) {
             return false;
         }
         String regions_ = value.substring(index).replace("REGIONS=", "");
@@ -53,7 +52,7 @@ public class JenkinsUtils {
                 .filter(region -> region.contains("_"))
                 .map(region -> region.substring(0, region.indexOf("_")))
                 .collect(Collectors.toSet());
-        System.out.println("PRODUCT: "+ products);
+        System.out.println("PRODUCT: " + products);
         return products.size() > 1;
     }
 
@@ -67,9 +66,31 @@ public class JenkinsUtils {
                         Map<String, String> parameters = buildDetails.getParameters();
                         Optional.ofNullable(parameters.get("GERRIT_CHANGE_SUBJECT")).ifPresent(parameter ->
                                 {
-                                    if (isCrossProductBuild(parameter))
-                                    {
+                                    if (isCrossProductBuild(parameter)) {
                                         System.out.println("Cross product build:");
+                                        System.out.println(buildDetails.getDisplayName());
+                                        System.out.println(BUILD_DATE.apply(buildDetails.getTimestamp()));
+                                        System.out.println(buildDetails.getUrl());
+                                    }
+                                }
+                        );
+                    }
+            );
+        }
+    }
+
+    public static void findBuildsByCommitMessage(Predicate<String> condition) {
+        JobWithDetails presubmitJob = getJobByName("PreSubmit");
+        List<Build> presubmitsBuilds = presubmitJob.getBuilds();
+        for (Build build : presubmitsBuilds) {
+            int number = build.getNumber();
+            getBuildLogNyNumber(presubmitJob, number).ifPresent(buildDetails ->
+                    {
+                        Map<String, String> parameters = buildDetails.getParameters();
+                        Optional.ofNullable(parameters.get("GERRIT_CHANGE_SUBJECT")).ifPresent(parameter ->
+                                {
+                                    if (condition.test(parameter)) {
+                                        System.out.println("Commit message = " + parameter);
                                         System.out.println(buildDetails.getDisplayName());
                                         System.out.println(BUILD_DATE.apply(buildDetails.getTimestamp()));
                                         System.out.println(buildDetails.getUrl());
