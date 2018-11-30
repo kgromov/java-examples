@@ -116,24 +116,24 @@ public class JenkinsUtils {
         AtomicInteger finished = new AtomicInteger();
         AtomicLong elapsedTime = new AtomicLong();
         while (finished.get() == 0 || elapsedTime.get() < TIMEOUT) {
-            boolean compilationCompleted = false;
+            boolean isNotCompletedCompilation = true;
             for (Build build : presubmitsBuilds) {
                 BuildWithDetails buildWithDetails = build.details();
-                compilationCompleted = buildWithDetails.getResult() != null
-                        || buildWithDetails.getConsoleOutputText().contains("Reactor Summary:");
-                if (compilationCompleted) {
-                    finished.incrementAndGet();
-                    System.out.println("Finished compilation: " + build.getUrl());
+                isNotCompletedCompilation = buildWithDetails.getResult() != null
+                        || !buildWithDetails.getConsoleOutputText().contains("Reactor Summary:");
+                if (isNotCompletedCompilation) {
+                    System.out.println(BUILD_DATE.apply(System.nanoTime()) + "\tNot finished compilation: " + build.getUrl());
                     break;
                 }
+                System.out.println(BUILD_DATE.apply(System.nanoTime()) +"\tFinished compilation: " + build.getUrl());
             }
-            if (compilationCompleted) {
+            if (!isNotCompletedCompilation) {
                 Build lastBuild = presubmitJob.getLastBuild();
                 boolean isNewBuilds = presubmitsBuilds.get(0).getNumber() != lastBuild.getNumber();
                 if (!isNewBuilds) {
                     break;
                 }
-                System.out.println("Added new build: " + lastBuild.getUrl());
+                System.out.println(BUILD_DATE.apply(System.nanoTime()) +"\tAdded new build: " + lastBuild.getUrl());
                 presubmitsBuilds = presubmitJob.getAllBuilds(buildRange);
                 leaveRunningBuilds(presubmitsBuilds);
             }
@@ -145,11 +145,9 @@ public class JenkinsUtils {
 
     private static void leaveRunningBuilds(List<Build> builds) throws IOException {
         Iterator<Build> iterator = builds.iterator();
-        while (iterator.hasNext())
-        {
+        while (iterator.hasNext()) {
             Build build = iterator.next();
-            if(build.details().getResult() != null)
-            {
+            if (build.details().getResult() != null) {
                 iterator.remove();
             }
         }
