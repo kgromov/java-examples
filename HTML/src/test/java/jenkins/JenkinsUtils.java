@@ -120,12 +120,15 @@ public class JenkinsUtils {
             for (Build build : presubmitsBuilds) {
                 BuildWithDetails buildWithDetails = build.details();
                 isNotCompletedCompilation = buildWithDetails.getResult() != null
-                        || !buildWithDetails.getConsoleOutputText().contains("Reactor Summary:");
+                        // http://akela-prd.nds.ext.here.com:8080/job/PreSubmit/409/logText/progressiveText
+//                        || !buildWithDetails.getConsoleOutputText().contains("Reactor Summary:");
+                        // but should be: http://akela-prd.nds.ext.here.com:8080/job/PreSubmit/409/consoleFull
+                        || !getFullConsoleLog(buildWithDetails).contains("Reactor Summary:");
                 if (isNotCompletedCompilation) {
                     System.out.println(BUILD_DATE.apply(System.nanoTime()) + "\tNot finished compilation: " + build.getUrl());
                     break;
                 }
-                System.out.println(BUILD_DATE.apply(System.nanoTime()) +"\tFinished compilation: " + build.getUrl());
+                System.out.println(BUILD_DATE.apply(System.nanoTime()) + "\tFinished compilation: " + build.getUrl());
             }
             if (!isNotCompletedCompilation) {
                 Build lastBuild = presubmitJob.getLastBuild();
@@ -133,14 +136,18 @@ public class JenkinsUtils {
                 if (!isNewBuilds) {
                     break;
                 }
-                System.out.println(BUILD_DATE.apply(System.nanoTime()) +"\tAdded new build: " + lastBuild.getUrl());
-                presubmitsBuilds = presubmitJob.getAllBuilds(buildRange);
-                leaveRunningBuilds(presubmitsBuilds);
+                System.out.println(BUILD_DATE.apply(System.nanoTime()) + "\tAdded new build: " + lastBuild.getUrl());
             }
+            presubmitsBuilds = presubmitJob.getAllBuilds(buildRange);
+            leaveRunningBuilds(presubmitsBuilds);
             long iteration = 30 * 1000L;
             elapsedTime.addAndGet(iteration);
             Thread.sleep(30 * 1000);
         }
+    }
+
+    private static String getFullConsoleLog(BuildWithDetails buildWithDetails) throws IOException {
+        return buildWithDetails.getClient().get(buildWithDetails.getUrl() + "consoleFull");
     }
 
     private static void leaveRunningBuilds(List<Build> builds) throws IOException {
