@@ -1,6 +1,7 @@
 package jenkins;
 
 import com.offbytwo.jenkins.JenkinsServer;
+import com.offbytwo.jenkins.helper.Range;
 import com.offbytwo.jenkins.model.Build;
 import com.offbytwo.jenkins.model.BuildWithDetails;
 import com.offbytwo.jenkins.model.Job;
@@ -12,16 +13,20 @@ import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class JenkinsUtils {
+    private static final long TIMEOUT = 10 * 60 * 1000;
     private static final Function<Long, String> BUILD_DATE = time ->
             new SimpleDateFormat("dd/MM/yyyy'T'HH-mm-ss", Locale.getDefault()).format(new Date(time));
 
@@ -101,6 +106,55 @@ public class JenkinsUtils {
             );
         }
     }
+
+    public static void logCompiledBuilds(int maxActive, int compiled, String jobName) throws IOException, InterruptedException {
+        JobWithDetails presubmitJob = getJobByName(jobName);
+        Range buildRange = Range.build().from(0).to(maxActive);
+        List<Build> presubmitsBuilds = presubmitJob.getAllBuilds(buildRange);
+        // filter out only not finished builds
+        leaveRunningBuilds(presubmitsBuilds);
+        AtomicInteger finished = new AtomicInteger();
+        AtomicLong elapsedTime = new AtomicLong();
+        while (finished.get() == 0 || elapsedTime.get() < TIMEOUT) {
+            boolean compilationCompleted = false;
+            for (Build build : presubmitsBuilds) {
+                BuildWithDetails buildWithDetails = build.details();
+                compilationCompleted = buildWithDetails.getResult() != null
+                        || buildWithDetails.getConsoleOutputText().contains("Reactor Summary:");
+                if (compilationCompleted) {
+                    finished.incrementAndGet();
+                    System.out.println("Finished compilation: " + build.getUrl());
+                    break;
+                }
+            }
+            if (compilationCompleted) {
+                Build lastBuild = presubmitJob.getLastBuild();
+                boolean isNewBuilds = presubmitsBuilds.get(0).getNumber() != lastBuild.getNumber();
+                if (!isNewBuilds) {
+                    break;
+                }
+                System.out.println("Added new build: " + lastBuild.getUrl());
+                presubmitsBuilds = presubmitJob.getAllBuilds(buildRange);
+                leaveRunningBuilds(presubmitsBuilds);
+            }
+            long iteration = 30 * 1000L;
+            elapsedTime.addAndGet(iteration);
+            Thread.sleep(30 * 1000);
+        }
+    }
+
+    private static void leaveRunningBuilds(List<Build> builds) throws IOException {
+        Iterator<Build> iterator = builds.iterator();
+        while (iterator.hasNext())
+        {
+            Build build = iterator.next();
+            if(build.details().getResult() != null)
+            {
+                iterator.remove();
+            }
+        }
+    }
+
 
     public static JobWithDetails getJobByName(String jobName) {
         try {
