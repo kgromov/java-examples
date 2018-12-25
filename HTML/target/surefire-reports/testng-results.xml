@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" ignored="2" total="4" passed="2">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Command line suite" duration-ms="4433" started-at="2018-10-11T07:06:38Z" finished-at="2018-10-11T07:06:42Z">
+    <groups>
+    </groups>
+    <test name="Command line test" duration-ms="4433" started-at="2018-10-11T07:06:38Z" finished-at="2018-10-11T07:06:42Z">
+      <class name="html.TestGridActivationTest">
+        <test-method status="PASS" signature="successTest()[pri:0, instance:html.TestGridActivationTest@7a79be86]" name="successTest" duration-ms="1" started-at="2018-10-11T10:06:38Z" finished-at="2018-10-11T10:06:38Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- successTest -->
+      </class> <!-- html.TestGridActivationTest -->
+      <class name="jenkins.JenkinsClientTest">
+        <test-method status="PASS" signature="initSettings()[pri:0, instance:jenkins.JenkinsClientTest@6e8dacdf]" name="initSettings" is-config="true" duration-ms="11" started-at="2018-10-11T10:06:38Z" finished-at="2018-10-11T10:06:38Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- initSettings -->
+        <test-method status="PASS" signature="checkSettings()[pri:0, instance:jenkins.JenkinsClientTest@6e8dacdf]" name="checkSettings" is-config="true" duration-ms="0" started-at="2018-10-11T10:06:38Z" finished-at="2018-10-11T10:06:38Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- checkSettings -->
+        <test-method status="PASS" signature="checkBuild()[pri:0, instance:jenkins.JenkinsClientTest@6e8dacdf]" name="checkBuild" duration-ms="4398" started-at="2018-10-11T10:06:38Z" finished-at="2018-10-11T10:06:42Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- checkBuild -->
+      </class> <!-- jenkins.JenkinsClientTest -->
+    </test> <!-- Command line test -->
+  </suite> <!-- Command line suite -->
+</testng-results>

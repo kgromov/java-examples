@@ -1,0 +1,9 @@
+html\HtmlUtils.class
+jenkins\JenkinsClientTest.class
+mail\SendMail.class
+jenkins\JenkinsUtils.class
+jenkins\JobInfo.class
+html\TestGridActivationTest.class
+jenkins\Settings.class
+mail\SendMail$1.class
+jenkins\Report.class

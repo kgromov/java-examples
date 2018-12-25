@@ -1,0 +1,8 @@
+example\Demo.class
+example\Foo.class
+example\Bar.class
+marshaling\Template.class
+marshaling\XmlJaxbAdaptors.class
+marshaling\JsonJaxbAdapters.class
+example\ObjectFactory.class
+marshaling\XmlToObjectMediator.class

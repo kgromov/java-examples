@@ -7,9 +7,13 @@ import com.offbytwo.jenkins.model.BuildWithDetails;
 import com.offbytwo.jenkins.model.Job;
 import com.offbytwo.jenkins.model.JobWithDetails;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -66,7 +70,7 @@ public class JenkinsUtils {
         List<Build> presubmitsBuilds = presubmitJob.getBuilds();
         for (Build build : presubmitsBuilds) {
             int number = build.getNumber();
-            getBuildLogNyNumber(presubmitJob, number).ifPresent(buildDetails ->
+            getBuildLogByNumber(presubmitJob, number).ifPresent(buildDetails ->
                     {
                         Map<String, String> parameters = buildDetails.getParameters();
                         Optional.ofNullable(parameters.get("GERRIT_CHANGE_SUBJECT")).ifPresent(parameter ->
@@ -89,7 +93,7 @@ public class JenkinsUtils {
         List<Build> presubmitsBuilds = presubmitJob.getBuilds();
         for (Build build : presubmitsBuilds) {
             int number = build.getNumber();
-            getBuildLogNyNumber(presubmitJob, number).ifPresent(buildDetails ->
+            getBuildLogByNumber(presubmitJob, number).ifPresent(buildDetails ->
                     {
                         Map<String, String> parameters = buildDetails.getParameters();
                         Optional.ofNullable(parameters.get("GERRIT_CHANGE_SUBJECT")).ifPresent(parameter ->
@@ -169,9 +173,10 @@ public class JenkinsUtils {
         }
     }
 
-    public static Optional<BuildWithDetails> getBuildLogNyNumber(String jobName, int buildNumber) {
+    public static Optional<BuildWithDetails> getBuildLogByNumber(String jobName, int buildNumber) {
         try {
-            return Optional.ofNullable(getJobByName(jobName).getBuildByNumber(buildNumber).details());
+            return buildNumber > 100 ?  getBuildLogByNumberEx(getJobByName(jobName), buildNumber)
+                    :Optional.ofNullable(getJobByName(jobName).getBuildByNumber(buildNumber).details());
         } catch (IOException | NullPointerException e) {
 //            throw new RuntimeException(String.format("Job '%s' does not have build by number '%d'", jobName, buildNumber));
             System.out.println(String.format("Job '%s' does not have build by number '%d'", jobName, buildNumber));
@@ -179,7 +184,7 @@ public class JenkinsUtils {
         }
     }
 
-    public static Optional<BuildWithDetails> getBuildLogNyNumber(JobWithDetails job, int buildNumber) {
+    public static Optional<BuildWithDetails> getBuildLogByNumber(JobWithDetails job, int buildNumber) {
         try {
             return Optional.ofNullable(job.getBuildByNumber(buildNumber).details());
         } catch (IOException | NullPointerException e) {
@@ -189,4 +194,44 @@ public class JenkinsUtils {
         }
     }
 
+    public static Optional<BuildWithDetails> getBuildLogByNumberEx(JobWithDetails job, int buildNumber) {
+        try {
+            int lastBuildNumber = job.getLastBuild().getNumber();
+            int diff = lastBuildNumber - buildNumber;
+            Range buildRange = Range.build().from(0).to(diff + 1);
+            List<Build> presubmitsBuilds = job.getAllBuilds(buildRange);
+            return Optional.ofNullable(presubmitsBuilds.get(diff).details());
+        } catch (IOException | NullPointerException e) {
+//            throw new RuntimeException(String.format("Job '%s' does not have build by number '%d'", job.getDisplayName(), buildNumber));
+            System.out.println(String.format("Job '%s' does not have build by number '%d'", job.getDisplayName(), buildNumber));
+            return Optional.empty();
+        }
+    }
+
+    private String getResponseByURLConnection(String url, Map<String, String> map) {
+        long start = System.currentTimeMillis();
+        StringBuilder response = new StringBuilder();
+        try {
+            String inputLine;
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setInstanceFollowRedirects(false);
+            HttpURLConnection.setFollowRedirects(false);
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                connection.addRequestProperty(entry.getKey(), entry.getValue());
+            }
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+            System.out.println("getResponseByURLConnection for url '" + url + "'= " + (System.currentTimeMillis() - start));
+            return response.toString();
+        } catch (IOException e) {
+            throw new RuntimeException(String.format("Unable to get response by url\t%s\ncause\n%s", url, e.getMessage()));
+        } finally {
+            System.out.println(String.format("getResponseByURLConnection for url '%s', time = '%d'", url, (System.currentTimeMillis() - start)));
+            System.out.println("Response\t" + response);
+        }
+
+    }
 }
