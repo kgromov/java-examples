@@ -1,0 +1,155 @@
+Retriggered by user olevinsk for Gerrit: https://gerrit.it.here.com/656748
+[Pipeline] timestamps
+[Pipeline] {
+[Pipeline] node
+Running on akela-admin-ip-10-126-92-159 in /home/jenkins/workspace/PreSubmit@6
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Build Compiler)
+[Pipeline] retry
+[Pipeline] {
+[Pipeline] git
+ > git rev-parse --is-inside-work-tree # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://deveo-ext.it.here.com/COLLAB/projects/akela/repositories/git/build # timeout=10
+Fetching upstream changes from https://deveo-ext.it.here.com/COLLAB/projects/akela/repositories/git/build
+ > git --version # timeout=10
+using GIT_ASKPASS to set credentials Seed Job Repo
+ > git fetch --tags --progress https://deveo-ext.it.here.com/COLLAB/projects/akela/repositories/git/build +refs/heads/*:refs/remotes/origin/*
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+ > git rev-parse refs/remotes/origin/origin/master^{commit} # timeout=10
+Checking out Revision 3ec4f2e95a928cbea09edc8119ce198f2fe4e5f7 (refs/remotes/origin/master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 3ec4f2e95a928cbea09edc8119ce198f2fe4e5f7
+ > git branch -a -v --no-abbrev # timeout=10
+ > git branch -D master # timeout=10
+ > git checkout -b master 3ec4f2e95a928cbea09edc8119ce198f2fe4e5f7
+Commit message: "NDSAKELA-8338 add LC FB and 3D"
+[Pipeline] }
+[Pipeline] // retry
+[Pipeline] echo
+Loading from pipelines/lib/helpers.groovy
+[Pipeline] load
+[Pipeline] { (pipelines/lib/helpers.groovy)
+[Pipeline] }
+[Pipeline] // load
+[Pipeline] sh
+[PreSubmit@6] Running shell script
++ rake clean
+Warning: NLS_LANG is not set. fallback to US7ASCII.
+rm -rf /home/jenkins/workspace/PreSubmit@6/out
+[Pipeline] echo
+Checking out nds_compiler. BRANCH is Akela, REFSPEC is refs/changes/48/656748/8
+[Pipeline] dir
+Running in /home/jenkins/workspace/PreSubmit@6/out
+[Pipeline] {
+[Pipeline] checkout
+Cloning the remote Git repository
+Cloning repository ssh://akela-ci@gerrit.it.here.com:29418/nds_here/nds_compiler
+ > git init /home/jenkins/workspace/PreSubmit@6/out # timeout=10
+Fetching upstream changes from ssh://akela-ci@gerrit.it.here.com:29418/nds_here/nds_compiler
+ > git --version # timeout=10
+using GIT_SSH to set credentials Private key for gerrit
+ > git fetch --tags --progress ssh://akela-ci@gerrit.it.here.com:29418/nds_here/nds_compiler +refs/heads/*:refs/remotes/origin/*
+ > git config remote.origin.url ssh://akela-ci@gerrit.it.here.com:29418/nds_here/nds_compiler # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url ssh://akela-ci@gerrit.it.here.com:29418/nds_here/nds_compiler # timeout=10
+Fetching upstream changes from ssh://akela-ci@gerrit.it.here.com:29418/nds_here/nds_compiler
+using GIT_SSH to set credentials Private key for gerrit
+ > git fetch --tags --progress ssh://akela-ci@gerrit.it.here.com:29418/nds_here/nds_compiler refs/changes/48/656748/8:refs/remotes/origin/buildMe
+ > git rev-parse refs/remotes/origin/buildMe^{commit} # timeout=10
+ > git rev-parse refs/remotes/origin/origin/buildMe^{commit} # timeout=10
+Checking out Revision e588a94e0f4710777d7b56faf02337eaeee5fde4 (refs/remotes/origin/buildMe)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f e588a94e0f4710777d7b56faf02337eaeee5fde4
+Commit message: "NDSAKELA-8491 change writing of export data of PSFV_BMD_MERGE_AREA_METADATA"
+ > git rev-list --no-walk 55a6640dede5bbb6fc0278698951ed4006ee724a # timeout=10
+First time build. Skipping changelog.
+[Pipeline] }
+[Pipeline] // dir
+[Pipeline] sh
+[PreSubmit@6] Running shell script
++ rake build
+Warning: NLS_LANG is not set. fallback to US7ASCII.
+aws s3 ls s3://akela-artifacts/compilers/Akela-CMP-e588a94.zip
+Package /home/jenkins/workspace/PreSubmit@6/out/Akela-CMP-e588a94.zip already exists in the archive.
+[Pipeline] sh
+[PreSubmit@6] Running shell script
++ rake nds:package:compiler nds:publish:compiler
+Warning: NLS_LANG is not set. fallback to US7ASCII.
+mkdir -p /home/jenkins/workspace/PreSubmit@6/out/bin/export/target
+aws s3 ls s3://akela-artifacts/compilers/Akela-CMP-e588a94.zip
+Package /home/jenkins/workspace/PreSubmit@6/out/Akela-CMP-e588a94.zip already exists in the archive
+aws s3 ls s3://akela-artifacts/compilers/Akela-CMP-e588a94.zip
+Package /home/jenkins/workspace/PreSubmit@6/out/Akela-CMP-e588a94.zip already exists in the archive.
+[Pipeline] readFile
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] dir
+Running in /home/jenkins/workspace/PreSubmit@6/out
+[Pipeline] {
+[Pipeline] sh
+[out] Running shell script
++ git log -1 --pretty=%B
+[Pipeline] }
+[Pipeline] // dir
+[Pipeline] echo
+Gerrit commit message:
+[Pipeline] echo
+START
+NDSAKELA-8491 change writing of export data of PSFV_BMD_MERGE_AREA_METADATA
+
+REGIONS=FB_DEU_G4_SA_SO FB_DEU_G4_SN_BR
+
+Change-Id: Ia9b422fae7731fddd44ad00775db6b12b4f5d71e
+
+
+END
+[Pipeline] readYaml
+[Pipeline] echo
+Using REGIONS=FB_DEU_G4_SA_SO FB_DEU_G4_SN_BR, QUARTER=17144, runvstest=true, keepuser=false
+[Pipeline] sh
+[PreSubmit@6] Running shell script
++ rake admin:config:get_db_by_ur DELIVERY_QUARTER=17144 REGION=FB_DEU_G4_SA_SO
+Warning: NLS_LANG is not set. fallback to US7ASCII.
+[Pipeline] sh
+[PreSubmit@6] Running shell script
++ rake admin:config:get_db_by_ur DELIVERY_QUARTER=17144 REGION=FB_DEU_G4_SN_BR
+Warning: NLS_LANG is not set. fallback to US7ASCII.
+[Pipeline] stage
+[Pipeline] { (Build maps)
+[Pipeline] parallel
+[Pipeline] [17144 akela-eu-17144-tst] { (Branch: 17144 akela-eu-17144-tst)
+[Pipeline] [17144 akela-eu-17144-tst] build (Building Wake Up RDS)
+[17144 akela-eu-17144-tst] Scheduling project: Wake Up RDS
+[17144 akela-eu-17144-tst] Starting building: Wake Up RDS #18906
+[Pipeline] [17144 akela-eu-17144-tst] }
+[Pipeline] // parallel
+[Pipeline] parallel
+[Pipeline] [FB_DEU_G4_SA_SO] { (Branch: FB_DEU_G4_SA_SO)
+[Pipeline] [FB_DEU_G4_SN_BR] { (Branch: FB_DEU_G4_SN_BR)
+[Pipeline] [FB_DEU_G4_SA_SO] build (Building Compile)
+[FB_DEU_G4_SA_SO] Scheduling project: Compile
+[Pipeline] [FB_DEU_G4_SN_BR] build (Building Compile)
+[FB_DEU_G4_SN_BR] Scheduling project: Compile
+[FB_DEU_G4_SA_SO] Starting building: Compile #35558
+[FB_DEU_G4_SN_BR] Starting building: Compile #35559
+[Pipeline] [FB_DEU_G4_SN_BR] }
+[Pipeline] [FB_DEU_G4_SA_SO] }
+[Pipeline] // parallel
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Merge)
+[Pipeline] build (Building Merge)
+Scheduling project: Merge
+Starting building: Merge #9005
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] }
+[Pipeline] // timestamps
+[Pipeline] End of Pipeline
+ERROR: Merge 9005-PreSubmit_FB_DEU_G4_SA_SO_FB_D completed with status FAILURE (propagate: false to ignore)
+Finished: FAILURE
