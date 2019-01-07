@@ -16,6 +16,7 @@
         <module>XML</module>
         <module>Selenium</module>
         <module>Multithreading</module>
+        <module>Aspect</module>
     </modules>
 
     <properties>
