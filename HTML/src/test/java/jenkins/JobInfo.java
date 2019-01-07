@@ -56,7 +56,7 @@ public class JobInfo {
     public JobInfo(String jobName, int buildNumber) {
         this.jobName = jobName;
         this.buildNumber = buildNumber;
-        Optional<BuildWithDetails> build = JenkinsUtils.getBuildLogNyNumber(jobName, buildNumber);
+        Optional<BuildWithDetails> build = JenkinsUtils.getBuildLogByNumber(jobName, buildNumber);
         build.ifPresent(info ->
         {
             this.buildName = info.getDisplayName(); // or set with jobName ?

@@ -71,6 +71,12 @@ public class JenkinsClientTest {
     }
 
 
+    @Test(enabled = true)
+    public void listFreeBuilds() throws IOException, InterruptedException {
+        JenkinsUtils.authenticate(settings.getJenkinsURL(), settings.getLogin(), settings.getPassword());
+        JenkinsUtils.logCompiledBuilds(10, 3, "PreSubmit");
+    }
+
     public static void main(String[] args) throws IOException {
         File log = new File("C:\\Users\\kgromov\\Desktop\\jenkinsAPI\\consoleText_dev_fail.txt");
         BufferedReader reader = new BufferedReader(new FileReader(log));
