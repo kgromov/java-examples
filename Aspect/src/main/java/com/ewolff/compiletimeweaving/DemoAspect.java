@@ -61,16 +61,16 @@ public class DemoAspect {
         state = State.STARTED;
         System.out.println("Before proceeding method:" + joinPoint.toString() + " state = " + state);
         System.out.println("Inside Aspect = " + Thread.currentThread().getName());
-       /* Timer timer = new Timer(true);
+        Timer timer = new Timer(true);
         InterruptTimerTask interruptTimerTask = new InterruptTimerTask(Thread.currentThread());
-        timer.schedule(interruptTimerTask, 1100);*/
+        timer.schedule(interruptTimerTask, 1100);
 
-        /*try {
+        try {
             // put here the portion of code that may take more than "waitTimeout"
         } finally {
             timer.cancel();
-        }*/
-        // fails but not stop thread with method
+        }
+        /*// fails but not stop thread with method
         Timeouter timeouter = new Timeouter(Thread.currentThread(), joinPoint.toString(), 10);
         Thread thread = new Thread(timeouter);
         try {
@@ -79,7 +79,7 @@ public class DemoAspect {
         catch (RuntimeException e)
         {
             throw new RuntimeException(e);
-        }
+        }*/
     }
 
     @After("execution(void advicedMethod())")
@@ -110,7 +110,7 @@ public class DemoAspect {
                 Thread.sleep(timeout);
                 if (state != State.FINISHED) {
                     System.out.println("Method: " + methodSignature + " not finished in " + timeout + " ms");
-//                    theTread.interrupt();
+                    theTread.interrupt();
 //                    theTread.stop();
                     throw new RuntimeException("Method: " + methodSignature + " not finished in " + timeout + " ms");
                 }

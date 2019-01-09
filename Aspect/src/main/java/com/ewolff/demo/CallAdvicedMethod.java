@@ -6,6 +6,28 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import java.util.Timer;
 
 public class CallAdvicedMethod {
+
+	private class DemoProxy
+	{
+		private DemoClass demoClass;
+
+		public DemoProxy(DemoClass demoClass) {
+			this.demoClass = demoClass;
+		}
+
+		public void adviceMethod()
+		{
+			try
+			{
+				Thread.sleep(0);
+				demoClass.advicedMethod();
+			}
+			catch (InterruptedException e)
+			{
+
+			}
+		}
+	}
 	
 	public static void main(String[] args) throws InterruptedException {
 		/*Thread [] threads = new Thread[5];
