@@ -37,7 +37,7 @@ public class TimeOutAspect {
         }
     }
 
-    @Before("execution(void advicedMethod())")
+//    @Before("execution(void advicedMethod())")
     public void beforeMethod(JoinPoint joinPoint) {
         System.out.println("Before proceeding method:" + joinPoint.toString());
         state = State.STARTED;
@@ -51,7 +51,7 @@ public class TimeOutAspect {
         }*/
     }
 
-    @Before("execution(void advicedMethod())")
+//    @Before("execution(void advicedMethod())")
     public void afterMethod(JoinPoint joinPoint) {
         System.out.println("After proceeding method:" + joinPoint.toString());
         state = State.FINISHED;
