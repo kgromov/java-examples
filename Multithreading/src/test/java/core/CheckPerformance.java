@@ -11,13 +11,13 @@ import java.util.stream.StreamSupport;
 public class CheckPerformance {
 
     public static void main(String[] args) {
-        List<String> elems = new ArrayList<>(Arrays.asList(
+     /*   List<String> elems = new ArrayList<>(Arrays.asList(
                 "a", "b"
         ));
         elems = elems.subList(0, 1);
         Stream<String> stream = elems.stream();
         elems.add("c");
-        stream.forEach(System.out::println);
+        stream.forEach(System.out::println);*/
 
 
         int length = 1_000_000;
