@@ -63,11 +63,11 @@ public class JenkinsClientTest {
         JenkinsUtils.findCrossProductBuilds();
     }
 
-    @Test(enabled = false)
+    @Test(enabled = true)
     public void listRegionBuilds()
     {
         JenkinsUtils.authenticate(settings.getJenkinsURL(), settings.getLogin(), settings.getPassword());
-        JenkinsUtils.findBuildsByCommitMessage(message -> message.contains("DEU_G1_NO") && message.contains("KEEPUSER"));
+        JenkinsUtils.findBuildsByCommitMessage(message -> /*message.contains("AUT_EAST") &&*/ message.contains("KEEPUSER"));
     }
 
 
