@@ -1,8 +1,12 @@
 package forkjoinpool.recursive_action;
 
 import java.util.List;
-import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Created by konstantin on 23.02.2019.
@@ -30,16 +34,29 @@ public class Main {
         // parallelStream = 93ms, common stream - 82ms
 //        products.forEach(product -> product.setPrice(product.getPrice() * (1 + 0.2)));
 
-       /* ExecutorService service = Executors.newFixedThreadPool(10);
-        for (int i = 0; i < products.size(); i += 10) {
+        List<Callable<Void>> tasks = IntStream.range(0, products.size() / 10).boxed()
+                .map(i ->
+                        (Callable<Void>) () -> {
+                            new UpdateProductTask(i * 10).updateProducts(products);
+                            return null;
+                        })
+                .collect(Collectors.toList());
+
+        ExecutorService service = Executors.newFixedThreadPool(10);
+      /*  for (int i = 0; i < products.size(); i += 10) {
             int finalI = i;
             service.submit(() -> new UpdateProductTask(finalI).updateProducts(products));
+        }*/
+        try {
+            service.invokeAll(tasks);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        service.shutdown();*/
+        service.shutdown();
 
 
         // ~230ms
-        ProductTask task = new ProductTask(products, 0, products.size(), 0.2);
+       /* ProductTask task = new ProductTask(products, 0, products.size(), 0.2);
 //        ProductRunnable runnable = new ProductRunnable(products, 0, products.size(), 0.2);
         ForkJoinPool pool = ForkJoinPool.commonPool();
         pool.execute(task);
@@ -60,7 +77,7 @@ public class Main {
         pool.shutdown();
         if (task.isCompletedNormally()) {
             System.out.println("Main: The process has completed normally.");
-        }
+        }*/
         System.out.println(String.format("Time elapsed = %d", TimeUnit.MILLISECONDS.convert(System.nanoTime() - start, TimeUnit.NANOSECONDS)));
 
         for (Product product : products) {
