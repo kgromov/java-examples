@@ -3,23 +3,26 @@ package jenkins;
 import com.offbytwo.jenkins.model.BuildResult;
 import com.offbytwo.jenkins.model.BuildWithDetails;
 import javafx.util.Pair;
+import jenkins.forkjoinpool.BuildInfo;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
-public class JobInfo {
+public class JobInfo extends BuildInfo {
     // "\\w{4,}\\s*#\\d+"
 //    private static final Pattern JOB_BUILD = Pattern.compile("[^\\d]{4,}\\s*#\\d+"); // or strictly specify job names
     private static final String BUILD_PREFIX = "\\s*#%d";
     private static final Pattern JOB_BUILD = Pattern.compile("(Compile|Merge|Validation_Suite|Compile Market)\\s*#\\d+");
-//    private static final Pattern PATH_TO_RESULT_PATTERN = Pattern.compile("^.*(s3://akela-artifacts).*$"); // (s3://akela-artifacts).*$
+    //    private static final Pattern PATH_TO_RESULT_PATTERN = Pattern.compile("^.*(s3://akela-artifacts).*$"); // (s3://akela-artifacts).*$
     private static final Pattern PATH_TO_RESULT_PATTERN = Pattern.compile(".*(s3://akela-artifacts).*"); // (s3://akela-artifacts).*$
     private static final String PATH_TO_RESULT = "s3://"; // and aws and ticket (auto) and .sq3
     private static final Predicate<String> IS_FOLDER = path -> path.charAt(path.length() - 1) == '/';
@@ -27,22 +30,12 @@ public class JobInfo {
 //    private final static Pattern EXCEPTION_PATTERN = Pattern.compile("Exception\\b:");
     private final static Pattern EXCEPTION_PATTERN = Pattern.compile("(?s)(?<=Exception occured:).*?(?=Caused)");
     // to build composite pattern
-    private List<JobInfo> downstreamJobs;
-    // fields
-    private String buildName;
-    private String jobName;
-    private int buildNumber;
-    private float logSize;
-    private long buildTime;
-    private BuildResult result;
-    private boolean isPassed;  // like double check
-    private String pathToS3;
-    private Set<String> exceptions;
-    private Map<String, String> parameters;
+    private List<BuildInfo> downstreamJobs;
 
     // to parse console output
     public JobInfo(String consoleOutput) {
         // consoleOutput
+        super(null, -1);
         BigDecimal decimal = BigDecimal.valueOf(consoleOutput.getBytes().length);
         this.logSize = decimal.divide(BigDecimal.valueOf(1024), 2, RoundingMode.HALF_UP).floatValue();
         this.downstreamJobs = new ArrayList<>();
@@ -54,6 +47,7 @@ public class JobInfo {
 
     // to get job directly from Jenkins
     public JobInfo(String jobName, int buildNumber) {
+        super(jobName, buildNumber);
         this.jobName = jobName;
         this.buildNumber = buildNumber;
         Optional<BuildWithDetails> build = JenkinsUtils.getBuildLogByNumber(jobName, buildNumber);
@@ -82,7 +76,7 @@ public class JobInfo {
         });
     }
 
-    public List<JobInfo> getDownstreamJobs() {
+    public List<BuildInfo> getDownstreamJobs() {
         return downstreamJobs;
     }
 
@@ -118,8 +112,7 @@ public class JobInfo {
                 String path = matcher.group();
                 this.pathToS3 = IS_FOLDER.test(path) ? path : path.substring(0, path.lastIndexOf('/'));
             }
-        } catch (IndexOutOfBoundsException e)
-        {
+        } catch (IndexOutOfBoundsException e) {
 
         }
         // parse for exceptions
@@ -128,82 +121,5 @@ public class JobInfo {
             exceptions.add(matcher.group());
         }
         return jobs;
-    }
-
-    public String getBuildName() {
-        return buildName;
-    }
-
-    public String getJobName() {
-        return jobName;
-    }
-
-    public int getBuildNumber() {
-        return buildNumber;
-    }
-
-    public long getBuildTime() {
-        return buildTime;
-    }
-
-    public float getLogSize() {
-        return logSize;
-    }
-
-    public String getResult() {
-        return result.name();
-    }
-
-    public boolean isPassed() {
-        return isPassed;
-    }
-
-    public String getPathToS3() {
-        return pathToS3;
-    }
-
-    public String getParameters() {
-        return parameters == null ? "" : parameters.entrySet().stream()
-                .map(entry -> entry.getKey() + "=" + entry.getValue())
-                .collect(Collectors.joining("\r\n"));
-    }
-
-    public String getExceptions() {
-        return exceptions == null ? "" : exceptions.stream().collect(Collectors.joining("\r\n")); // or tokenize in a proper wqy in xslt
-    }
-
-    public boolean isFound() {
-        return result != null;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(buildName, buildNumber);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || !(o instanceof JobInfo)) {
-            return false;
-        }
-        JobInfo that = (JobInfo) o;
-        return this.buildName.equalsIgnoreCase(that.buildName)
-                && this.buildNumber == that.buildNumber;
-    }
-
-    @Override
-    public String toString() {
-        return "JobInfo{" +
-                ", buildName='" + buildName + '\'' +
-                ", jobName='" + jobName + '\'' +
-                ", buildNumber=" + buildNumber +
-                ", logSize=" + logSize +
-                ", buildTime=" + buildTime +
-                ", result=" + result +
-                ", isPassed=" + isPassed +
-                ", pathToS3='" + pathToS3 + '\'' +
-                ", exceptions=" + exceptions +
-                ", parameters=" + parameters +
-                '}';
     }
 }

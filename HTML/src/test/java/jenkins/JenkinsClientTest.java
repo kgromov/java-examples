@@ -1,5 +1,7 @@
 package jenkins;
 
+import jenkins.forkjoinpool.BuildInfo;
+import jenkins.forkjoinpool.JobInfoTask;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -10,6 +12,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by konstantin on 11.03.2018.
@@ -56,6 +60,35 @@ public class JenkinsClientTest {
         Report.writeToReport(jobInfo);
     }
 
+    @Test(enabled = true)
+    public void checkBuild_task() {
+//        JenkinsUtils.authenticate("http://akela-dev.nds.ext.here.com:8080/", "kgromov", "Here1501!");
+        JenkinsUtils.authenticate(settings.getJenkinsURL(), settings.getLogin(), settings.getPassword());
+        // provide here jobName and build via parameters
+        BuildInfo buildInfo = new BuildInfo(settings.getJobName(), settings.getBuildNumber());
+
+        JobInfoTask task = new JobInfoTask(buildInfo);
+        ForkJoinPool pool = ForkJoinPool.commonPool();
+        pool.execute(task);
+        do {
+            System.out.printf("Main: Thread Count:%d\n", pool.getActiveThreadCount());
+            System.out.printf("Main: Thread Steal:%d\n", pool.getStealCount());
+            System.out.printf("Main: Parallelism:%d\n", pool.getParallelism());
+            try {
+                TimeUnit.SECONDS.sleep(5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } while (!task.isDone());
+        pool.shutdown();
+        // log all jobs info
+        System.out.println(buildInfo);
+        buildInfo.getDownstreamBuilds().forEach(System.out::println);
+        // check for consoleOutput and downstreamJobs
+        Report.copyTemplates();
+        Report.writeToReport(buildInfo);
+    }
+
     @Test(enabled = false)
     public void listCrossProductBuilds()
     {
@@ -64,10 +97,11 @@ public class JenkinsClientTest {
     }
 
     @Test(enabled = true)
+    // TODO: extend with dbUser; dbServer
     public void listRegionBuilds()
     {
         JenkinsUtils.authenticate(settings.getJenkinsURL(), settings.getLogin(), settings.getPassword());
-        JenkinsUtils.findBuildsByCommitMessage(message -> /*message.contains("AUT_EAST") &&*/ message.contains("KEEPUSER"));
+        JenkinsUtils.findBuildsByCommitMessage(message -> message.contains("LC") && message.contains("KEEPUSER"));
     }
 
 
