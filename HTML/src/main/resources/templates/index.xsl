@@ -23,6 +23,9 @@
 						<th width = "10%">DisplayName</th>
 						<th width = "5%">Number</th>
 						<th width = "15%%">Parameters</th>
+						<th width = "5%">CdcUser</th>
+						<th width = "5%">KeepUser</th>
+						<th width = "5%">DbServer</th>
 						<th width = "5%">LogSize, KB</th>
 						<th width = "5%">BuildTime, sec</th>						
 						<th width = "5%">BuildResult</th>
@@ -37,6 +40,9 @@
 							<td class="name"><xsl:value-of select="Name"/></td>
 							<td class="name"><xsl:value-of select="Number"/></td>
 							<td class="description"><xsl:value-of select="Parameters"/></td>
+							<td class="name"><xsl:value-of select="CdcUser"/></td>
+							<td class="name"><xsl:value-of select="KeepUser"/></td>
+							<td class="name"><xsl:value-of select="DbServer"/></td>
 							<td class="name"><xsl:value-of select="LogSize"/></td>
 							<td class="name"><xsl:value-of select="BuildTime"/></td>
 							<td class="name"><xsl:value-of select="BuildResult"/></td>
