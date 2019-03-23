@@ -81,8 +81,7 @@ public class Report {
             Document document = dBuilder.parse(xmlFile);
 
             NodeList builds = document.getElementsByTagName("Build");
-            if (builds.getLength() > 0)
-            {
+            if (builds.getLength() > 0) {
                 writeToSqLite(builds);
             }
             // compare speed
@@ -97,8 +96,7 @@ public class Report {
         }
     }
 
-    private static String getCreateQuery()
-    {
+    private static String getCreateQuery() {
         return "CREATE TABLE IF NOT EXISTS " +
                 TABLE_NAME +
                 COLUMN_TYPE_BY_COLUMN_NAME.entrySet().stream()
@@ -106,8 +104,7 @@ public class Report {
                         .collect(Collectors.joining(",", " (", ")"));
     }
 
-    private static String getInsertQuery()
-    {
+    private static String getInsertQuery() {
         return "INSERT INTO " +
                 TABLE_NAME +
                 COLUMN_TYPE_BY_COLUMN_NAME.keySet().stream()
@@ -120,8 +117,7 @@ public class Report {
     private static void writeToSqLite(NodeList builds) {
         try (Connection connection = DriverManager.getConnection(DB_URI_PREFIX + OUTPUT_SQ3);
              Statement createStatement = connection.createStatement();
-             PreparedStatement statement = connection.prepareStatement(getInsertQuery()))
-        {
+             PreparedStatement statement = connection.prepareStatement(getInsertQuery())) {
             // create table
             statement.execute(getCreateQuery());
             // start inserting
@@ -231,6 +227,19 @@ public class Report {
         result.setTextContent(buildInfo.getResult());
         Element pathToResult = document.createElement("PathToResult");
         pathToResult.setTextContent(buildInfo.getPathToS3());
+        // credentials
+        if (buildInfo.isCredentialsApplicable()) {
+            DbCredentials credentials = buildInfo.getDbCredentials();
+            Element cdcUser = document.createElement("CdcUser");
+            cdcUser.setTextContent(String.valueOf(credentials.getSourceDbUser()));
+            Element keepUser = document.createElement("KeepUser");
+            keepUser.setTextContent(String.valueOf(credentials.getDbUser()));
+            Element dbServer = document.createElement("DbServer");
+            dbServer.setTextContent(String.valueOf(credentials.getdBServer()));
+            record.appendChild(cdcUser);
+            record.appendChild(keepUser);
+            record.appendChild(dbServer);
+        }
         // append to record
         record.appendChild(name);
         record.appendChild(jobName);

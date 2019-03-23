@@ -1,6 +1,7 @@
 package jenkins.forkjoinpool;
 
 import com.offbytwo.jenkins.model.BuildResult;
+import jenkins.DbCredentials;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class BuildInfo {
+    protected static final String CDC_USER = "SourceDBUser";
+    protected static final String KEEP_USER = "DBUser";
+    protected static final String SERVER_URL = "DBServer";
     // fields
     protected String buildName;
     protected String jobName;
@@ -21,9 +25,11 @@ public class BuildInfo {
     protected String pathToS3;
     protected Set<String> exceptions;
     protected Map<String, String> parameters;
+    // additional
+    protected DbCredentials dbCredentials;
 
     // to build composite pattern
-    private List<BuildInfo> downstreamBuilds = new ArrayList<>();
+    protected List<BuildInfo> downstreamBuilds = new ArrayList<>();
 
     public BuildInfo(String jobName, int buildNumber) {
         this.jobName = jobName;
@@ -120,6 +126,15 @@ public class BuildInfo {
         this.parameters = parameters;
     }
 
+    // applicable only for compile jobs
+    public boolean isCredentialsApplicable() {
+        return jobName.equalsIgnoreCase("Compile");
+    }
+
+    public DbCredentials getDbCredentials() {
+        return dbCredentials;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(buildName, buildNumber);
@@ -148,6 +163,7 @@ public class BuildInfo {
                 ", pathToS3='" + pathToS3 + '\'' +
                 ", exceptions=" + exceptions +
                 ", parameters=" + parameters +
+                ", dbCredentials=" + dbCredentials +
                 '}';
     }
 }

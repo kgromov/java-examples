@@ -27,12 +27,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class JenkinsUtils {
     private static final long TIMEOUT = 10 * 60 * 1000;
     private static final Function<Long, String> BUILD_DATE = time ->
             new SimpleDateFormat("dd/MM/yyyy'T'HH-mm-ss", Locale.getDefault()).format(new Date(time));
+
+    private static final String BUILD_PREFIX = "\\s*#%d";
+    private static final Pattern JOB_BUILD = Pattern.compile("(Compile|Compile Market)\\s*#\\d+");
+    private final static Pattern DB_CREDENTIALS_PATTERN = Pattern.compile("(SourceDBUser|DBUser|DBServer)=\\w+");
 
     private static JenkinsServer jenkins;
     private static Map<String, Job> jobs;
@@ -103,6 +109,30 @@ public class JenkinsUtils {
                                         System.out.println(buildDetails.getDisplayName());
                                         System.out.println(BUILD_DATE.apply(buildDetails.getTimestamp()));
                                         System.out.println(buildDetails.getUrl());
+                                        // downstream jobs are required
+                                        try {
+                                            String consoleOutput = buildDetails.getConsoleOutputText();
+                                            Matcher matcher = JOB_BUILD.matcher(consoleOutput);
+                                            while (matcher.find()) {
+                                                String downstreamBuild = matcher.group();
+                                                try {
+                                                    int buildNumber = Integer.valueOf(downstreamBuild.replaceAll("[^\\d]", ""));
+                                                    String jobName = downstreamBuild.replaceAll(String.format(BUILD_PREFIX, buildNumber), "");
+                                                    getBuildLogByNumber(jobName, buildNumber).ifPresent(details ->
+                                                            {
+                                                                try {
+                                                                    System.out.println(getCredentials(details.getConsoleOutputText()));
+                                                                } catch (IOException e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                    );
+                                                } catch (NumberFormatException ignored) {
+                                                }
+                                            }
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
                                     }
                                 }
                         );
@@ -110,6 +140,82 @@ public class JenkinsUtils {
             );
         }
     }
+
+    // 2 nav_strands expected, but it only has
+    public static void findBuildsByConsoleLog(Predicate<String> condition) {
+        JobWithDetails presubmitJob = getJobByName("PreSubmit");
+        List<Build> presubmitsBuilds = presubmitJob.getBuilds();
+        for (Build build : presubmitsBuilds) {
+            int number = build.getNumber();
+            getBuildLogByNumber(presubmitJob, number).ifPresent(buildDetails ->
+                    {
+                        // downstream jobs are required
+                        try {
+                            String consoleOutput = buildDetails.getConsoleOutputText();
+                            Matcher matcher = JOB_BUILD.matcher(consoleOutput);
+                            while (matcher.find()) {
+                                String downstreamBuild = matcher.group();
+                                try {
+                                    int buildNumber = Integer.valueOf(downstreamBuild.replaceAll("[^\\d]", ""));
+                                    String jobName = downstreamBuild.replaceAll(String.format(BUILD_PREFIX, buildNumber), "");
+                                    getBuildLogByNumber(jobName, buildNumber).ifPresent(details ->
+                                            {
+                                                try {
+                                                    String downStreamConsoleOutput = buildDetails.getConsoleOutputText();
+                                                    if (condition.test(downStreamConsoleOutput)) {
+                                                        System.out.println(buildDetails.getDisplayName());
+                                                        System.out.println(BUILD_DATE.apply(buildDetails.getTimestamp()));
+                                                        System.out.println(buildDetails.getUrl());
+                                                        System.out.println(getCredentials(downStreamConsoleOutput));
+                                                    }
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                    );
+                                } catch (NumberFormatException ignored) {
+                                }
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+            );
+        }
+    }
+
+    public static DbCredentials getCredentials(String consoleOutput) {
+        Matcher matcher = DB_CREDENTIALS_PATTERN.matcher(consoleOutput);
+        String sourceDbUser = null;
+        String dbUser = null;
+        String dBServer = null;
+        while (matcher.find()) {
+            String[] paramAndValue = matcher.group().split("=");
+            String paramName = paramAndValue[0];
+            switch (paramName) {
+                case "SourceDBUser":
+                    sourceDbUser = sourceDbUser == null ? paramAndValue[1] : sourceDbUser;
+                    break;
+                case "DBUser":
+                    dbUser = dbUser == null ? paramAndValue[1] : dbUser;
+                    break;
+                case "DBServer":
+                    if (dBServer == null) {
+                        String[] temp = consoleOutput.substring(matcher.start(), matcher.start() + 100).split("\\,");
+                        String[] params = temp[0].split("=");
+                        dBServer = params[1];
+                    }
+                    break;
+                default:
+                    break;
+            }
+            if (sourceDbUser != null && dbUser != null && dBServer != null) {
+                break;
+            }
+        }
+        return new DbCredentials(sourceDbUser, dbUser, dBServer);
+    }
+
 
     public static void logCompiledBuilds(int maxActive, int compiled, String jobName) throws IOException, InterruptedException {
         JobWithDetails presubmitJob = getJobByName(jobName);
@@ -175,8 +281,8 @@ public class JenkinsUtils {
 
     public static Optional<BuildWithDetails> getBuildLogByNumber(String jobName, int buildNumber) {
         try {
-            return buildNumber > 100 ?  getBuildLogByNumberEx(getJobByName(jobName), buildNumber)
-                    :Optional.ofNullable(getJobByName(jobName).getBuildByNumber(buildNumber).details());
+            return buildNumber > 100 ? getBuildLogByNumberEx(getJobByName(jobName), buildNumber)
+                    : Optional.ofNullable(getJobByName(jobName).getBuildByNumber(buildNumber).details());
         } catch (IOException | NullPointerException e) {
 //            throw new RuntimeException(String.format("Job '%s' does not have build by number '%d'", jobName, buildNumber));
             System.out.println(String.format("Job '%s' does not have build by number '%d'", jobName, buildNumber));

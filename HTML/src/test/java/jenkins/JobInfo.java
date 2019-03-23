@@ -28,9 +28,7 @@ public class JobInfo extends BuildInfo {
     private static final Predicate<String> IS_FOLDER = path -> path.charAt(path.length() - 1) == '/';
     // patters
 //    private final static Pattern EXCEPTION_PATTERN = Pattern.compile("Exception\\b:");
-    private final static Pattern EXCEPTION_PATTERN = Pattern.compile("(?s)(?<=Exception occured:).*?(?=Caused)");
-    // to build composite pattern
-    private List<BuildInfo> downstreamJobs;
+    private final static Pattern EXCEPTION_PATTERN = Pattern.compile("(?s)(?<=Exception:).*?(?=Caused)");
 
     // to parse console output
     public JobInfo(String consoleOutput) {
@@ -38,10 +36,10 @@ public class JobInfo extends BuildInfo {
         super(null, -1);
         BigDecimal decimal = BigDecimal.valueOf(consoleOutput.getBytes().length);
         this.logSize = decimal.divide(BigDecimal.valueOf(1024), 2, RoundingMode.HALF_UP).floatValue();
-        this.downstreamJobs = new ArrayList<>();
+        this.downstreamBuilds = new ArrayList<>();
         // parse consoleOutput
         parseConsoleLog(consoleOutput).forEach(job ->
-                downstreamJobs.add(new JobInfo(job.getKey(), job.getValue()))
+                downstreamBuilds.add(new JobInfo(job.getKey(), job.getValue()))
         );
     }
 
@@ -62,22 +60,26 @@ public class JobInfo extends BuildInfo {
             // consoleOutput
             try {
                 String consoleOutput = info.getConsoleOutputText();
+                if (consoleOutput.contains("2 nav_strands expected, but it only has")) {
+                    System.out.println(info.getUrl());
+                }
                 BigDecimal decimal = BigDecimal.valueOf(consoleOutput.getBytes().length);
                 this.logSize = decimal.divide(BigDecimal.valueOf(1024), 2, RoundingMode.HALF_UP).floatValue();
-                this.downstreamJobs = new ArrayList<>();
+                this.downstreamBuilds = new ArrayList<>();
+                // parse db credentials
+                if(isCredentialsApplicable())
+                {
+                    this.dbCredentials = JenkinsUtils.getCredentials(consoleOutput);
+                }
                 // parse consoleOutput
                 parseConsoleLog(consoleOutput).forEach(job ->
-                        downstreamJobs.add(new JobInfo(job.getKey(), job.getValue()))
+                        downstreamBuilds.add(new JobInfo(job.getKey(), job.getValue()))
                 );
             } catch (IOException e) {
                 throw new RuntimeException(String.format("ConsoleOutput of job's '%s', " +
                         "build '%d' could not be provided", jobName, buildNumber), e);
             }
         });
-    }
-
-    public List<BuildInfo> getDownstreamJobs() {
-        return downstreamJobs;
     }
 
     /**

@@ -54,7 +54,7 @@ public class JenkinsClientTest {
         JobInfo jobInfo = new JobInfo(settings.getJobName(), settings.getBuildNumber());
         // log all jobs info
         System.out.println(jobInfo);
-        jobInfo.getDownstreamJobs().forEach(System.out::println);
+        jobInfo.getDownstreamBuilds().forEach(System.out::println);
         // check for consoleOutput and downstreamJobs
         Report.copyTemplates();
         Report.writeToReport(jobInfo);
