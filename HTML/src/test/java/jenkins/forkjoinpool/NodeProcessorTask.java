@@ -7,6 +7,7 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
@@ -69,14 +70,18 @@ public class NodeProcessorTask extends RecursiveAction {
         }
     }
 
-    public static void main(String[] args) throws Exception {
-        long start = System.nanoTime();
-        File xmlFile = new File("C:\\Projects\\java-examples\\HTML\\target\\jenkins-builds\\index.xml");
+    private static NodeList getNodeList(String xmlPath, String rootChildTag) throws Exception {
+        File xmlFile = new File(xmlPath);
         DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document document = dBuilder.parse(xmlFile);
+        return document.getElementsByTagName(rootChildTag);
+    }
 
-        NodeList builds = document.getElementsByTagName("Build");
-        NodeProcessorTask task = new NodeProcessorTask(builds, 0, builds.getLength());
+    public static void main(String[] args) throws Exception {
+//        NodeList nodes = getNodeList("C:\\Projects\\java-examples\\HTML\\target\\jenkins-builds\\index.xml", "Build");
+        NodeList nodes = getNodeList("D:\\workspace\\cds-automation\\src\\test\\resources\\data\\leads_data_1000.xml", "ContactData");
+        long start = System.nanoTime();
+        NodeProcessorTask task = new NodeProcessorTask(nodes, 0, nodes.getLength());
         ForkJoinPool pool = ForkJoinPool.commonPool();
         pool.execute(task);
 
@@ -93,10 +98,10 @@ public class NodeProcessorTask extends RecursiveAction {
 
         pool.shutdown();
 
-        System.out.println(String.format("Time elapsed = %d", TimeUnit.MILLISECONDS.convert(System.nanoTime() - start, TimeUnit.NANOSECONDS)));
+        System.out.println(String.format("ForkJoinPool: Time elapsed = %d", TimeUnit.MILLISECONDS.convert(System.nanoTime() - start, TimeUnit.NANOSECONDS)));
 
         start = System.nanoTime();
-        processSequentially(builds);
-        System.out.println(String.format("Time elapsed = %d", TimeUnit.MILLISECONDS.convert(System.nanoTime() - start, TimeUnit.NANOSECONDS)));
+        processSequentially(nodes);
+        System.out.println(String.format("Sequentially: Time elapsed = %d", TimeUnit.MILLISECONDS.convert(System.nanoTime() - start, TimeUnit.NANOSECONDS)));
     }
 }
