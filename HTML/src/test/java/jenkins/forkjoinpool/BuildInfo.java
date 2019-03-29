@@ -161,7 +161,7 @@ public class BuildInfo {
                 ", result=" + result +
                 ", isPassed=" + isPassed +
                 ", pathToS3='" + pathToS3 + '\'' +
-                ", exceptions=" + exceptions +
+//                ", exceptions=" + exceptions +
                 ", parameters=" + parameters +
                 ", dbCredentials=" + dbCredentials +
                 '}';

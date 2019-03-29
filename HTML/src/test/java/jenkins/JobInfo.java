@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +29,9 @@ public class JobInfo extends BuildInfo {
     private static final Predicate<String> IS_FOLDER = path -> path.charAt(path.length() - 1) == '/';
     // patters
 //    private final static Pattern EXCEPTION_PATTERN = Pattern.compile("Exception\\b:");
-    private final static Pattern EXCEPTION_PATTERN = Pattern.compile("(?s)(?<=Exception:).*?(?=Caused)");
+//    private final static Pattern EXCEPTION_PATTERN = Pattern.compile("(?s)(?<=Exception:).*?(?=Caused)");
+    private final static String NEW_STRING_RECORD_PATTERN = "\\d{2,4}-\\d{2}-\\d{2}\\s?\\d{2}:\\d{2}:\\d{2}(,\\d{3})?";
+    private final static Pattern EXCEPTION_PATTERN = Pattern.compile(".+Exception[^\\n]++(\\s+at .++)+");
 
     // to parse console output
     public JobInfo(String consoleOutput) {
@@ -67,8 +70,7 @@ public class JobInfo extends BuildInfo {
                 this.logSize = decimal.divide(BigDecimal.valueOf(1024), 2, RoundingMode.HALF_UP).floatValue();
                 this.downstreamBuilds = new ArrayList<>();
                 // parse db credentials
-                if(isCredentialsApplicable())
-                {
+                if (isCredentialsApplicable()) {
                     this.dbCredentials = JenkinsUtils.getCredentials(consoleOutput);
                 }
                 // parse consoleOutput
@@ -118,10 +120,16 @@ public class JobInfo extends BuildInfo {
 
         }
         // parse for exceptions
-        matcher = EXCEPTION_PATTERN.matcher(consoleOutput);
-        while (matcher.find()) {
-            exceptions.add(matcher.group());
-        }
+        Arrays.stream(consoleOutput.split(NEW_STRING_RECORD_PATTERN))
+                .filter(row -> row.contains("Exception:"))
+                .forEach(row ->
+                {
+                    Matcher matcher1 = EXCEPTION_PATTERN.matcher(row);
+                    if(matcher1.find())
+                    {
+                        exceptions.add(matcher1.group());
+                    }
+                });
         return jobs;
     }
 }
