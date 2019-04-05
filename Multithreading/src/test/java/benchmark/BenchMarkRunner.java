@@ -10,7 +10,8 @@ public class BenchMarkRunner {
         Options opt = new OptionsBuilder()
 //                .include(MapBenchMark.class.getSimpleName())
 //                .include(ListBenchMark.class.getSimpleName())
-                .include(FilesCounterBenchMark.class.getSimpleName())
+//                .include(FilesCounterBenchMark.class.getSimpleName())
+                .include(IoNioBenchMark.class.getSimpleName())
                 .forks(1)
                 .build();
 

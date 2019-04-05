@@ -97,11 +97,10 @@ public class JenkinsClientTest {
     }
 
     @Test(enabled = true)
-    // TODO: extend with dbUser; dbServer
     public void listRegionBuilds()
     {
         JenkinsUtils.authenticate(settings.getJenkinsURL(), settings.getLogin(), settings.getPassword());
-        JenkinsUtils.findBuildsByCommitMessage(message -> message.contains("LC") && message.contains("KEEPUSER"));
+        JenkinsUtils.findBuildsByCommitMessage(message -> message.contains("LC_DEU") && message.contains("KEEPUSER"));
     }
 
 
