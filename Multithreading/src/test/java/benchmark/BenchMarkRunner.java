@@ -11,7 +11,7 @@ public class BenchMarkRunner {
 //                .include(MapBenchMark.class.getSimpleName())
 //                .include(ListBenchMark.class.getSimpleName())
 //                .include(FilesCounterBenchMark.class.getSimpleName())
-                .include(IoNioBenchMark.class.getSimpleName())
+                .include(ReadFileBenchMark.class.getSimpleName())
                 .forks(1)
                 .build();
 

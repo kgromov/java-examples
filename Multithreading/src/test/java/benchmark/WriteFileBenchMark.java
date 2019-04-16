@@ -13,9 +13,14 @@ import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.infra.Blackhole;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -23,17 +28,19 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 @BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
+@OutputTimeUnit(TimeUnit.MICROSECONDS)
 @State(Scope.Benchmark)
 @Fork(value = 2, jvmArgs = {"-Xms2G", "-Xmx2G"})
 @Warmup(iterations = 3)
 @Measurement(iterations = 5)
-public class IoNioBenchMark {
+public class WriteFileBenchMark {
 
     @Param({
-            "C:\\Users\\kgromov\\Desktop\\nds-compilier-stuff\\Stubbles_Gateways.txt",
-            "C:\\Users\\kgromov\\Desktop\\nds-compilier-stuff\\Conditions_in_Routing.docx",
-            "C:\\Users\\kgromov\\Desktop\\nds-compilier-stuff\\RDF Reference Manual v2018.Q1.pdf",
+            "C:\\Users\\kgromov\\Desktop\\Credentials.txt",
+            "C:\\eula.1031.txt",
+            "C:\\Windows\\WinSxS\\x86_microsoft-windows-servicingstack_31bf3856ad364e35_10.0.17134.165_none_8ed574c0651001db\\GlobalInstallOrder.xml",
+          /*  "C:\\Users\\kgromov\\Desktop\\nds-compilier-stuff\\Conditions_in_Routing.docx",
+            "C:\\Users\\kgromov\\Desktop\\nds-compilier-stuff\\RDF Reference Manual v2018.Q1.pdf",*/
 
     })
     private String filePath;
@@ -61,6 +68,16 @@ public class IoNioBenchMark {
             e.printStackTrace();
         }
     }
+//    @Benchmark
+    public void dataInputStream_JDK_1_7_8(Blackhole bh) {
+        try (DataInputStream reader = new DataInputStream(new FileInputStream(filePath));) {
+            String result = reader.readUTF();
+            bh.consume(result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Benchmark
     public void filesBufferedReader_JDK_1_8(Blackhole bh) {
@@ -79,6 +96,29 @@ public class IoNioBenchMark {
         try {
             List<String> allLines =  Files.readAllLines(Paths.get(filePath));
             bh.consume(allLines);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Benchmark
+    public void filesReadChannel_JDK_1_8(Blackhole bh) {
+        try (RandomAccessFile reader = new RandomAccessFile(filePath, "r");
+             FileChannel channel = reader.getChannel();)
+        {
+            ByteBuffer buff = ByteBuffer.allocate((int) channel.size());
+            channel.read(buff);
+            buff.flip();
+            String value = new String(buff.array());
+            bh.consume(value);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        try (DataInputStream reader = new DataInputStream(new FileInputStream( "C:\\Users\\kgromov\\Desktop\\Credentials.txt"))) {
+            String result = reader.readUTF();
         } catch (IOException e) {
             e.printStackTrace();
         }
