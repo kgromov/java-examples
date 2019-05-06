@@ -59,19 +59,19 @@ public class Main {
     public static void main(String[] args) {
         long start = System.nanoTime();
 
-        File rootDirectory = new File("C:\\Projects\\nds_here");
-        System.out.println(fileCounter(rootDirectory, new AtomicInteger()));
+        File rootDirectory = new File("C:\\");
+     /*   System.out.println(fileCounter(rootDirectory, new AtomicInteger()));
         System.out.println(fileWalk(rootDirectory.getAbsolutePath()));
         System.out.println(fileFind(rootDirectory.getAbsolutePath()));
-        //
+        //*/
         FileCounterTask task = new FileCounterTask(rootDirectory);
         ForkJoinPool pool = ForkJoinPool.commonPool();
         pool.execute(task);
 
         do {
-            System.out.printf("Main: Thread Count:%d\n", pool.getActiveThreadCount());
+           /* System.out.printf("Main: Thread Count:%d\n", pool.getActiveThreadCount());
             System.out.printf("Main: Thread Steal:%d\n", pool.getStealCount());
-            System.out.printf("Main: Parallelism:%d\n", pool.getParallelism());
+            System.out.printf("Main: Parallelism:%d\n", pool.getParallelism());*/
             try {
                 TimeUnit.MILLISECONDS.sleep(5);
             } catch (InterruptedException e) {

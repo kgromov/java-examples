@@ -22,17 +22,17 @@ public class CheckSpecificGatewayConditions {
     private static final String STUB_LINKS_QUERY = QueryCondition.TRANSITION_MASK_CONDITIONS.getStubbleGatewaysQuery();
     private static final String LOCAL_LINKS_QUERY = QueryCondition.TRANSITION_MASK_CONDITIONS.getLocalGatewaysQuery();
 
-    private static Pair<String, String> sourceRegionConfig = Pair.of("CDCA_DEU_G2_HE_18144",
-            "jdbc:oracle:thin:@akela-eu-18144-02.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl");
+    private static Pair<String, String> sourceRegionConfig = Pair.of("CDCA_DEU_G2_HE_18147",
+            "jdbc:oracle:thin:@akela-eu-18147-02.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl"); // 10403
 
     private static Map<String, String> neighbourRegionsConfig = new ImmutableMap.Builder<String, String>()
-            .put("CDCA_DEU_G1_NO_18144", "jdbc:oracle:thin:@akela-eu-18144-07.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")
-            .put("CDCA_DEU_G2_RP_SA_18144", "jdbc:oracle:thin:@akela-eu-18144-03.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")
-            .put("CDCA_DEU_G3_18144", "jdbc:oracle:thin:@akela-eu-18144-05.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")
-            .put("CDCA_DEU_G4_SA_SO_18144", "jdbc:oracle:thin:@akela-eu-18144-06.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")
-            .put("CDCA_DEU_G5_18144", "jdbc:oracle:thin:@akela-eu-18144-07.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")
-            .put("CDCA_DEU_G6_NO_18144", "jdbc:oracle:thin:@akela-eu-18144-04.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")
-            .put("CDCA_DEU_G8_18144", "jdbc:oracle:thin:@akela-eu-18144-01.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")
+            .put("CDCA_DEU_G1_NO_18147", "jdbc:oracle:thin:@akela-eu-18147-07.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")      // 10402
+            .put("CDCA_DEU_G2_RP_SA_18147", "jdbc:oracle:thin:@akela-eu-18147-03.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")   // 10404
+            .put("CDCA_DEU_G3_18147", "jdbc:oracle:thin:@akela-eu-18147-05.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")         // 10405
+            .put("CDCA_DEU_G4_SA_SO_18147", "jdbc:oracle:thin:@akela-eu-18147-06.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")   // 10406
+            .put("CDCA_DEU_G5_18147", "jdbc:oracle:thin:@akela-eu-18147-07.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")         // 10409
+            .put("CDCA_DEU_G6_NO_18147", "jdbc:oracle:thin:@akela-eu-18147-04.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")      // 10411
+            .put("CDCA_DEU_G8_18147", "jdbc:oracle:thin:@akela-eu-18147-01.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")         // 10413
             .build();
 
     public static void main(String[] args) {
@@ -41,7 +41,7 @@ public class CheckSpecificGatewayConditions {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             SourceUpdateRegionGatewayLinksHolder sourceGatewaysHolder = new SourceUpdateRegionGatewayLinksHolder(
                     sourceRegionConfig.getLeft(), sourceRegionConfig.getRight()
-//                    "CDCA_DEU_G5_18144", "jdbc:oracle:thin:@akela-eu-18144-07.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl"
+//                    "CDCA_DEU_G5_18147", "jdbc:oracle:thin:@akela-eu-18147-07.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl"
             );
             // init source link gateways
             try (Connection connection = DriverManager.getConnection(sourceGatewaysHolder.getDbServerUrl(),

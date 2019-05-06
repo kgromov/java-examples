@@ -23,6 +23,11 @@ public class FileCounterTask extends RecursiveTask<Integer> {
         for (File file : files) {
             if (file.isFile()) {
                 ++filesCount;
+                if (file.getName().contains(".java")
+                        && (file.getName().contains("Middleware") || file.getName().contains("Block")))
+                {
+                    System.out.println(file);
+                }
             } else {
                 filesCount +=new FileCounterTask(file).fork().join();
             }

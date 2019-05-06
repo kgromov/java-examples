@@ -79,7 +79,8 @@ public class NodeProcessorTask extends RecursiveAction {
 
     public static void main(String[] args) throws Exception {
 //        NodeList nodes = getNodeList("C:\\Projects\\java-examples\\HTML\\target\\jenkins-builds\\index.xml", "Build");
-        NodeList nodes = getNodeList("D:\\workspace\\cds-automation\\src\\test\\resources\\data\\leads_data_1000.xml", "ContactData");
+//        NodeList nodes = getNodeList("D:\\workspace\\cds-automation\\src\\test\\resources\\data\\leads_data_1000.xml", "ContactData");
+        NodeList nodes = getNodeList("C:\\Windows\\WinSxS\\x86_microsoft-windows-servicingstack_31bf3856ad364e35_10.0.17134.165_none_8ed574c0651001db\\GlobalInstallOrder.xml", "component");
         long start = System.nanoTime();
         NodeProcessorTask task = new NodeProcessorTask(nodes, 0, nodes.getLength());
         ForkJoinPool pool = ForkJoinPool.commonPool();

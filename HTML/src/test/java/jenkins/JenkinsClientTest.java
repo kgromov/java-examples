@@ -100,7 +100,7 @@ public class JenkinsClientTest {
     public void listRegionBuilds()
     {
         JenkinsUtils.authenticate(settings.getJenkinsURL(), settings.getLogin(), settings.getPassword());
-        JenkinsUtils.findBuildsByCommitMessage(message -> message.contains("LC_BEL") && message.contains("KEEPUSER"));
+        JenkinsUtils.findBuildsByCommitMessage(message -> message.contains("LC_DEU") && message.contains("KEEPUSER"));
     }
 
 
