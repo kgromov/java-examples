@@ -13,8 +13,20 @@ with CF_PSF_LOCAL_LINK_RESTR_MNR as
                     or (rl.NONREF_NODE_ID = rcd.NODE_ID and rnl.DIVIDER = '2')
                 )
                 union
+                 -- RDF_CONDITION_DIVIDER (RR, SR, RS)
+                select rcd.NODE_ID, rcd.FROM_LINK_ID, rcd.TO_LINK_ID from STUB_CONDITION_DIVIDER rcd
+                join RDF_NAV_LINK rnl on rnl.LINK_ID = rcd.FROM_LINK_ID or rnl.LINK_ID = rcd.TO_LINK_ID
+--                join TMP_CF_PSF_RDF_NAV_LINK rnl on rnl.LINK_ID = rcd.FROM_LINK_ID or rnl.LINK_ID = rcd.TO_LINK_ID
+                join RDF_LINK rl on rl.LINK_ID = rnl.LINK_ID
+                where rnl.DIVIDER != 'N' and
+                (
+                    rnl.DIVIDER_LEGAL = 'N' or rnl.DIVIDER = 'A'
+                    or (rl.REF_NODE_ID = rcd.NODE_ID and rnl.DIVIDER = '1')
+                    or (rl.NONREF_NODE_ID = rcd.NODE_ID and rnl.DIVIDER = '2')
+                )
+                union
                 -- RDF_CONDITION_DIVIDER (SS)
-                select rcd.NODE_ID, rcd.FROM_LINK_ID, rcd.TO_LINK_ID from RDF_CONDITION_DIVIDER rcd
+                select rcd.NODE_ID, rcd.FROM_LINK_ID, rcd.TO_LINK_ID from STUB_CONDITION_DIVIDER rcd
                 join STUB_NAV_LINK rnl on rnl.LINK_ID = rcd.FROM_LINK_ID or rnl.LINK_ID = rcd.TO_LINK_ID
 --                join TMP_CF_PSF_RDF_NAV_LINK rnl on rnl.LINK_ID = rcd.FROM_LINK_ID or rnl.LINK_ID = rcd.TO_LINK_ID
                 join STUB_LINK rl on rl.LINK_ID = rnl.LINK_ID
@@ -23,7 +35,7 @@ with CF_PSF_LOCAL_LINK_RESTR_MNR as
                     rnl.DIVIDER_LEGAL = 'N' or rnl.DIVIDER = 'A'
                     or (rl.REF_NODE_ID = rcd.NODE_ID and rnl.DIVIDER = '1')
                     or (rl.NONREF_NODE_ID = rcd.NODE_ID and rnl.DIVIDER = '2')
-                )
+                ) and rcd.NODE_ID in (select NODE_ID from SC_BORDER_NODE)
                 union
                 -- U-Turn
                 select NODE_ID, FROM_LINK_ID, TO_LINK_ID from
@@ -77,10 +89,24 @@ with CF_PSF_LOCAL_LINK_RESTR_MNR as
                     select rn.NAV_STRAND_ID
                     from RDF_CONDITION rc
                     join RDF_NAV_STRAND rn on rn.nav_strand_id = rc.NAV_STRAND_ID
-                    where rc.condition_type = 7
+                    where rc.condition_type in (4, 7)
                     group by rn.NAV_STRAND_ID
                     having count (*) = 2
                 )
+                union
+                -- Restricted Driving Manoeuvre pair (CONDITION_TYPE = 7)
+                select fns.NODE_ID, fns.LINK_ID as FROM_LINK_ID, tns.LINK_ID as TO_LINK_ID
+                from STUB_NAV_STRAND fns
+                join STUB_NAV_STRAND tns on tns.NAV_STRAND_ID = fns.NAV_STRAND_ID and tns.NODE_ID is null
+                where fns.NODE_ID is not null and fns.NAV_STRAND_ID in
+                (
+                    select rn.NAV_STRAND_ID
+                    from STUB_CONDITION rc
+                    join STUB_NAV_STRAND rn on rn.nav_strand_id = rc.NAV_STRAND_ID
+                    where rc.condition_type in (4, 7)
+                    group by rn.NAV_STRAND_ID
+                    having count (*) = 2
+                ) and fns.NODE_ID in (select NODE_ID from SC_BORDER_NODE)
             ),
     TMP_STUB_LOCAL_BNODE_LINKS as
     (

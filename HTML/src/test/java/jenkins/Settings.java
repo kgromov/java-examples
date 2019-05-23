@@ -8,6 +8,7 @@ public class Settings {
     private String password;
     private String jobName;
     private int buildNumber;
+    private boolean isParseExceptions;
 
     public Settings(Properties properties) {
         this.jenkinsURL = properties.getProperty("jenkinsURL");
@@ -15,6 +16,7 @@ public class Settings {
         this.password = properties.getProperty("passwordToJenkins");
         this.jobName = properties.getProperty("jobName");
         this.buildNumber = Integer.parseInt(properties.getProperty("buildNumber"));
+        this.isParseExceptions = Boolean.parseBoolean(properties.getProperty("isParseExceptions"));
     }
 
     public String getJenkinsURL() {
@@ -45,6 +47,7 @@ public class Settings {
                 ", password='" + password + '\'' +
                 ", jobName='" + jobName + '\'' +
                 ", buildNumber=" + buildNumber +
+                ", isParseExceptions=" + isParseExceptions +
                 '}';
     }
 }

@@ -22,17 +22,17 @@ public class CheckSpecificGatewayConditions {
     private static final String STUB_LINKS_QUERY = QueryCondition.TRANSITION_MASK_CONDITIONS.getStubbleGatewaysQuery();
     private static final String LOCAL_LINKS_QUERY = QueryCondition.TRANSITION_MASK_CONDITIONS.getLocalGatewaysQuery();
 
-    private static Pair<String, String> sourceRegionConfig = Pair.of("CDCA_DEU_G2_HE_18147",
-            "jdbc:oracle:thin:@akela-eu-18147-02.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl"); // 10403
+    private static Pair<String, String> sourceRegionConfig = Pair.of("CDCA_DEU_G2_HE_191E0",
+            "jdbc:oracle:thin:@akela-eu-191E0-02.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl"); // 10403
 
     private static Map<String, String> neighbourRegionsConfig = new ImmutableMap.Builder<String, String>()
-            .put("CDCA_DEU_G1_NO_18147", "jdbc:oracle:thin:@akela-eu-18147-07.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")      // 10402
-            .put("CDCA_DEU_G2_RP_SA_18147", "jdbc:oracle:thin:@akela-eu-18147-03.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")   // 10404
-            .put("CDCA_DEU_G3_18147", "jdbc:oracle:thin:@akela-eu-18147-05.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")         // 10405
-            .put("CDCA_DEU_G4_SA_SO_18147", "jdbc:oracle:thin:@akela-eu-18147-06.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")   // 10406
-            .put("CDCA_DEU_G5_18147", "jdbc:oracle:thin:@akela-eu-18147-07.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")         // 10409
-            .put("CDCA_DEU_G6_NO_18147", "jdbc:oracle:thin:@akela-eu-18147-04.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")      // 10411
-            .put("CDCA_DEU_G8_18147", "jdbc:oracle:thin:@akela-eu-18147-01.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")         // 10413
+            .put("CDCA_DEU_G1_NO_191E0", "jdbc:oracle:thin:@akela-eu-191E0-07.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")      // 10402
+            .put("CDCA_DEU_G2_RP_SA_191E0", "jdbc:oracle:thin:@akela-eu-191E0-03.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")   // 10404
+            .put("CDCA_DEU_G3_191E0", "jdbc:oracle:thin:@akela-eu-191E0-05.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")         // 10405
+            .put("CDCA_DEU_G4_SA_SO_191E0", "jdbc:oracle:thin:@akela-eu-191E0-06.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")   // 10406
+            .put("CDCA_DEU_G5_191E0", "jdbc:oracle:thin:@akela-eu-191E0-07.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")         // 10409
+            .put("CDCA_DEU_G6_NO_191E0", "jdbc:oracle:thin:@akela-eu-191E0-04.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")      // 10411
+            .put("CDCA_DEU_G8_191E0", "jdbc:oracle:thin:@akela-eu-191E0-01.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")         // 10413
             .build();
 
     public static void main(String[] args) {
@@ -41,7 +41,7 @@ public class CheckSpecificGatewayConditions {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             SourceUpdateRegionGatewayLinksHolder sourceGatewaysHolder = new SourceUpdateRegionGatewayLinksHolder(
                     sourceRegionConfig.getLeft(), sourceRegionConfig.getRight()
-//                    "CDCA_DEU_G5_18147", "jdbc:oracle:thin:@akela-eu-18147-07.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl"
+//                    "CDCA_DEU_G5_191E0", "jdbc:oracle:thin:@akela-eu-191E0-07.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl"
             );
             // init source link gateways
             try (Connection connection = DriverManager.getConnection(sourceGatewaysHolder.getDbServerUrl(),
@@ -65,8 +65,8 @@ public class CheckSpecificGatewayConditions {
                      ResultSet localGateways = connection.createStatement().executeQuery(LOCAL_LINKS_QUERY)) {
                     Set<Pair<Integer, Integer>> stubbles = getLinkGateways(stubbleGateways);
                     Set<Pair<Integer, Integer>> locals = getLinkGateways(localGateways);
-                    System.out.println(String.format("%s\tuser = %s, dbServer = %s%nstubbleGateways = %s%nlocalGateways = %s",
-                            new Date(), user, dbServerUrl, stubbles, locals));
+                    System.out.println(String.format("%s\tuser = %s, dbServer = %s%nstubbleGateways = %d%nlocalGateways = %d",
+                            new Date(), user, dbServerUrl, stubbles.size(), locals.size()));
                     sourceGatewaysHolder.getStubbleGateways().removeAll(locals);
                     sourceGatewaysHolder.getLocalGateways().removeAll(stubbles);
                 } catch (SQLException e) {

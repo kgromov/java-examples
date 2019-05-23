@@ -119,7 +119,7 @@ public class JobInfo extends BuildInfo {
         } catch (IndexOutOfBoundsException e) {
 
         }
-        // parse for exceptions
+      /*  // parse for exceptions
         Arrays.stream(consoleOutput.split(NEW_STRING_RECORD_PATTERN))
                 .filter(row -> row.contains("Exception:"))
                 .forEach(row ->
@@ -129,7 +129,7 @@ public class JobInfo extends BuildInfo {
                     {
                         exceptions.add(matcher1.group());
                     }
-                });
+                });*/
         return jobs;
     }
 }
