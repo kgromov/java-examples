@@ -1,7 +1,7 @@
 -- SELECT *  FROM all_tables where owner = 'CDCA_DEU_G4_SA_SO_18144' and table_name like '%LINK%' and table_name like '%NODE%';
 with CF_PSF_LOCAL_LINK_RESTR_MNR as
 (
-                -- RDF_CONDITION_DIVIDER (RR, SR, RS)
+               -- RDF_CONDITION_DIVIDER (RR, SR, RS)
                 select rcd.NODE_ID, rcd.FROM_LINK_ID, rcd.TO_LINK_ID from RDF_CONDITION_DIVIDER rcd
                 join RDF_NAV_LINK rnl on rnl.LINK_ID = rcd.FROM_LINK_ID or rnl.LINK_ID = rcd.TO_LINK_ID
 --                join TMP_CF_PSF_RDF_NAV_LINK rnl on rnl.LINK_ID = rcd.FROM_LINK_ID or rnl.LINK_ID = rcd.TO_LINK_ID
@@ -12,7 +12,7 @@ with CF_PSF_LOCAL_LINK_RESTR_MNR as
                     or (rl.REF_NODE_ID = rcd.NODE_ID and rnl.DIVIDER = '1')
                     or (rl.NONREF_NODE_ID = rcd.NODE_ID and rnl.DIVIDER = '2')
                 )
-                union
+               /* union
                  -- RDF_CONDITION_DIVIDER (RR, SR, RS)
                 select rcd.NODE_ID, rcd.FROM_LINK_ID, rcd.TO_LINK_ID from STUB_CONDITION_DIVIDER rcd
                 join RDF_NAV_LINK rnl on rnl.LINK_ID = rcd.FROM_LINK_ID or rnl.LINK_ID = rcd.TO_LINK_ID
@@ -23,9 +23,9 @@ with CF_PSF_LOCAL_LINK_RESTR_MNR as
                     rnl.DIVIDER_LEGAL = 'N' or rnl.DIVIDER = 'A'
                     or (rl.REF_NODE_ID = rcd.NODE_ID and rnl.DIVIDER = '1')
                     or (rl.NONREF_NODE_ID = rcd.NODE_ID and rnl.DIVIDER = '2')
-                )
+                )*/
                 union
-                -- RDF_CONDITION_DIVIDER (SS)
+                -- RDF_CONDITION_DIVIDER (SS, SR, RS)
                 select rcd.NODE_ID, rcd.FROM_LINK_ID, rcd.TO_LINK_ID from STUB_CONDITION_DIVIDER rcd
                 join STUB_NAV_LINK rnl on rnl.LINK_ID = rcd.FROM_LINK_ID or rnl.LINK_ID = rcd.TO_LINK_ID
 --                join TMP_CF_PSF_RDF_NAV_LINK rnl on rnl.LINK_ID = rcd.FROM_LINK_ID or rnl.LINK_ID = rcd.TO_LINK_ID

@@ -5,8 +5,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 public class SourceUpdateRegionGatewayLinksHolder {
@@ -72,8 +70,8 @@ public class SourceUpdateRegionGatewayLinksHolder {
         return new StringBuilder("SourceUpdateRegionGatewayLinks{")
                 .append("userName='").append(userName).append('\'')
                 .append(", dbServerUrl='").append(dbServerUrl).append('\'')
-                .append("\nlocalGateways=").append(localGateways)
-                .append("\nstubbleGateways=").append(stubbleGateways)
+                .append("\nlocalGateways=").append(localGateways.size()).append(":").append(localGateways)
+                .append("\nstubbleGateways=").append(stubbleGateways.size()).append(":").append(stubbleGateways)
                 .append('}').toString();
     }
 }
