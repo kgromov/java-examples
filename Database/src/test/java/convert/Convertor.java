@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 /**
  * Created by konstantin on 25.03.2018.
  */
-// TODO: male more generic; this one move to HTML module
+// TODO: made more generic; this one move to HTML module
 public class Convertor {
     // sql
     private static final String DB_URI_PREFIX = "jdbc:sqlite:file:";
@@ -125,9 +125,9 @@ public class Convertor {
                 String parameters = build.getElementsByTagName("Parameters").item(0).getTextContent();
                 float logSize = Float.parseFloat(build.getElementsByTagName("LogSize").item(0).getTextContent());
                 int buildTime = Integer.parseInt(build.getElementsByTagName("BuildTime").item(0).getTextContent());
-                String stackTrace = build.getElementsByTagName("StackTrace").item(0).getTextContent();
                 String buildResult = build.getElementsByTagName("BuildResult").item(0).getTextContent();
                 String pathToResult = build.getElementsByTagName("PathToResult").item(0).getTextContent();
+                String stackTrace = build.getElementsByTagName("StackTrace").item(0).getTextContent();
 
                 int columnIndex = 0;
                 statement.setString(++columnIndex, name);
@@ -137,9 +137,9 @@ public class Convertor {
                 statement.setFloat(++columnIndex, logSize);
 //                statement.setObject(++columnIndex, logSize, JDBCType.REAL);
                 statement.setInt(++columnIndex, buildTime);
-                statement.setString(++columnIndex, stackTrace);
                 statement.setString(++columnIndex, buildResult);
                 statement.setString(++columnIndex, pathToResult);
+                statement.setString(++columnIndex, stackTrace);
                 statement.addBatch();
             }
             statement.executeBatch();
