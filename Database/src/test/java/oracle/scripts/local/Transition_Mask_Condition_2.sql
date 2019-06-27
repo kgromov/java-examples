@@ -2,7 +2,7 @@
 with CF_PSF_LOCAL_LINK_RESTR_MNR as
 (
                -- RDF_CONDITION_DIVIDER (RR, SR, RS)
-                select rcd.NODE_ID, rcd.FROM_LINK_ID, rcd.TO_LINK_ID from RDF_CONDITION_DIVIDER rcd
+                select rcd.NODE_ID, rcd.FROM_LINK_ID, rcd.TO_LINK_ID, null as NAV_STRAND_ID from RDF_CONDITION_DIVIDER rcd
                 join RDF_NAV_LINK rnl on rnl.LINK_ID = rcd.FROM_LINK_ID or rnl.LINK_ID = rcd.TO_LINK_ID
 --                join TMP_CF_PSF_RDF_NAV_LINK rnl on rnl.LINK_ID = rcd.FROM_LINK_ID or rnl.LINK_ID = rcd.TO_LINK_ID
                 join RDF_LINK rl on rl.LINK_ID = rnl.LINK_ID
@@ -26,7 +26,7 @@ with CF_PSF_LOCAL_LINK_RESTR_MNR as
                 )*/
                 union
                 -- RDF_CONDITION_DIVIDER (SS, SR, RS)
-                select rcd.NODE_ID, rcd.FROM_LINK_ID, rcd.TO_LINK_ID from STUB_CONDITION_DIVIDER rcd
+                select rcd.NODE_ID, rcd.FROM_LINK_ID, rcd.TO_LINK_ID, null as NAV_STRAND_ID from STUB_CONDITION_DIVIDER rcd
                 join STUB_NAV_LINK rnl on rnl.LINK_ID = rcd.FROM_LINK_ID or rnl.LINK_ID = rcd.TO_LINK_ID
 --                join TMP_CF_PSF_RDF_NAV_LINK rnl on rnl.LINK_ID = rcd.FROM_LINK_ID or rnl.LINK_ID = rcd.TO_LINK_ID
                 join STUB_LINK rl on rl.LINK_ID = rnl.LINK_ID
@@ -38,7 +38,7 @@ with CF_PSF_LOCAL_LINK_RESTR_MNR as
                 ) and rcd.NODE_ID in (select NODE_ID from SC_BORDER_NODE)
                 union
                 -- U-Turn
-                select NODE_ID, FROM_LINK_ID, TO_LINK_ID from
+                select NODE_ID, FROM_LINK_ID, TO_LINK_ID, null as NAV_STRAND_ID from
                 (
                     select fromLinks.REF_NODE_ID as NODE_ID, rnl.LINK_ID as FROM_LINK_ID, rnl.LINK_ID as TO_LINK_ID from RDF_NAV_LINK rnl
                     join RDF_LINK fromLinks on fromLinks.LINK_ID = rnl.LINK_ID
@@ -58,7 +58,7 @@ with CF_PSF_LOCAL_LINK_RESTR_MNR as
                 ) where not exists (select 1 from RDF_ADMIN_ATTRIBUTE where ADMIN_WIDE_REGULATIONS = 1)
                 union
                  -- U-Turn (stubble links)
-                select NODE_ID, FROM_LINK_ID, TO_LINK_ID from
+                select NODE_ID, FROM_LINK_ID, TO_LINK_ID, null as NAV_STRAND_ID from
                 (
                     select fromLinks.REF_NODE_ID as NODE_ID, rnl.LINK_ID as FROM_LINK_ID, rnl.LINK_ID as TO_LINK_ID from STUB_NAV_LINK rnl
 --                    inner join TMP_STUB_NAV_LINK_INF snli on rnl.LINK_ID = snli.LINK_ID
@@ -81,7 +81,7 @@ with CF_PSF_LOCAL_LINK_RESTR_MNR as
                     and NODE_ID in (select NODE_ID from SC_BORDER_NODE)
                 union
                 -- Restricted Driving Manoeuvre pair (CONDITION_TYPE = 7)
-                select fns.NODE_ID, fns.LINK_ID as FROM_LINK_ID, tns.LINK_ID as TO_LINK_ID
+                select fns.NODE_ID, fns.LINK_ID as FROM_LINK_ID, tns.LINK_ID as TO_LINK_ID, fns.NAV_STRAND_ID
                 from RDF_NAV_STRAND fns
                 join RDF_NAV_STRAND tns on tns.NAV_STRAND_ID = fns.NAV_STRAND_ID and tns.NODE_ID is null
                 where fns.NODE_ID is not null and fns.NAV_STRAND_ID in
@@ -95,7 +95,7 @@ with CF_PSF_LOCAL_LINK_RESTR_MNR as
                 )
                 union
                 -- Restricted Driving Manoeuvre pair (CONDITION_TYPE = 7)
-                select fns.NODE_ID, fns.LINK_ID as FROM_LINK_ID, tns.LINK_ID as TO_LINK_ID
+                select fns.NODE_ID, fns.LINK_ID as FROM_LINK_ID, tns.LINK_ID as TO_LINK_ID, fns.NAV_STRAND_ID
                 from STUB_NAV_STRAND fns
                 join STUB_NAV_STRAND tns on tns.NAV_STRAND_ID = fns.NAV_STRAND_ID and tns.NODE_ID is null
                 where fns.NODE_ID is not null and fns.NAV_STRAND_ID in

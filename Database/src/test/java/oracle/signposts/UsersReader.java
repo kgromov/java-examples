@@ -27,4 +27,13 @@ public class UsersReader {
             throw new RuntimeException();
         }
     }
+
+    public Set<String> getCdcUserWithDVN(String customDVN) {
+        Set<String> cdcUsers = getCdcUsers();
+        String anyUser = cdcUsers.iterator().next();
+        String configurationDVN = anyUser.substring(anyUser.lastIndexOf('_') + 1);
+        return cdcUsers.stream()
+                .map(user -> user.replace(configurationDVN, customDVN))
+                .collect(Collectors.toSet());
+    }
 }
