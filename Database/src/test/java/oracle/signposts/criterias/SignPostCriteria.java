@@ -1,4 +1,4 @@
-package oracle.signposts;
+package oracle.signposts.criterias;
 
 public enum SignPostCriteria implements ICriteria{
 
