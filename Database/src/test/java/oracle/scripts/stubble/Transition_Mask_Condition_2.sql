@@ -125,16 +125,4 @@ with CF_PSF_STUB_LINK_RESTR_MNR as
     from STUB_NAV_LINK snl
     join STUB_LINK sl on snl.LINK_ID = sl.LINK_ID
     where snl.LINK_ID in (select LINK_ID from TMP_STUB_BNODE_LINKS)
-        -- Part of TRANSITION_MASK
---       exists (
---            select 1
---            from RDF_CONDITION_DIVIDER cd
---            where (snl.LINK_ID = cd.TO_LINK_ID or snl.LINK_ID = cd.FROM_LINK_ID)
---                and cd.NODE_ID in (select NODE_ID from SC_BORDER_NODE)
---        )
---         exists (
---            select 1
---            from CF_PSF_STUB_LINK_RESTR_MNR crm
---            where (snl.LINK_ID = crm.TO_LINK_ID or snl.LINK_ID = crm.FROM_LINK_ID)
---                and crm.NODE_ID in (select NODE_ID from SC_BORDER_NODE)
---        )
+

@@ -1,4 +1,4 @@
-package oracle;
+package oracle.signposts.gateways;
 
 import com.google.common.collect.Sets;
 import org.apache.commons.lang3.tuple.Pair;

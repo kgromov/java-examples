@@ -1,8 +1,6 @@
 package oracle.signposts;
 
 import com.google.common.collect.ImmutableMap;
-import oracle.signposts.consumers.PoiCriteriaConsumer;
-import oracle.signposts.criterias.GatewaysCriteria;
 import oracle.signposts.criterias.ICriteria;
 
 import java.sql.Connection;
@@ -15,8 +13,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-public class CheckSignpostSvg {
-    public static final Logger LOGGER = Logger.getLogger(CheckSignpostSvg.class.getName());
+public class CheckQueryBackup {
+    private static final Logger LOGGER = Logger.getLogger(CheckQueryBackup.class.getName());
     private static final String USERS_QUERY = "select username from dba_users WHERE username like 'CDCA_%'";
     private static final String DVN_USERS_PREDICATE = " and username like '%s'";
     private static final String DB_PASSWORD = "password";
@@ -31,8 +29,7 @@ public class CheckSignpostSvg {
         long start = System.nanoTime();
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
-//            ICriteria criteria = GatewaysCriteria.ADMIN_WIDE_REGULATIONS;
-//            ICriteria criteria = StubbleCriteria.STUB_LOCAL_POI;
+            ICriteria criteria = StubbleCriteria.STUB_LOCAL_POI;
             MARKET_TO_DVN.forEach((market, dvn) ->
             {
                 LOGGER.info(String.format("################## market = %s, dvn = %s ##################", market, dvn));
@@ -55,26 +52,20 @@ public class CheckSignpostSvg {
                             // users
                             dbServerUsers.parallelStream().forEach(userName ->
                             {
-                             /*   try (Connection connection2 = DriverManager.getConnection(dbServerUrl, userName, DB_PASSWORD);
+                                try (Connection connection2 = DriverManager.getConnection(dbServerUrl, userName, DB_PASSWORD);
                                      ResultSet queryResult2 = connection2.createStatement().executeQuery(criteria.getQuery())) {
                                     if (queryResult2.next()) {
-                                        LOGGER.info(String.format("SourceDbUser = %s, dbServer = %s", userName, dbServerUrl));
-                                        LOGGER.info("Criteria is found! E.g. :" + criteria.getIdentity(queryResult2));
+                                        System.out.println(String.format("SourceDbUser = %s, dbServer = %s", userName, dbServerUrl));
+                                        System.out.println("Criteria is found! E.g. :" + criteria.getIdentity(queryResult2));
                                     }
                                     synchronized (iterateUsers) {
                                         iterateUsers.remove(userName);
                                     }
                                 } catch (SQLException e) {
-                                    e.printStackTrace();
-                                }*/
-                                //  TODO: optimize this shit reusing connection
-                                try (Connection connection2 = DriverManager.getConnection(dbServerUrl, userName, DB_PASSWORD)) {
-                                   new PoiCriteriaConsumer().processDbUser(connection2, userName, dbServerUrl);
-                                } catch (SQLException e) {
-                                    LOGGER.severe(String.format("Unable to process dbUser = %s, dbServerURL = %s. Cause:%n%s", userName, dbServerUrl, e));
+                                     LOGGER.severe(String.format("Unable to process dbUser = %s, dbServerURL = %s. Cause:%n%s", userName, dbServerUrl, e));
+
                                 }
                             });
-                            iterateUsers.removeAll(dbServerUsers);
                         } catch (Exception e) {
 //                            System.err.println(String.format("No SourceDbUser = %s, dbServer = %s", cdcUser, dbServerUrl));
                         }

@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 public class UsersReader {
     private static final String RESOURCES_FILE = "C:\\Projects\\java-examples\\Database\\src\\test\\java\\oracle\\signposts\\resources\\%s_users.txt";
+    private static final Set<String> SAMPLE_USERS = new UsersReader("sample").getCdcUsers();
     private String market;
     private Set<String> cdcUsers;
 
@@ -35,5 +36,12 @@ public class UsersReader {
         return cdcUsers.stream()
                 .map(user -> user.replace(configurationDVN, customDVN))
                 .collect(Collectors.toSet());
+    }
+
+    public static Set<String> withoutSampleUsers(Set<String> cdcUsers)
+    {
+       return cdcUsers.stream()
+               .filter(user -> !SAMPLE_USERS.contains(user.substring(user.lastIndexOf('_') + 1)))
+               .collect(Collectors.toSet());
     }
 }

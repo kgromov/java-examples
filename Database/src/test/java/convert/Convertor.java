@@ -37,7 +37,9 @@ public class Convertor {
     private static final String BUILD_TIME_COLUMN = "BuildTime";
     private static final String BUILD_RESULT_COLUMN = "BuildResult";
     private static final String PATH_COLUMN = "PathToResult";
-    private static final String STACK_TRACE_COLUMN = "StackTrace";
+    private static final String CDC_USER = "CdcUser";
+    private static final String KEEP_USER = "KeepUser";
+    private static final String DB_SERVER = "DbServer";
 
     private static final String TEXT_TYPE = "TEXT";
     private static final String INTEGER_TYPE = "INTEGER";
@@ -52,7 +54,9 @@ public class Convertor {
             .put(BUILD_TIME_COLUMN, INTEGER_TYPE)
             .put(BUILD_RESULT_COLUMN, TEXT_TYPE)
             .put(PATH_COLUMN, TEXT_TYPE)
-            .put(STACK_TRACE_COLUMN, TEXT_TYPE)
+            .put(CDC_USER, TEXT_TYPE)
+            .put(KEEP_USER, TEXT_TYPE)
+            .put(DB_SERVER, TEXT_TYPE)
             .build();
 
     private Convertor() {
@@ -127,7 +131,14 @@ public class Convertor {
                 int buildTime = Integer.parseInt(build.getElementsByTagName("BuildTime").item(0).getTextContent());
                 String buildResult = build.getElementsByTagName("BuildResult").item(0).getTextContent();
                 String pathToResult = build.getElementsByTagName("PathToResult").item(0).getTextContent();
-                String stackTrace = build.getElementsByTagName("StackTrace").item(0).getTextContent();
+                // credentials
+                String cdcUser = null, keepUser = null, dbServer = null;
+                if (build.getElementsByTagName("CdcUser").getLength() > 0)
+                {
+                     cdcUser = build.getElementsByTagName("CdcUser").item(0).getTextContent();
+                     keepUser = build.getElementsByTagName("KeepUser").item(0).getTextContent();
+                     dbServer = build.getElementsByTagName("DbServer").item(0).getTextContent();
+                }
 
                 int columnIndex = 0;
                 statement.setString(++columnIndex, name);
@@ -139,7 +150,9 @@ public class Convertor {
                 statement.setInt(++columnIndex, buildTime);
                 statement.setString(++columnIndex, buildResult);
                 statement.setString(++columnIndex, pathToResult);
-                statement.setString(++columnIndex, stackTrace);
+                statement.setString(++columnIndex, cdcUser);
+                statement.setString(++columnIndex, keepUser);
+                statement.setString(++columnIndex, dbServer);
                 statement.addBatch();
             }
             statement.executeBatch();
@@ -154,7 +167,6 @@ public class Convertor {
         String folder = "C:\\Projects\\java-examples\\HTML\\target\\jenkins-builds\\";
         String xmlFilePath = folder + "index.xml";
         String dbFilePath = folder + "result.sq3";
-        ;
         convertToSqLite(xmlFilePath, dbFilePath);
 
     }

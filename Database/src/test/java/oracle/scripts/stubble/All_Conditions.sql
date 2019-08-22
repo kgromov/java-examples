@@ -17,8 +17,8 @@ CF_REAL_LINK_START_END_RESTR as
       select distinct ns_first.NAV_STRAND_ID
       from RDF_NAV_STRAND ns_first
       join RDF_NAV_STRAND ns_last on ns_first.NAV_STRAND_ID = ns_last.NAV_STRAND_ID
-      join CF_PSF_CONDITION c on ns_first.NAV_STRAND_ID = c.NAV_STRAND_ID
-      join TMP_CF_PSF_RDF_NAV_LINK nl on (nl.LINK_ID = ns_first.LINK_ID or nl.LINK_ID = ns_last.LINK_ID)
+      join RDF_CONDITION c on ns_first.NAV_STRAND_ID = c.NAV_STRAND_ID
+      join RDF_NAV_LINK nl on (nl.LINK_ID = ns_first.LINK_ID or nl.LINK_ID = ns_last.LINK_ID)
       where c.CONDITION_TYPE = 7 and ns_first.SEQ_NUM = 0 and ns_last.SEQ_NUM in
       (
         select max(seq_num)

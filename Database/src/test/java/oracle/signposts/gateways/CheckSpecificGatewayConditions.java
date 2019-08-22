@@ -1,10 +1,8 @@
-package oracle;
+package oracle.signposts.gateways;
 
 import com.google.common.collect.ImmutableMap;
-import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.io.FileWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -81,7 +79,7 @@ public class CheckSpecificGatewayConditions {
         }
     }
 
-    public static Set<Pair<Integer, Integer>> getLinkGateways(ResultSet resultSet) throws SQLException {
+    static Set<Pair<Integer, Integer>> getLinkGateways(ResultSet resultSet) throws SQLException {
         Set<Pair<Integer, Integer>> linkGateways = new HashSet<>();
         while (resultSet.next()) {
             int linkId = resultSet.getInt(LINK_ID_COLUMN_NAME);
