@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
 import java.util.Properties;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
@@ -26,11 +27,11 @@ public class JenkinsClientTest {
     public void initSettings() {
         String pathToProperties = System.getProperty("my.properties", DEFAULT_MY_PROPERTIES);
         if (pathToProperties != null && !pathToProperties.isEmpty()) {
-            Properties prop = new Properties();
+            Properties properties = new Properties();
             try(InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(DEFAULT_MY_PROPERTIES)) {
 //                prop.load(new FileReader(new File(pathToProperties)));
-                prop.load(is);
-                this.settings = new Settings(prop);
+                properties.load(is);
+                this.settings = Settings.getInstance(properties);
                 System.out.println(settings);
             } catch (IOException ignored) {
             }
@@ -58,6 +59,8 @@ public class JenkinsClientTest {
         // check for consoleOutput and downstreamJobs
         Report.copyTemplates();
         Report.writeToReport(jobInfo);
+        // convert to sq3
+        Convertor.convertToSqLite(settings, jobInfo);
     }
 
     @Test(enabled = true)
@@ -87,6 +90,8 @@ public class JenkinsClientTest {
         // check for consoleOutput and downstreamJobs
         Report.copyTemplates();
         Report.writeToReport(buildInfo);
+        // convert to sq3
+        Convertor.convertToSqLite(settings, buildInfo);
     }
 
     @Test(enabled = false)

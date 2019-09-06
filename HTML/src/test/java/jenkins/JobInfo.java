@@ -22,7 +22,7 @@ public class JobInfo extends BuildInfo {
     // "\\w{4,}\\s*#\\d+"
 //    private static final Pattern JOB_BUILD = Pattern.compile("[^\\d]{4,}\\s*#\\d+"); // or strictly specify job names
     private static final String BUILD_PREFIX = "\\s*#%d";
-    private static final Pattern JOB_BUILD = Pattern.compile("(Compile|Merge|Validation_Suite|Compile Market)\\s*#\\d+");
+    private static final Pattern JOB_BUILD = Pattern.compile("(Compile|Merge|Validation_Suite|Compile Market|City_FTS|Nuance)\\s*#\\d+");
     //    private static final Pattern PATH_TO_RESULT_PATTERN = Pattern.compile("^.*(s3://akela-artifacts).*$"); // (s3://akela-artifacts).*$
     private static final Pattern PATH_TO_RESULT_PATTERN = Pattern.compile(".*(s3://akela-artifacts).*"); // (s3://akela-artifacts).*$
     private static final String PATH_TO_RESULT = "s3://"; // and aws and ticket (auto) and .sq3
@@ -56,6 +56,7 @@ public class JobInfo extends BuildInfo {
         {
             this.buildName = info.getDisplayName(); // or set with jobName ?
             this.buildTime = TimeUnit.SECONDS.convert(info.getDuration(), TimeUnit.MILLISECONDS);
+            this.timestamp = info.getTimestamp();
             this.parameters = info.getParameters();
             this.result = info.getResult();
             this.isPassed = result == BuildResult.SUCCESS;

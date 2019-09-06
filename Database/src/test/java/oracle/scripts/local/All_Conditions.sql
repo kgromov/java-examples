@@ -86,9 +86,15 @@ CF_PSF_NON_BIVALENT_NODE as
                     having count(LINK_ID) > 2
 )
  select distinct sll.LINK_ID, sll.STUB_ID
-    from STUB_LINK_LOCAL sll inner join RDF_LINK l on sll.LINK_ID = l.LINK_ID inner join RDF_NAV_LINK rnl on l.LINK_ID = rnl.LINK_ID
-    left join RDF_LOCATION rl on rnl.LINK_ID = rl.LINK_ID
-    where rnl.POI_ACCESS = 'Y' and rl.LINK_ID is not null
+    from STUB_LINK_LOCAL sll inner join RDF_LINK l on sll.LINK_ID = l.LINK_ID
+    inner join RDF_NAV_LINK rnl on l.LINK_ID = rnl.LINK_ID
+    where
+        -- POI
+        exists (
+            select 1
+            from RDF_LOCATION l
+            where rnl.LINK_ID = l.LINK_ID and rnl.POI_ACCESS = 'Y'
+        )
         -- Signpost destination link
         or exists (
             select 1

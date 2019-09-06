@@ -104,13 +104,18 @@ CF_PSF_NON_BIVALENT_NODE as
 select distinct snl.LINK_ID, sl.STUB_ID
     from STUB_NAV_LINK snl
     join STUB_LINK sl on snl.LINK_ID = sl.LINK_ID
-    left join RDF_LOCATION rl on snl.LINK_ID = rl.LINK_ID
-    where snl.POI_ACCESS = 'Y' and rl.LINK_ID is not null
+    where
+        -- POI
+        exists (
+            select 1
+            from RDF_LOCATION l
+            where snl.LINK_ID = l.LINK_ID and snl.POI_ACCESS = 'Y'
+        )
         -- Signpost destination link
         or exists (
             select 1
             from RDF_SIGN_DESTINATION sd inner join RDF_SIGN_ORIGIN so on sd.SIGN_ID = so.SIGN_ID
-                inner join RDF_LINK l on so.ORIGINATING_LINK_ID = l.LINK_ID
+            inner join RDF_LINK l on so.ORIGINATING_LINK_ID = l.LINK_ID
             where snl.LINK_ID = sd.DEST_LINK_ID
                 and not exists (select 1 from SC_BORDER_LINK bl where bl.LINK_ID = l.LINK_ID)
         )

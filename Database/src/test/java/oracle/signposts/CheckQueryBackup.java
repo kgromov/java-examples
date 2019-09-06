@@ -77,7 +77,7 @@ public class CheckQueryBackup {
                                         System.out.println("STUB_LOCAL_POI:\t" + stubLocalPoiLinksPerUser);
                                     }
 
-                                    boolean isLogged = false;
+                                   /* boolean isLogged = false;
                                     if (queryResult1.next()) {
                                         System.out.println(String.format("SourceDbUser = %s, dbServer = %s", userName, dbServerUrl));
                                         System.out.println("Criteria is found! E.g. :" + stubPoiCriteria.getIdentity(queryResult1));
@@ -89,7 +89,7 @@ public class CheckQueryBackup {
                                             System.out.println(String.format("SourceDbUser = %s, dbServer = %s", userName, dbServerUrl));
                                         }
                                         System.out.println("Criteria is found! E.g. :" + stubLocalPoiCriteria.getIdentity(queryResult2));
-                                    }
+                                    }*/
                                     synchronized (iterateUsers) {
                                         iterateUsers.remove(userName);
                                         // specific

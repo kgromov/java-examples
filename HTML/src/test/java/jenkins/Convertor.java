@@ -1,6 +1,7 @@
-package convert;
+package jenkins;
 
 import com.google.common.collect.ImmutableMap;
+import jenkins.forkjoinpool.BuildInfo;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -12,11 +13,16 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -28,6 +34,7 @@ public class Convertor {
     // sql
     private static final String DB_URI_PREFIX = "jdbc:sqlite:file:";
     private static final String TABLE_NAME = "RunSummary";
+    private static final SimpleDateFormat BUILD_START_DATE = new SimpleDateFormat("dd-MM-yyyy");
 
     private static final String JOB_NAME_COLUMN = "JobName";
     private static final String DISPLAY_NAME_COLUMN = "DisplayName";
@@ -62,7 +69,7 @@ public class Convertor {
     private Convertor() {
     }
 
-    public static void convertToSqLite(String xmlFilePath, String dbFilePath) {
+    private static void convertToSqLite(String xmlFilePath, String dbFilePath) {
         try {
             File xmlFile = new File(xmlFilePath);
             DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -82,6 +89,31 @@ public class Convertor {
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
             System.out.println("UsersXML: Error trying to instantiate DocumentBuilder " + e);
+        }
+    }
+
+    public static void convertToSqLite(Settings settings, BuildInfo upstreamBuild) {
+        try {
+            Path inputFilePath = Paths.get(settings.getOutputDir(), "index.xml");
+            Path outputFolder = Paths.get(settings.getDbOutputDir(),
+                    settings.getDvn(), "connections", BUILD_START_DATE.format(new Date(upstreamBuild.getTimestamp())));
+            Files.createDirectories(outputFolder);
+            Path outputFilePath = outputFolder.resolve(settings.getJobName() + "-" + settings.getBuildNumber() + ".sq3");
+//            Path outputFilePath = outputFolder.resolve(upstreamBuild.getBuildName() + ".sq3");
+            Files.deleteIfExists(outputFilePath);
+            Files.createFile(outputFilePath);
+
+            DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document document = dBuilder.parse(inputFilePath.toFile());
+
+            NodeList builds = document.getElementsByTagName("Build");
+            if (builds.getLength() > 0) {
+                createTable(outputFilePath.toString());
+                writeToSqLite(outputFilePath.toString(), builds);
+            }
+
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            System.err.println("UsersXML: Error trying to instantiate DocumentBuilder " + e);
         }
     }
 
@@ -133,11 +165,10 @@ public class Convertor {
                 String pathToResult = build.getElementsByTagName("PathToResult").item(0).getTextContent();
                 // credentials
                 String cdcUser = null, keepUser = null, dbServer = null;
-                if (build.getElementsByTagName("CdcUser").getLength() > 0)
-                {
-                     cdcUser = build.getElementsByTagName("CdcUser").item(0).getTextContent();
-                     keepUser = build.getElementsByTagName("KeepUser").item(0).getTextContent();
-                     dbServer = build.getElementsByTagName("DbServer").item(0).getTextContent();
+                if (build.getElementsByTagName("CdcUser").getLength() > 0) {
+                    cdcUser = build.getElementsByTagName("CdcUser").item(0).getTextContent();
+                    keepUser = build.getElementsByTagName("KeepUser").item(0).getTextContent();
+                    dbServer = build.getElementsByTagName("DbServer").item(0).getTextContent();
                 }
 
                 int columnIndex = 0;
@@ -162,13 +193,11 @@ public class Convertor {
         }
     }
 
-
     public static void main(String[] args) {
         String folder = "C:\\Projects\\java-examples\\HTML\\target\\jenkins-builds\\";
         String xmlFilePath = folder + "index.xml";
         String dbFilePath = folder + "result.sq3";
         convertToSqLite(xmlFilePath, dbFilePath);
-
     }
 
 }

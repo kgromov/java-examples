@@ -11,15 +11,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class BuildInfo {
-    protected static final String CDC_USER = "SourceDBUser";
-    protected static final String KEEP_USER = "DBUser";
-    protected static final String SERVER_URL = "DBServer";
     // fields
     protected String buildName;
     protected String jobName;
     protected int buildNumber;
     protected float logSize;
     protected long buildTime;
+    protected long timestamp;
     protected BuildResult result;
     protected boolean isPassed;  // like double check
     protected String pathToS3;
@@ -57,7 +55,7 @@ public class BuildInfo {
     }
 
     public String getResult() {
-        return result.name();
+        return result == null ? BuildResult.UNKNOWN.name() : result.name();
     }
 
     public boolean isPassed() {
@@ -104,6 +102,10 @@ public class BuildInfo {
 
     public void setBuildTime(long buildTime) {
         this.buildTime = buildTime;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
     }
 
     public void setResult(BuildResult result) {

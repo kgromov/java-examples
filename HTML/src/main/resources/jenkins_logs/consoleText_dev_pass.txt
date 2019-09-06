@@ -1017,7 +1017,7 @@ java.lang.Exception: kill the programmer
 	at org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:286)
 	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:240)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:121)
-convert
+jenkins.convert
 testInitializePNGOnly
 testInitializeBadFormats
 2661 [main] ERROR com.navteq.psf.common.tasks.SvgImageTaskTest$ImageTaskImpl$$EnhancerByMockitoWithCGLIB$$be38228f  - initialization error
@@ -3102,8 +3102,8 @@ com.navteq.cf.foundation.workflow.WorkflowException: no bounding box for country
 	at org.mockito.internal.creation.cglib.MethodInterceptorFilter.intercept(MethodInterceptorFilter.java:59)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.derivePostalCentroid(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.getListOfAllCurrentPostalCodes(CalculatePostalMidPointTask.java:404)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.convert(CalculatePostalMidPointTask.java:140)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.CGLIB$convert$0(<generated>)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.jenkins.convert(CalculatePostalMidPointTask.java:140)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.CGLIB$jenkins.convert$0(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4$$FastClassByMockitoWithCGLIB$$9bda8276.invoke(<generated>)
 	at org.mockito.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:216)
 	at org.mockito.internal.creation.cglib.DelegatingMockitoMethodProxy.invokeSuper(DelegatingMockitoMethodProxy.java:19)
@@ -3115,7 +3115,7 @@ com.navteq.cf.foundation.workflow.WorkflowException: no bounding box for country
 	at org.mockito.internal.handler.NullResultGuardian.handle(NullResultGuardian.java:29)
 	at org.mockito.internal.handler.InvocationNotifierHandler.handle(InvocationNotifierHandler.java:38)
 	at org.mockito.internal.creation.cglib.MethodInterceptorFilter.intercept(MethodInterceptorFilter.java:59)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.convert(<generated>)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.jenkins.convert(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.checkedConvert(CalculateMidPointTaskTest.java:1624)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.convertWithFailure(CalculateMidPointTaskTest.java:1636)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.testConvertCountriesExtPostalCodesUnknownCountry(CalculateMidPointTaskTest.java:410)
@@ -3165,8 +3165,8 @@ com.navteq.cf.foundation.workflow.WorkflowException: no bounding box for country
 	at org.mockito.internal.creation.cglib.MethodInterceptorFilter.intercept(MethodInterceptorFilter.java:59)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.derivePostalCentroid(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.getListOfAllCurrentPostalCodes(CalculatePostalMidPointTask.java:404)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.convert(CalculatePostalMidPointTask.java:140)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.CGLIB$convert$0(<generated>)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.jenkins.convert(CalculatePostalMidPointTask.java:140)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.CGLIB$jenkins.convert$0(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4$$FastClassByMockitoWithCGLIB$$9bda8276.invoke(<generated>)
 	at org.mockito.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:216)
 	at org.mockito.internal.creation.cglib.DelegatingMockitoMethodProxy.invokeSuper(DelegatingMockitoMethodProxy.java:19)
@@ -3178,7 +3178,7 @@ com.navteq.cf.foundation.workflow.WorkflowException: no bounding box for country
 	at org.mockito.internal.handler.NullResultGuardian.handle(NullResultGuardian.java:29)
 	at org.mockito.internal.handler.InvocationNotifierHandler.handle(InvocationNotifierHandler.java:38)
 	at org.mockito.internal.creation.cglib.MethodInterceptorFilter.intercept(MethodInterceptorFilter.java:59)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.convert(<generated>)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.jenkins.convert(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.checkedConvert(CalculateMidPointTaskTest.java:1624)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.convertWithFailure(CalculateMidPointTaskTest.java:1636)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.testConvertCountriesExtPostalCodesUnknownCountry(CalculateMidPointTaskTest.java:410)
@@ -3228,8 +3228,8 @@ com.navteq.cf.foundation.workflow.WorkflowException: no bounding box for country
 	at org.mockito.internal.creation.cglib.MethodInterceptorFilter.intercept(MethodInterceptorFilter.java:59)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.derivePostalCentroid(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.getListOfAllCurrentPostalCodes(CalculatePostalMidPointTask.java:404)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.convert(CalculatePostalMidPointTask.java:140)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.CGLIB$convert$0(<generated>)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.jenkins.convert(CalculatePostalMidPointTask.java:140)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.CGLIB$jenkins.convert$0(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4$$FastClassByMockitoWithCGLIB$$9bda8276.invoke(<generated>)
 	at org.mockito.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:216)
 	at org.mockito.internal.creation.cglib.DelegatingMockitoMethodProxy.invokeSuper(DelegatingMockitoMethodProxy.java:19)
@@ -3241,7 +3241,7 @@ com.navteq.cf.foundation.workflow.WorkflowException: no bounding box for country
 	at org.mockito.internal.handler.NullResultGuardian.handle(NullResultGuardian.java:29)
 	at org.mockito.internal.handler.InvocationNotifierHandler.handle(InvocationNotifierHandler.java:38)
 	at org.mockito.internal.creation.cglib.MethodInterceptorFilter.intercept(MethodInterceptorFilter.java:59)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.convert(<generated>)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.jenkins.convert(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.checkedConvert(CalculateMidPointTaskTest.java:1624)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.convertWithFailure(CalculateMidPointTaskTest.java:1636)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.testConvertCountriesExtPostalCodesUnknownCountry(CalculateMidPointTaskTest.java:410)
@@ -3291,8 +3291,8 @@ com.navteq.cf.foundation.workflow.WorkflowException: no bounding box for country
 	at org.mockito.internal.creation.cglib.MethodInterceptorFilter.intercept(MethodInterceptorFilter.java:59)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.derivePostalCentroid(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.getListOfAllCurrentPostalCodes(CalculatePostalMidPointTask.java:404)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.convert(CalculatePostalMidPointTask.java:140)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.CGLIB$convert$0(<generated>)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.jenkins.convert(CalculatePostalMidPointTask.java:140)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.CGLIB$jenkins.convert$0(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4$$FastClassByMockitoWithCGLIB$$9bda8276.invoke(<generated>)
 	at org.mockito.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:216)
 	at org.mockito.internal.creation.cglib.DelegatingMockitoMethodProxy.invokeSuper(DelegatingMockitoMethodProxy.java:19)
@@ -3304,7 +3304,7 @@ com.navteq.cf.foundation.workflow.WorkflowException: no bounding box for country
 	at org.mockito.internal.handler.NullResultGuardian.handle(NullResultGuardian.java:29)
 	at org.mockito.internal.handler.InvocationNotifierHandler.handle(InvocationNotifierHandler.java:38)
 	at org.mockito.internal.creation.cglib.MethodInterceptorFilter.intercept(MethodInterceptorFilter.java:59)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.convert(<generated>)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.jenkins.convert(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.checkedConvert(CalculateMidPointTaskTest.java:1624)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.convertWithFailure(CalculateMidPointTaskTest.java:1636)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.testConvertCountriesExtPostalCodesUnknownCountry(CalculateMidPointTaskTest.java:410)
@@ -4149,8 +4149,8 @@ com.navteq.cf.foundation.workflow.WorkflowException: Error in calculateNavCentro
 	at org.mockito.internal.creation.cglib.MethodInterceptorFilter.intercept(MethodInterceptorFilter.java:59)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.derivePostalCentroid(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.getListOfAllCurrentPostalCodes(CalculatePostalMidPointTask.java:404)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.convert(CalculatePostalMidPointTask.java:140)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.CGLIB$convert$0(<generated>)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.jenkins.convert(CalculatePostalMidPointTask.java:140)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.CGLIB$jenkins.convert$0(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4$$FastClassByMockitoWithCGLIB$$9bda8276.invoke(<generated>)
 	at org.mockito.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:216)
 	at org.mockito.internal.creation.cglib.DelegatingMockitoMethodProxy.invokeSuper(DelegatingMockitoMethodProxy.java:19)
@@ -4162,7 +4162,7 @@ com.navteq.cf.foundation.workflow.WorkflowException: Error in calculateNavCentro
 	at org.mockito.internal.handler.NullResultGuardian.handle(NullResultGuardian.java:29)
 	at org.mockito.internal.handler.InvocationNotifierHandler.handle(InvocationNotifierHandler.java:38)
 	at org.mockito.internal.creation.cglib.MethodInterceptorFilter.intercept(MethodInterceptorFilter.java:59)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.convert(<generated>)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.jenkins.convert(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.checkedConvert(CalculateMidPointTaskTest.java:1624)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.convertWithFailure(CalculateMidPointTaskTest.java:1636)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.testConvertNoLatLonForRemainingExtPostalCode(CalculateMidPointTaskTest.java:1076)
@@ -4212,8 +4212,8 @@ com.navteq.cf.foundation.workflow.WorkflowException: Error in calculateNavCentro
 	at org.mockito.internal.creation.cglib.MethodInterceptorFilter.intercept(MethodInterceptorFilter.java:59)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.derivePostalCentroid(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.getListOfAllCurrentPostalCodes(CalculatePostalMidPointTask.java:404)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.convert(CalculatePostalMidPointTask.java:140)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.CGLIB$convert$0(<generated>)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.jenkins.convert(CalculatePostalMidPointTask.java:140)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.CGLIB$jenkins.convert$0(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4$$FastClassByMockitoWithCGLIB$$9bda8276.invoke(<generated>)
 	at org.mockito.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:216)
 	at org.mockito.internal.creation.cglib.DelegatingMockitoMethodProxy.invokeSuper(DelegatingMockitoMethodProxy.java:19)
@@ -4225,7 +4225,7 @@ com.navteq.cf.foundation.workflow.WorkflowException: Error in calculateNavCentro
 	at org.mockito.internal.handler.NullResultGuardian.handle(NullResultGuardian.java:29)
 	at org.mockito.internal.handler.InvocationNotifierHandler.handle(InvocationNotifierHandler.java:38)
 	at org.mockito.internal.creation.cglib.MethodInterceptorFilter.intercept(MethodInterceptorFilter.java:59)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.convert(<generated>)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.jenkins.convert(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.checkedConvert(CalculateMidPointTaskTest.java:1624)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.convertWithFailure(CalculateMidPointTaskTest.java:1636)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.testConvertNoLatLonForRemainingExtPostalCode(CalculateMidPointTaskTest.java:1076)
@@ -4275,8 +4275,8 @@ com.navteq.cf.foundation.workflow.WorkflowException: Error in calculateNavCentro
 	at org.mockito.internal.creation.cglib.MethodInterceptorFilter.intercept(MethodInterceptorFilter.java:59)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.derivePostalCentroid(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.getListOfAllCurrentPostalCodes(CalculatePostalMidPointTask.java:404)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.convert(CalculatePostalMidPointTask.java:140)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.CGLIB$convert$0(<generated>)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.jenkins.convert(CalculatePostalMidPointTask.java:140)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.CGLIB$jenkins.convert$0(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4$$FastClassByMockitoWithCGLIB$$9bda8276.invoke(<generated>)
 	at org.mockito.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:216)
 	at org.mockito.internal.creation.cglib.DelegatingMockitoMethodProxy.invokeSuper(DelegatingMockitoMethodProxy.java:19)
@@ -4288,7 +4288,7 @@ com.navteq.cf.foundation.workflow.WorkflowException: Error in calculateNavCentro
 	at org.mockito.internal.handler.NullResultGuardian.handle(NullResultGuardian.java:29)
 	at org.mockito.internal.handler.InvocationNotifierHandler.handle(InvocationNotifierHandler.java:38)
 	at org.mockito.internal.creation.cglib.MethodInterceptorFilter.intercept(MethodInterceptorFilter.java:59)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.convert(<generated>)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.jenkins.convert(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.checkedConvert(CalculateMidPointTaskTest.java:1624)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.convertWithFailure(CalculateMidPointTaskTest.java:1636)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.testConvertNoLatLonForRemainingExtPostalCode(CalculateMidPointTaskTest.java:1076)
@@ -4338,8 +4338,8 @@ com.navteq.cf.foundation.workflow.WorkflowException: Error in calculateNavCentro
 	at org.mockito.internal.creation.cglib.MethodInterceptorFilter.intercept(MethodInterceptorFilter.java:59)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.derivePostalCentroid(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.getListOfAllCurrentPostalCodes(CalculatePostalMidPointTask.java:404)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.convert(CalculatePostalMidPointTask.java:140)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.CGLIB$convert$0(<generated>)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask.jenkins.convert(CalculatePostalMidPointTask.java:140)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.CGLIB$jenkins.convert$0(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4$$FastClassByMockitoWithCGLIB$$9bda8276.invoke(<generated>)
 	at org.mockito.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:216)
 	at org.mockito.internal.creation.cglib.DelegatingMockitoMethodProxy.invokeSuper(DelegatingMockitoMethodProxy.java:19)
@@ -4351,7 +4351,7 @@ com.navteq.cf.foundation.workflow.WorkflowException: Error in calculateNavCentro
 	at org.mockito.internal.handler.NullResultGuardian.handle(NullResultGuardian.java:29)
 	at org.mockito.internal.handler.InvocationNotifierHandler.handle(InvocationNotifierHandler.java:38)
 	at org.mockito.internal.creation.cglib.MethodInterceptorFilter.intercept(MethodInterceptorFilter.java:59)
-	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.convert(<generated>)
+	at com.navteq.psf.basicnav.names.nvc.CalculatePostalMidPointTask$$EnhancerByMockitoWithCGLIB$$cf83e5c4.jenkins.convert(<generated>)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.checkedConvert(CalculateMidPointTaskTest.java:1624)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.convertWithFailure(CalculateMidPointTaskTest.java:1636)
 	at com.navteq.psf.basicnav.names.nvc.CalculateMidPointTaskTest.testConvertNoLatLonForRemainingExtPostalCode(CalculateMidPointTaskTest.java:1076)
@@ -7696,10 +7696,17 @@ quarter: 17144, regions: LC_MUC, keep_user: false, skip_vs_run: false
 + rake stats:compiler DELIVERY_QUARTER=17144 COMPILER_ID=compilers/Akela-CMP-8b6cb27.zip
 Warning: NLS_LANG is not set. fallback to US7ASCII.
 aws s3 sync --exclude "*" --include "*.yaml" --exclude "*.clip.performance.yaml" s3://akela-artifacts/Akela-17144/CMP-8b6cb27/logs /home/jenkins/workspace/PreSubmit@2/out/Akela-17144/CMP-8b6cb27/logs
-Completed 29 Bytes/109 Bytes with 4 file(s) remainingdownload: s3://akela-artifacts/Akela-17144/CMP-8b6cb27/logs/LC_MUC.performance.yaml to out/Akela-17144/CMP-8b6cb27/logs/LC_MUC.performance.yaml
-Completed 29 Bytes/109 Bytes with 3 file(s) remainingCompleted 55 Bytes/109 Bytes with 3 file(s) remainingdownload: s3://akela-artifacts/Akela-17144/CMP-8b6cb27/logs/UNKNOWN-LC.checksum.perf.yaml to out/Akela-17144/CMP-8b6cb27/logs/UNKNOWN-LC.checksum.perf.yaml
-Completed 55 Bytes/109 Bytes with 2 file(s) remainingCompleted 81 Bytes/109 Bytes with 2 file(s) remainingCompleted 109 Bytes/109 Bytes with 2 file(s) remainingdownload: s3://akela-artifacts/Akela-17144/CMP-8b6cb27/logs/UNKNOWN-LC.compression.perf.yaml to out/Akela-17144/CMP-8b6cb27/logs/UNKNOWN-LC.compression.perf.yaml
-Completed 109 Bytes/109 Bytes with 1 file(s) remainingdownload: s3://akela-artifacts/Akela-17144/CMP-8b6cb27/logs/UNKNOWN-LC.verification.perf.yaml to out/Akela-17144/CMP-8b6cb27/logs/UNKNOWN-LC.verification.perf.yaml
+Completed 29 Bytes/109 Bytes with 4 file(s) remaining
+download: s3://akela-artifacts/Akela-17144/CMP-8b6cb27/logs/LC_MUC.performance.yaml to out/Akela-17144/CMP-8b6cb27/logs/LC_MUC.performance.yaml
+Completed 29 Bytes/109 Bytes with 3 file(s) remaining
+Completed 55 Bytes/109 Bytes with 3 file(s) remaining
+download: s3://akela-artifacts/Akela-17144/CMP-8b6cb27/logs/UNKNOWN-LC.checksum.perf.yaml to out/Akela-17144/CMP-8b6cb27/logs/UNKNOWN-LC.checksum.perf.yaml
+Completed 55 Bytes/109 Bytes with 2 file(s) remaining
+Completed 81 Bytes/109 Bytes with 2 file(s) remaining
+Completed 109 Bytes/109 Bytes with 2 file(s) remaining
+download: s3://akela-artifacts/Akela-17144/CMP-8b6cb27/logs/UNKNOWN-LC.compression.perf.yaml to out/Akela-17144/CMP-8b6cb27/logs/UNKNOWN-LC.compression.perf.yaml
+Completed 109 Bytes/109 Bytes with 1 file(s) remaining
+download: s3://akela-artifacts/Akela-17144/CMP-8b6cb27/logs/UNKNOWN-LC.verification.perf.yaml to out/Akela-17144/CMP-8b6cb27/logs/UNKNOWN-LC.verification.perf.yaml
 **************************************************************************
 Build of Akela-17144/CMP-8b6cb27
 Compiler: CMP-8b6cb27
