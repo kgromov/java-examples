@@ -24,11 +24,12 @@ import java.util.stream.Collectors;
 public class BuildsDiffer {
     private static final String DB_URI_PREFIX = "jdbc:sqlite:file:";
     private static final String ATTACH_QUERY = "ATTACH database '%s' as %s";
-    private static final String ALTER_QUERY = "ALTER TABLE NEW.%s ADD %s INT (6)";
+    private static final String ALTER_QUERY = "ALTER TABLE new.%s ADD %s INT (6)";
     private static final String INSERT_QUERY_UPDATE_REGIONS = "INSERT INTO main.UPDATE_REGIONS_TREND (%s) " +
-            "SELECT BuildTime FROM new.RunSummary " +
-            "WHERE DisplayName  = 'Compile' " +
-            "ORDER BY SUBSTR(KeepUser, 0, instr(KeepUser, '_10_126'))";
+            "SELECT b2.BuildTime " +
+            "FROM main.RunSummary b1 " +
+            "LEFT JOIN NEW.RunSummary b2 on SUBSTR(b1.jobName, instr(b1.jobName, '-') + 1)  = SUBSTR(b2.jobName, instr(b2.jobName, '-') + 1) "+
+            "WHERE b1.DisplayName  = 'Compile'";
 
     private static final String INSERT_QUERY_PRODUCTS = "INSERT INTO main.PRODUCTS_TREND (%s) " +
             "SELECT sum(BuildTime) FROM new.RunSummary " +
@@ -39,6 +40,12 @@ public class BuildsDiffer {
     private static final String DETACH_QUERY = "DETACH database %s";
     private static final String PREV_CATALOG = "prev";
     private static final String NEW_CATALOG = "new";
+
+    /*
+    SELECT substr(UpdateRegion, 0, instr(UpdateRegion, '_')) as product, sum(BuildTime_177) as BuildTime_Total_158, sum(BuildTime_179) as BuildTime_Total_160
+    from buidTrendPerUpdateRegion
+    GROUP by product
+     */
 
     private static final String REGION_CREATE_QUERY = "CREATE TABLE UPDATE_REGIONS_TREND AS " +
             "SELECT DISTINCT SUBSTR(b1.KeepUser, 0, instr(b1.KeepUser, '_10_126')) as UpdateRegion, " +
@@ -73,16 +80,20 @@ public class BuildsDiffer {
         this.jobType = jobType;
     }
 
-    // TODO: via alter will be much easier:
+    // TODO: create table for the first build
     public void collectBuildTimeTrend(Settings settings) {
         try {
             Path outputFolder = Paths.get(settings.getDbOutputDir(), "trend", settings.getJobName(), settings.getDvn());
             Files.createDirectories(outputFolder);
-            List<Path> buildFiles = Files.find(outputFolder,
+            List<Path> buildFiles = Files.find(Paths.get(settings.getDbOutputDir()),
                     Short.MAX_VALUE,
-                    (filePath, fileAttr) -> fileAttr.isRegularFile() && filePath.toString().contains(settings.getJobName()))
+                    (filePath, fileAttr) -> fileAttr.isRegularFile() && filePath.toString().contains(settings.getJobName())
+                            && filePath.toString().contains("connections"))
                     .collect(Collectors.toList());
             Path outputFilePath = outputFolder.resolve(settings.getJobName() + ".sq3");
+            Files.deleteIfExists(outputFilePath);
+            Files.createFile(outputFilePath);
+            writeRegionStat(outputFilePath, buildFiles, "UPDATE_REGIONS_TREND");
         } catch (IOException e) {
             System.err.println("Unable to create build time trend folder: " + e.getMessage());
         }
@@ -97,13 +108,7 @@ public class BuildsDiffer {
         return query.toString();
     }
 
-    /*
-    INSERT INTO main.UPDATE_REGIONS_TREND (%s)
-    SELECT b2.BuildTime
-    FROM main.RunSummary b1
-    LEFT JOIN NEW.RunSummary b2 on SUBSTR(b1.jobName, instr(b1.jobName, '-') + 1)  = SUBSTR(b2.jobName, instr(b2.jobName, '-') + 1)
-    WHERE b1.DisplayName  = 'Compile'
-     */
+
     private void writeRegionStat(Path buildTimeTrendDbPath, List<Path> buildPaths, String tableName) {
         try (Connection connection = DriverManager.getConnection(DB_URI_PREFIX + buildTimeTrendDbPath.toString());
              Statement statement = connection.createStatement()) {
