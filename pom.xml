@@ -66,16 +66,17 @@
         </developer>
     </developers>
 
+    <!-- TODO: add transitive dependencies into child modules -->
     <dependencies>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.5</version>
+            <version>3.9</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.18</version>
+            <version>1.18.10</version>
         </dependency>
     </dependencies>
 

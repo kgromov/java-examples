@@ -15,14 +15,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
@@ -50,6 +43,10 @@ public class JenkinsUtils {
         try {
 //            jenkins = new JenkinsServer(new URI("http://akela-dev.nds.ext.here.com:8080/"), "kgromov", "Here1501!");
             jenkins = new JenkinsServer(new URI(url), login, password);
+            /*HttpClientBuilder builder = HttpClientBuilder.create();
+            builder.setConnectionManager(new PoolingHttpClientConnectionManager());  // + set max per route
+            JenkinsHttpClient client = new JenkinsHttpClient(uri, builder, username, password);
+            JenkinsServer jenkins = new JenkinsServer(client);*/
             jobs = jenkins.getJobs();
         } catch (URISyntaxException | IOException e) {
             throw new RuntimeException(String.format("Unable to login to jenkins:" +
