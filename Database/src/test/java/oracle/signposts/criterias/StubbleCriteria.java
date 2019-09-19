@@ -1,4 +1,4 @@
-package oracle.signposts;
+package oracle.signposts.criterias;
 
 import oracle.signposts.criterias.ICriteria;
 

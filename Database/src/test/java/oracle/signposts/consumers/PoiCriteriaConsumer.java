@@ -1,6 +1,6 @@
 package oracle.signposts.consumers;
 
-import oracle.signposts.StubbleCriteria;
+import oracle.signposts.criterias.StubbleCriteria;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

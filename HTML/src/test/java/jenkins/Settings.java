@@ -1,8 +1,12 @@
 package jenkins;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class Settings {
+    private static final String DEFAULT_MY_PROPERTIES = "templates/build_config.properties";
+
     private static volatile Settings instance;
     // properties
     private final String jenkinsURL;
@@ -16,10 +20,18 @@ public class Settings {
     private final String dbOutputDir;
     private final String dvn;
 
-    public static Settings getInstance(Properties properties) {
+    public static Settings getInstance() {
         if (instance == null) {
             synchronized (Settings.class) {
                 if (instance == null) {
+                    String pathToProperties = System.getProperty("my.properties", DEFAULT_MY_PROPERTIES);
+                    Properties properties = new Properties();
+                    if (pathToProperties != null && !pathToProperties.isEmpty()) {
+                        try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(pathToProperties)) {
+                            properties.load(is);
+                        } catch (IOException ignored) {
+                        }
+                    }
                     instance = new Settings(properties);
                 }
             }

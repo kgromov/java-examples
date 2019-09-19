@@ -1,7 +1,7 @@
 package oracle.signposts;
 
 import com.google.common.collect.ImmutableMap;
-import oracle.signposts.criterias.ICriteria;
+import oracle.signposts.criterias.StubbleCriteria;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -39,7 +39,7 @@ public class CheckQueryBackup {
             MARKET_TO_DVN.forEach((market, dvn) ->
             {
                 System.out.println(String.format("################## market = %s, dvn = %s ##################", market, dvn));
-                Set<String> allUsers = new UsersReader(market).getCdcUserWithDVN(dvn);
+                Set<String> allUsers = new UsersReader(market, dvn).getCdcUsers();
                 Set<String> iterateUsers = new HashSet<>(allUsers);
                 // specific
                 Set<Integer> stubPoiLinks = new TreeSet<>();
@@ -58,7 +58,7 @@ public class CheckQueryBackup {
                                 dbServerUsers.add(userNames.getString(1));
                             }
                             // users
-                            dbServerUsers.stream().forEach(userName ->
+                            dbServerUsers.forEach(userName ->
                             {
                                 try (ResultSet queryResult1 = connection.createStatement().executeQuery(stubPoiCriteria.getQuery(userName));
                                      ResultSet queryResult2 = connection.createStatement().executeQuery(stubLocalPoiCriteria.getQuery(userName))) {

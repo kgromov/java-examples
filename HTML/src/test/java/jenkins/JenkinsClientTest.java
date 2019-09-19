@@ -10,8 +10,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 
@@ -19,27 +17,16 @@ import java.util.concurrent.TimeUnit;
  * Created by konstantin on 11.03.2018.
  */
 public class JenkinsClientTest {
-    private static final String DEFAULT_MY_PROPERTIES = "templates/build_config.properties";
     private Settings settings;
 
     @BeforeTest
     public void initSettings() {
-        String pathToProperties = System.getProperty("my.properties", DEFAULT_MY_PROPERTIES);
-        if (pathToProperties != null && !pathToProperties.isEmpty()) {
-            Properties properties = new Properties();
-            try(InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(DEFAULT_MY_PROPERTIES)) {
-//                prop.load(new FileReader(new File(pathToProperties)));
-                properties.load(is);
-                this.settings = Settings.getInstance(properties);
-                System.out.println(settings);
-            } catch (IOException ignored) {
-            }
-        }
+        this.settings = Settings.getInstance();
+        System.out.println(settings);
     }
 
     @BeforeMethod
-    private void checkSettings()
-    {
+    private void checkSettings() {
         if (settings == null) {
             throw new RuntimeException("Settings were not instantiated cause " +
                     "of incorrect file or file format passed by " + System.getProperty("my.properties"));
@@ -94,15 +81,13 @@ public class JenkinsClientTest {
     }
 
     @Test(enabled = false)
-    public void listCrossProductBuilds()
-    {
+    public void listCrossProductBuilds() {
         JenkinsUtils.authenticate(settings.getJenkinsURL(), settings.getLogin(), settings.getPassword());
         JenkinsUtils.findCrossProductBuilds();
     }
 
     @Test(enabled = true)
-    public void listRegionBuilds()
-    {
+    public void listRegionBuilds() {
         JenkinsUtils.authenticate(settings.getJenkinsURL(), settings.getLogin(), settings.getPassword());
         JenkinsUtils.findBuildsByCommitMessage(message -> message.contains("LC_") && message.contains("KEEPUSER"));
     }
@@ -115,8 +100,7 @@ public class JenkinsClientTest {
     }
 
     @Test
-    public void checkBuldTimer()
-    {
+    public void checkBuldTimer() {
         new BuildsDiffer(settings.getJobName()).collectBuildTimeTrend(settings);
     }
 
@@ -134,7 +118,6 @@ public class JenkinsClientTest {
         int index = consoleLog.lastIndexOf("s3://");
         String sub = consoleLog.substring(index);
     }
-
 
 
 }

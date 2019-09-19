@@ -307,7 +307,7 @@ public class JenkinsUtils {
             Range buildRange = Range.build().from(0).to(diff + 1);
             List<Build> presubmitsBuilds = job.getAllBuilds(buildRange);
             return Optional.ofNullable(presubmitsBuilds.get(diff).details());
-        } catch (IOException | NullPointerException e) {
+        } catch (Exception e) {
 //            throw new RuntimeException(String.format("Job '%s' does not have build by number '%d'", job.getDisplayName(), buildNumber));
             System.out.println(String.format("Job '%s' does not have build by number '%d'", job.getDisplayName(), buildNumber));
             return Optional.empty();

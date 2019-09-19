@@ -29,8 +29,7 @@ public class CheckUnreachableStubbleLinks {
             MARKET_TO_DVN.forEach((market, dvn) ->
             {
                 System.out.println(String.format("################## market = %s, dvn = %s ##################", market, dvn));
-//                Set<String> allUsers = new UsersReader(market).getCdcUsers();
-                Set<String> allUsers = new UsersReader(market).getCdcUserWithDVN(dvn);
+                Set<String> allUsers = new UsersReader(market, dvn).getCdcUsers();
                 Set<String> iterateUsers = new HashSet<>(allUsers);
                 for (int i = 1; i < 9; i++) {
                     String dbServerUrl = String.format(DB_SERVER_URL, market, dvn, i)
