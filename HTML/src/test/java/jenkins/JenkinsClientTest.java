@@ -27,7 +27,7 @@ public class JenkinsClientTest {
         String pathToProperties = System.getProperty("my.properties", DEFAULT_MY_PROPERTIES);
         if (pathToProperties != null && !pathToProperties.isEmpty()) {
             Properties properties = new Properties();
-            try(InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(DEFAULT_MY_PROPERTIES)) {
+            try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(DEFAULT_MY_PROPERTIES)) {
 //                prop.load(new FileReader(new File(pathToProperties)));
                 properties.load(is);
                 this.settings = Settings.getInstance(properties);
@@ -38,13 +38,32 @@ public class JenkinsClientTest {
     }
 
     @BeforeMethod
-    private void checkSettings()
-    {
+    private void checkSettings() {
         if (settings == null) {
             throw new RuntimeException("Settings were not instantiated cause " +
                     "of incorrect file or file format passed by " + System.getProperty("my.properties"));
         }
     }
+
+   /* @Test
+    public void anotherAttemptToLogin()
+    {
+        HttpAuthenticationFeature auth = HttpAuthenticationFeature.basic(settings.getLogin(), settings.getPassword());
+        Client client = ClientBuilder.newBuilder()
+                .register(auth)
+                .build();
+        IntStream.range(331, 432).boxed()
+                .parallel()
+                .forEach(buildNumber ->
+                {
+                    Response response = client.target("http://10.126.87.186:8080/job/Stable_With_Meta_Data/"+buildNumber+"/consoleText")
+                            .request(MediaType.TEXT_PLAIN).get();
+                    String responseText = response.readEntity(String.class);
+                    System.out.println(String.format("Build#%d has status = %d and length = %d",
+                            buildNumber, response.getStatus(), responseText.length()));
+
+                });
+    }*/
 
     @Test(enabled = true)
     public void checkBuild() {
@@ -94,15 +113,13 @@ public class JenkinsClientTest {
     }
 
     @Test(enabled = false)
-    public void listCrossProductBuilds()
-    {
+    public void listCrossProductBuilds() {
         JenkinsUtils.authenticate(settings.getJenkinsURL(), settings.getLogin(), settings.getPassword());
         JenkinsUtils.findCrossProductBuilds();
     }
 
     @Test(enabled = true)
-    public void listRegionBuilds()
-    {
+    public void listRegionBuilds() {
         JenkinsUtils.authenticate(settings.getJenkinsURL(), settings.getLogin(), settings.getPassword());
         JenkinsUtils.findBuildsByCommitMessage(message -> message.contains("LC_") && message.contains("KEEPUSER"));
     }
@@ -115,8 +132,7 @@ public class JenkinsClientTest {
     }
 
     @Test
-    public void checkBuldTimer()
-    {
+    public void checkBuldTimer() {
         new BuildsDiffer(settings.getJobName()).collectBuildTimeTrend(settings);
     }
 
@@ -134,7 +150,6 @@ public class JenkinsClientTest {
         int index = consoleLog.lastIndexOf("s3://");
         String sub = consoleLog.substring(index);
     }
-
 
 
 }
