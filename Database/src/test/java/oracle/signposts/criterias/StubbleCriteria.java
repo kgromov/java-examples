@@ -1,20 +1,11 @@
 package oracle.signposts.criterias;
 
-import oracle.signposts.criterias.ICriteria;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public enum StubbleCriteria implements ICriteria {
     STUB_POI
        {
-           @Override
-           public String getQuery(String schema) {
-               return new StringBuilder("select distinct snl.LINK_ID\n")
-                       .append("from ").append(schema).append('.').append("STUB_NAV_LINK snl\n")
-                       .append("join ").append(schema).append('.').append("RDF_LOCATION l on snl.LINK_ID = l.LINK_ID\n")
-                       .append("where snl.POI_ACCESS = 'Y'").toString();
-           }
 
            @Override
             public String getQuery() {
@@ -29,15 +20,6 @@ public enum StubbleCriteria implements ICriteria {
 
     STUB_LOCAL_POI
             {
-                @Override
-                public String getQuery(String schema) {
-                    return new StringBuilder("select distinct rnl.LINK_ID\n")
-                            .append("from ").append(schema).append('.').append("RDF_NAV_LINK rnl\n")
-                            .append("join ").append(schema).append('.').append("STUB_LINK_LOCAL sll on sll.LINK_ID = rnl.LINK_ID\n")
-                            .append("join ").append(schema).append('.').append("RDF_LOCATION l on rnl.LINK_ID = l.LINK_ID\n")
-                            .append("where rnl.POI_ACCESS = 'Y'").toString();
-                }
-
                 @Override
                 public String getQuery() {
                     return "select distinct rnl.LINK_ID\n" +
@@ -129,8 +111,4 @@ public enum StubbleCriteria implements ICriteria {
         }
         return builder.toString();
     }*/
-
-    public abstract String getQuery(String schema) ;
-
-
 }

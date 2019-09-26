@@ -39,7 +39,6 @@ public class CheckSpecificGatewayConditions {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             SourceUpdateRegionGatewayLinksHolder sourceGatewaysHolder = new SourceUpdateRegionGatewayLinksHolder(
                     sourceRegionConfig.getLeft(), sourceRegionConfig.getRight()
-//                    "CDCA_DEU_G5_191E0", "jdbc:oracle:thin:@akela-eu-191E0-07.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl"
             );
             // init source link gateways
             try (Connection connection = DriverManager.getConnection(sourceGatewaysHolder.getDbServerUrl(),
@@ -79,7 +78,7 @@ public class CheckSpecificGatewayConditions {
         }
     }
 
-    static Set<Pair<Integer, Integer>> getLinkGateways(ResultSet resultSet) throws SQLException {
+    private static Set<Pair<Integer, Integer>> getLinkGateways(ResultSet resultSet) throws SQLException {
         Set<Pair<Integer, Integer>> linkGateways = new HashSet<>();
         while (resultSet.next()) {
             int linkId = resultSet.getInt(LINK_ID_COLUMN_NAME);

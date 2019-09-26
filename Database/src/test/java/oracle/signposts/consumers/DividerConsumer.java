@@ -1,20 +1,19 @@
-package oracle.signposts.gateways;
+package oracle.signposts.consumers;
 
 import com.google.common.base.Objects;
+import oracle.signposts.criterias.ICriteria;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class DividerFilter {
+public class DividerConsumer implements ICriteriaConsumer {
     // get all pairs: RR, RS, SR. But to map stubble dividers and nodes STUBBLE_LINKS_WITH_DIVIDER_QUERY is required
     private static final String REAL_LINKS_WITH_DIVIDER_QUERY = "select rnl.LINK_ID, rnl.DIVIDER_LEGAL, rnl.DIVIDER, rl.REF_NODE_ID, rl.NONREF_NODE_ID from RDF_NAV_LINK rnl " +
             "join RDF_LINK rl on rl.LINK_ID = rnl.LINK_ID " +
@@ -28,23 +27,21 @@ public class DividerFilter {
             "and (rnl.LINK_ID in (select FROM_LINK_ID from RDF_CONDITION_DIVIDER) " +
             "or rnl.LINK_ID in (select TO_LINK_ID from RDF_CONDITION_DIVIDER))";
 
+    private static final String RDF_DIVIDER_QUERY = "select NODE_ID, FROM_LINK_ID, TO_LINK_ID from RDF_CONDITION_DIVIDER";
+
     private Set<Triple<Integer, Integer, Integer>> usedDividers;
     private Map<Integer, LinkInfo> realLinksInfo;
     private Map<Integer, LinkInfo> stubbleLinksInfo;
-
-
     private AtomicInteger notSaved = new AtomicInteger();
     private AtomicInteger saved = new AtomicInteger();
 
-    public DividerFilter() {
-    }
 
-    public void processRealLinks(ResultSet resultSet) throws SQLException {
+    private void processRealLinks(ResultSet resultSet) throws SQLException {
         realLinksInfo = new HashMap<>();
         processLinksWithDivider(resultSet, realLinksInfo);
     }
 
-    public void processStubbleLinks(ResultSet resultSet) throws SQLException {
+    private void processStubbleLinks(ResultSet resultSet) throws SQLException {
         stubbleLinksInfo = new HashMap<>();
         processLinksWithDivider(resultSet, stubbleLinksInfo);
     }
@@ -144,6 +141,27 @@ public class DividerFilter {
 
     }
 
+    @Override
+    public void processDbUser(String dbUser, String dbServerURL) {
+
+    }
+
+    @Override
+    public void processDbUser(Connection connection, String dbUser, String dbServerURL) {
+        try (ResultSet stubbleGateways = connection.createStatement().executeQuery(ICriteria.getQuery(STUBBLE_LINKS_WITH_DIVIDER_QUERY, dbUser));
+             ResultSet localGateways = connection.createStatement().executeQuery(ICriteria.getQuery(REAL_LINKS_WITH_DIVIDER_QUERY, dbUser));
+             ResultSet rdfDividers = connection.createStatement().executeQuery(ICriteria.getQuery(RDF_DIVIDER_QUERY, dbUser))) {
+            processRealLinks(localGateways);
+            processStubbleLinks(stubbleGateways);
+            saveDividers(rdfDividers);
+            System.out.println(usedDividers.size());
+
+        } catch (SQLException e) {
+            System.out.println(String.format("Unable to process dbUser = %s, dbServerURL = %s. Cause:%n%s", dbUser, dbServerURL, e));
+        }
+
+    }
+
     // change in compiler to Divider.class
     private static final class LinkInfo {
         private int linkId;
@@ -206,46 +224,6 @@ public class DividerFilter {
                     .append(", isDividerLegal=").append(isDividerLegal)
                     .append(", dividerType=").append(dividerType)
                     .append('}').toString();
-        }
-    }
-
-
-    /*
-       private static Pair<String, String> sourceRegionConfig = Pair.of("CDCA_DEU_G2_HE_18144",
-            "jdbc:oracle:thin:@akela-eu-18144-02.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl");
-
-        private static Map<String, String> neighbourRegionsConfig = new ImmutableMap.Builder<String, String>()
-            .put("CDCA_DEU_G1_NO_18144", "jdbc:oracle:thin:@akela-eu-18144-07.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")
-            .put("CDCA_DEU_G2_RP_SA_18144", "jdbc:oracle:thin:@akela-eu-18144-03.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")
-            .put("CDCA_DEU_G3_18144", "jdbc:oracle:thin:@akela-eu-18144-05.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")
-            .put("CDCA_DEU_G4_SA_SO_18144", "jdbc:oracle:thin:@akela-eu-18144-06.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")
-            .put("CDCA_DEU_G5_18144", "jdbc:oracle:thin:@akela-eu-18144-07.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")
-            .put("CDCA_DEU_G6_NO_18144", "jdbc:oracle:thin:@akela-eu-18144-04.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")
-            .put("CDCA_DEU_G8_18144", "jdbc:oracle:thin:@akela-eu-18144-01.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl")
-            .build();
-     */
-    public static void main(String[] args) {
-        long start = System.nanoTime();
-        try {
-            String user = "CDCA_DEU_G2_HE_18144";
-            String dbServerUrl = "jdbc:oracle:thin:@akela-eu-18144-02.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl";
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            try (Connection connection = DriverManager.getConnection(dbServerUrl, user, "password");
-                 ResultSet stubbleGateways = connection.createStatement().executeQuery(STUBBLE_LINKS_WITH_DIVIDER_QUERY);
-                 ResultSet localGateways = connection.createStatement().executeQuery(REAL_LINKS_WITH_DIVIDER_QUERY);
-                 ResultSet rdfDividers = connection.createStatement().executeQuery("select NODE_ID, FROM_LINK_ID, TO_LINK_ID from RDF_CONDITION_DIVIDER")) {
-                DividerFilter filter = new DividerFilter();
-                filter.processRealLinks(localGateways);
-                filter.processStubbleLinks(stubbleGateways);
-                filter.saveDividers(rdfDividers);
-                System.out.println(filter.usedDividers.size());
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            System.out.println(String.format("Time elapsed = %d ms", TimeUnit.MILLISECONDS.convert(System.nanoTime() - start, TimeUnit.NANOSECONDS)));
         }
     }
 }
