@@ -1,9 +1,13 @@
-package jenkins;
+package jenkins.extensions;
 
 
 import com.google.common.collect.ImmutableMap;
+import jenkins.Settings;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.management.ManagementFactory;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,8 +15,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
 /**
@@ -72,6 +80,9 @@ public class BuildsDiffer {
             .put("PRODUCTS_TREND", INSERT_QUERY_PRODUCTS)
             .build();
 
+    private static final ToIntFunction<Path> TO_BUILD_NUMBER = path ->
+            Integer.parseInt(path.getFileName().toString().replaceAll(".sq3", "").replaceAll("[^\\d]", ""));
+
     private String folder;
     // TODO: implement enum later on {NPB-FULL, NPB-EXTENDED, PreSubmit, Validation_Suite_Pre_Submit}
     private String jobType;
@@ -89,6 +100,7 @@ public class BuildsDiffer {
                     Short.MAX_VALUE,
                     (filePath, fileAttr) -> fileAttr.isRegularFile() && filePath.toString().contains(settings.getJobName())
                             && filePath.toString().contains("connections"))
+                    .sorted(Comparator.comparingInt(TO_BUILD_NUMBER))
                     .collect(Collectors.toList());
             Path outputFilePath = outputFolder.resolve(settings.getJobName() + ".sq3");
             Files.deleteIfExists(outputFilePath);
@@ -113,8 +125,7 @@ public class BuildsDiffer {
         try (Connection connection = DriverManager.getConnection(DB_URI_PREFIX + buildTimeTrendDbPath.toString());
              Statement statement = connection.createStatement()) {
             for (Path buildPath : buildPaths) {
-                int buildNumber = Integer.parseInt(buildPath.getFileName().toString().replaceAll(".sq3", "")
-                        .replaceAll("[^\\d]", ""));
+                int buildNumber = TO_BUILD_NUMBER.applyAsInt(buildPath);
                 String buildColumn = String.format("'Build#%d'", buildNumber);
                 // attach
                 statement.execute(String.format(ATTACH_QUERY, buildPath, NEW_CATALOG));
@@ -166,7 +177,55 @@ public class BuildsDiffer {
         }
     }
 
-    public static void main(String[] args) {
+    private Set<Long> getJavaPIDs()
+    {
+        Set<Long> pids = new HashSet<>();
+        try
+        {
+            System.out.println("======== Getting java process pids =========");
+            String command = "pgrep java";
+            ProcessBuilder builder = new ProcessBuilder("bash", "-c", command);
+            Process process = builder.start();
+            BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String s;
+            while ((s = stdInput.readLine()) != null)
+            {
+                System.out.println(s);
+                try
+                {
+                    long pid = Long.parseLong(s.replaceAll("[^\\d]", ""));
+                    pids.add(pid);
+                }
+                catch (NumberFormatException ignored){}
+            }
+        }
+        catch (Exception e)
+        {
+            System.err.println(e);
+        }
+        return pids;
+    }
+
+    private long getOwnPID()
+    {
+        System.out.println("======== Getting java process pid =========");
+        String processName = ManagementFactory.getRuntimeMXBean().getName();
+        return Long.parseLong(processName.split("@")[0]);
+    }
+
+    private static void printMemoryUsage(long pid) throws IOException {
+        String command = "jmap -histo " + pid;
+        ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", command);
+        Process process = builder.start();
+        BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String s;
+        while ((s = stdInput.readLine()) != null)
+        {
+            System.out.println(s);
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
         String pathToFirstBuild = "C:\\HERE-CARDS\\products_per_dvn\\191F0\\connections\\31-08-2019\\NPB-148-NAR-FULL.sq3";
         String pathToSecondBuild = "C:\\HERE-CARDS\\products_per_dvn\\191F0\\connections\\04-09-2019\\NPB-150-NAR-FULL.sq3";
         new BuildsDiffer("NAR_FULL").compareBuilds(pathToFirstBuild, pathToSecondBuild);

@@ -1,6 +1,7 @@
-package jenkins;
+package jenkins.extensions;
 
 import com.google.common.collect.ImmutableMap;
+import jenkins.Settings;
 import jenkins.forkjoinpool.BuildInfo;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -95,8 +96,12 @@ public class Convertor {
     public static void convertToSqLite(Settings settings, BuildInfo upstreamBuild) {
         try {
             Path inputFilePath = Paths.get(settings.getOutputDir(), "index.xml");
+            // 191F0\connections\02-09-2019\NPB-EU-179.sq3 -> connections\NPB-EU\191F0\02-09-2019\NPB-EU-179.sq3
             Path outputFolder = Paths.get(settings.getDbOutputDir(),
-                    settings.getDvn(), "connections", BUILD_START_DATE.format(new Date(upstreamBuild.getTimestamp())));
+                    "connections", settings.getJobName(), settings.getDvn(), BUILD_START_DATE.format(new Date(upstreamBuild.getTimestamp())));
+
+            /*Path outputFolder = Paths.get(settings.getDbOutputDir(),
+                    settings.getDvn(), "connections", BUILD_START_DATE.format(new Date(upstreamBuild.getTimestamp())));*/
             Files.createDirectories(outputFolder);
             Path outputFilePath = outputFolder.resolve(settings.getJobName() + "-" + settings.getBuildNumber() + ".sq3");
 //            Path outputFilePath = outputFolder.resolve(upstreamBuild.getBuildName() + ".sq3");

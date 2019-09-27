@@ -1,5 +1,7 @@
 package jenkins;
 
+import jenkins.extensions.BuildsDiffer;
+import jenkins.extensions.Convertor;
 import jenkins.forkjoinpool.BuildInfo;
 import jenkins.forkjoinpool.JobInfoTask;
 import org.testng.annotations.BeforeMethod;
