@@ -2,6 +2,7 @@ package jenkins.extensions;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -37,7 +38,8 @@ public class BuildTrendGUIApp extends Application {
         final NumberAxis yAxis = new NumberAxis();
         final CategoryAxis xAxis = new CategoryAxis();
 
-        LineChart<String, Number> chart = new LineChart<>(xAxis, yAxis);
+//        XYChart<String, Number> chart = new LineChart<>(xAxis, yAxis);
+        XYChart<String, Number> chart = new BarChart<>(xAxis, yAxis);
         yAxis.setLabel("Build time");
         xAxis.setLabel("Build Number");
         chart.setTitle("Build Time per Product");
@@ -69,7 +71,8 @@ public class BuildTrendGUIApp extends Application {
                 String productName = resultSet.getString(1);
                 for (int i = 0; i < buildNumbers.size(); i++) {
                     int buildNumber = buildNumbers.get(i);
-                    int buildTime = resultSet.getInt(i + 1);
+                    // probably convert to some other time unit
+                    int buildTime = resultSet.getInt(i + 2);
                     buildTimePerProduct.computeIfAbsent(productName, value -> new TreeMap<>()).put(buildNumber, buildTime);
                 }
             }
