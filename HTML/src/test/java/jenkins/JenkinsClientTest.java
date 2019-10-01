@@ -48,7 +48,7 @@ public class JenkinsClientTest {
         Report.copyTemplates();
         Report.writeToReport(jobInfo);
         // convert to sq3
-        Convertor.convertToSqLite(settings, jobInfo);
+        Convertor.convertToSqLite(jobInfo);
     }
 
     @Test(enabled = true)
@@ -79,7 +79,9 @@ public class JenkinsClientTest {
         Report.copyTemplates();
         Report.writeToReport(buildInfo);
         // convert to sq3
-        Convertor.convertToSqLite(settings, buildInfo);
+        Convertor.convertToSqLite(buildInfo);
+        // append to build time trend
+        new BuildsDiffer().appendToTrend(buildInfo);
     }
 
     @Test(enabled = false)
@@ -103,7 +105,7 @@ public class JenkinsClientTest {
 
     @Test
     public void checkBuldTimer() {
-        new BuildsDiffer(settings.getJobName()).collectBuildTimeTrend(settings);
+        new BuildsDiffer().collectBuildTimeTrend();
     }
 
     public static void main(String[] args) throws IOException {

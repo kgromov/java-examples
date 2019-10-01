@@ -12,8 +12,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -21,8 +19,11 @@ public class RdfDataChecker {
     private static final Logger LOGGER = Logger.getLogger(RdfDataChecker.class.getName());
     private static final String USERS_QUERY = "select username from dba_users WHERE REGEXP_LIKE(username, '^CDCA_.*_%s$')";
     private static final String NO_SAMPLE_USERS = String.format("%s and not REGEXP_LIKE(username, '%s')", USERS_QUERY, UsersReader.getSampleRegions());
+    // when it's required to determine specific regions
+    private static final String SPECIFIC_REGIONS = " and REGEXP_LIKE(username, '%s')";
     private static final String DB_PASSWORD = "password";
     private static final String DB_SERVER_URL = "jdbc:oracle:thin:@akela-%s-%s-0%d.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl";
+    private static final Set<Integer> PROCESSED_SERVER_INDEXES = IntStream.rangeClosed(1, 8).boxed().collect(Collectors.toSet());
     private static final Map<String, String> MARKET_TO_DVN = ImmutableMap.<String, String>builder()
             .put("eu", "191F0")
 //            .put("nar", "191F0")
@@ -45,7 +46,6 @@ public class RdfDataChecker {
             DriverManager.setLoginTimeout(10);
 //            ICriteria criteria = GatewaysCriteria.ADMIN_WIDE_REGULATIONS;
 //            ICriteria criteria = StubbleCriteria.STUB_LOCAL_POI;
-            Set<Integer> processedServers = IntStream.rangeClosed(1, 8).boxed().collect(Collectors.toSet());
             MARKET_TO_DVN.forEach((market, dvn) ->
             {
                 LOGGER.info(String.format("################## market = %s, dvn = %s ##################", market, dvn));
@@ -56,7 +56,7 @@ public class RdfDataChecker {
                 GatewaysCounterpartCriteriaConsumer consumer = new GatewaysCounterpartCriteriaConsumer();
                 allUsers.stream().filter(iterateUsers::contains).forEach(cdcUser ->
                 {
-                    for (int i : processedServers) {
+                    for (int i : PROCESSED_SERVER_INDEXES) {
                         String dbServerUrl = String.format(DB_SERVER_URL, market, dvn, i)
                                 // exceptional case
                                 .replaceAll("_", "-");
@@ -84,7 +84,7 @@ public class RdfDataChecker {
 //                            System.err.println(String.format("No SourceDbUser = %s, dbServer = %s", cdcUser, dbServerUrl));
                         }
                         if (!dbServerUsers.isEmpty()) {
-                            processedServers.remove(i);
+                            PROCESSED_SERVER_INDEXES.remove(i);
                             LOGGER.info("Finish processing dbServer = " + dbServerUrl);
                             break;
                         }

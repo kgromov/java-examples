@@ -35,7 +35,7 @@ public class Convertor {
     // sql
     private static final String DB_URI_PREFIX = "jdbc:sqlite:file:";
     private static final String TABLE_NAME = "RunSummary";
-    private static final SimpleDateFormat BUILD_START_DATE = new SimpleDateFormat("dd-MM-yyyy");
+    public static final SimpleDateFormat BUILD_START_DATE = new SimpleDateFormat("dd-MM-yyyy");
 
     private static final String JOB_NAME_COLUMN = "JobName";
     private static final String DISPLAY_NAME_COLUMN = "DisplayName";
@@ -93,13 +93,13 @@ public class Convertor {
         }
     }
 
-    public static void convertToSqLite(Settings settings, BuildInfo upstreamBuild) {
+    public static void convertToSqLite(BuildInfo upstreamBuild) {
         try {
+            Settings settings = Settings.getInstance();
             Path inputFilePath = Paths.get(settings.getOutputDir(), "index.xml");
-            // 191F0\connections\02-09-2019\NPB-EU-179.sq3 -> connections\NPB-EU\191F0\02-09-2019\NPB-EU-179.sq3
+            // connections\NPB-EU\191F0\02-09-2019\NPB-EU-179.sq3
             Path outputFolder = Paths.get(settings.getDbOutputDir(),
                     "connections", settings.getJobName(), settings.getDvn(), BUILD_START_DATE.format(new Date(upstreamBuild.getTimestamp())));
-
             /*Path outputFolder = Paths.get(settings.getDbOutputDir(),
                     settings.getDvn(), "connections", BUILD_START_DATE.format(new Date(upstreamBuild.getTimestamp())));*/
             Files.createDirectories(outputFolder);

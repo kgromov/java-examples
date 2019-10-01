@@ -3,11 +3,9 @@ package jenkins.extensions;
 
 import com.google.common.collect.ImmutableMap;
 import jenkins.Settings;
+import jenkins.forkjoinpool.BuildInfo;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.management.ManagementFactory;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,219 +14,167 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
-/**
- * SELECT DISTINCT SUBSTR(eu177.KeepUser, 0, instr(eu177.KeepUser, '_10_126')) as KeepUser, eu177.BuildTime as BuildTime_177,  eu179.BuildTime as BuildTime_179
- * FROM main.RunSummary eu177
- * JOIN NEW.RunSummary  eu179 on SUBSTR(eu177.KeepUser, 0, instr(eu177.KeepUser, '_10_126')) = SUBSTR(eu179.KeepUser, 0, instr(eu179.KeepUser, '_10_126'))
- * WHERE eu177.DisplayName  = 'Compile' and BuildTime_179 > BuildTime_177
- */
+import static jenkins.extensions.Convertor.BUILD_START_DATE;
+
 public class BuildsDiffer {
     private static final String DB_URI_PREFIX = "jdbc:sqlite:file:";
-    private static final String ATTACH_QUERY = "ATTACH database '%s' as %s";
-    private static final String ALTER_QUERY = "ALTER TABLE new.%s ADD %s INT (6)";
-    private static final String INSERT_QUERY_UPDATE_REGIONS = "INSERT INTO main.UPDATE_REGIONS_TREND (%s) " +
-            "SELECT b2.BuildTime " +
-            "FROM main.RunSummary b1 " +
-            "LEFT JOIN NEW.RunSummary b2 on SUBSTR(b1.jobName, instr(b1.jobName, '-') + 1)  = SUBSTR(b2.jobName, instr(b2.jobName, '-') + 1) "+
-            "WHERE b1.DisplayName  = 'Compile'";
+    private static final String ATTACH_QUERY = "ATTACH database '%s' as new";
+    private static final String ALTER_QUERY = "ALTER TABLE main.%s ADD %s INT (6)";
+    private static final String DETACH_QUERY = "DETACH database new";
 
-    private static final String INSERT_QUERY_PRODUCTS = "INSERT INTO main.PRODUCTS_TREND (%s) " +
-            "SELECT sum(BuildTime) FROM new.RunSummary " +
-            "WHERE DisplayName  = 'Compile' " +
-            "GROUP by SUBSTR(b1.KeepUser, 0, instr(b1.KeepUser, '_')) "+
-            "ORDER BY SUBSTR(b1.KeepUser, 0, instr(b1.KeepUser, '_'))";
+    private static final ToIntFunction<Path> TO_BUILD_NUMBER = path ->
+            Integer.parseInt(path.getFileName().toString().replaceAll(".sq3", "").replaceAll("[^\\d]", ""));
 
-    private static final String DETACH_QUERY = "DETACH database %s";
-    private static final String PREV_CATALOG = "prev";
-    private static final String NEW_CATALOG = "new";
+    private Path outputFilePath;
+    // relevant for standalone GUI application
+    private String jobType;
 
-    /*
-    SELECT substr(UpdateRegion, 0, instr(UpdateRegion, '_')) as product, sum(BuildTime_177) as BuildTime_Total_158, sum(BuildTime_179) as BuildTime_Total_160
-    from buidTrendPerUpdateRegion
-    GROUP by product
-     */
+    public BuildsDiffer() {
+        this.outputFilePath = getOutputFilePath(Settings.getInstance());
+    }
 
-    private static final String REGION_CREATE_QUERY = "CREATE TABLE UPDATE_REGIONS_TREND AS " +
-            "SELECT DISTINCT SUBSTR(b1.KeepUser, 0, instr(b1.KeepUser, '_10_126')) as UpdateRegion, " +
-            "b1.BuildTime as BuildTime_1,  b2.BuildTime as BuildTime_2 " +
-            "FROM prev.RunSummary b1 " +
-            "JOIN new.RunSummary  b2 on SUBSTR(b1.KeepUser, 0, instr(b1.KeepUser, '_10_126')) = SUBSTR(b2.KeepUser, 0, instr(b2.KeepUser, '_10_126')) " +
-            "WHERE b1.DisplayName  = 'Compile'";
+    private Path getOutputFilePath(Settings settings) {
+        try {
+            Path outputFolder = Paths.get(settings.getDbOutputDir(), "trend", settings.getJobName(), settings.getDvn());
+            Files.createDirectories(outputFolder);
+            return outputFolder.resolve(settings.getJobName() + ".sq3");
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to create build time trend folder: " + e.getMessage());
+        }
+    }
 
-    private static final String PRODUCT_CREATE_QUERY = "CREATE TABLE PRODUCTS_TREND AS " +
-            "SELECT SUBSTR(b1.KeepUser, 0, instr(b1.KeepUser, '_')) as product, " +
-            "sum(b1.BuildTime) as BuildTime_Total_1, sum(b2.BuildTime) as BuildTime_Total_2 " +
-            "FROM prev.RunSummary b1 " +
-            "JOIN new.RunSummary  b2 on SUBSTR(b1.KeepUser, 0, instr(b1.KeepUser, '_10_126')) = SUBSTR(b2.KeepUser, 0, instr(b2.KeepUser, '_10_126')) " +
-            "WHERE b1.DisplayName  = 'Compile' " +
-            "GROUP by product";
+    public void collectBuildTimeTrend() {
+        try {
+            Settings settings = Settings.getInstance();
+            Path outputFolder = Paths.get(settings.getDbOutputDir(), "trend", settings.getJobName(), settings.getDvn());
+            Files.createDirectories(outputFolder);
+            List<Path> buildFiles = Files.find(Paths.get(settings.getDbOutputDir()),
+                    Short.MAX_VALUE,
+                    (filePath, fileAttr) -> fileAttr.isRegularFile() && filePath.toString().contains(settings.getJobName())
+                            && filePath.toString().contains(settings.getDvn())
+                            && filePath.toString().contains("connections"))
+                    .sorted(Comparator.comparingInt(TO_BUILD_NUMBER))
+                    .collect(Collectors.toList());
+            Path outputFilePath = outputFolder.resolve(settings.getJobName() + ".sq3");
+            if (buildFiles.isEmpty()) {
+                return;
+            }
+            Files.deleteIfExists(outputFilePath);
+            Files.createFile(outputFilePath);
+            // init trend - create table with 1st build
+            createTrend(buildFiles.get(0));
+            // append rest builds to existed tables
+            appendBuildsToTrend(buildFiles.subList(1, buildFiles.size()).toArray(new Path[buildFiles.size() - 1]));
+        } catch (IOException e) {
+            System.err.println("Unable to create build time trend folder: " + e.getMessage());
+        }
+    }
 
-    private Map<String, String> headers = ImmutableMap.<String, String>builder()
-            .put("UPDATE_REGIONS_TREND", "SELECT DISTINCT SUBSTR(b1.KeepUser, 0, instr(b1.KeepUser, '_10_126')) as UpdateRegion")
-            .put("PRODUCTS_TREND", "SELECT SUBSTR(b1.KeepUser, 0, instr(b1.KeepUser, '_')) as product")
-            .build();
+    // ============= Create =============
+    private static final String CREATE_REGIONS_TREND = "CREATE TABLE UPDATE_REGIONS_TREND AS\n" +
+            "select SUBSTR(jobName, instr(jobName, '-') + 1) as UpdateRegion, BuildTime AS %s from RunSummary\n" +
+            "WHERE DisplayName  = 'Compile'\n" +
+            "order by UpdateRegion";
+
+    private static final String CREATE_PRODUCT_TREND = "CREATE TABLE PRODUCTS_TREND AS\n" +
+            "select SUBSTR(SUBSTR(jobName, instr(jobName, '-') + 1), 0, instr(SUBSTR(jobName, instr(jobName, '-') + 1), '_')) as product, " +
+            "sum(BuildTime) as %s from RunSummary\n" +
+            "WHERE DisplayName  = 'Compile'\n" +
+            "group by product\n" +
+            "order by product";
+
+    private void createTrend(Path buildPath) {
+        try (Connection connection = DriverManager.getConnection(DB_URI_PREFIX + outputFilePath.toString());
+             Statement statement = connection.createStatement()) {
+            int buildNumber = TO_BUILD_NUMBER.applyAsInt(buildPath);
+            String buildColumn = String.format("'Build#%d'", buildNumber);
+            statement.execute(String.format(ATTACH_QUERY, buildPath));
+
+            statement.execute(String.format(CREATE_REGIONS_TREND, buildColumn));
+            statement.execute(String.format(CREATE_PRODUCT_TREND, buildColumn));
+
+            statement.execute(DETACH_QUERY);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // ============= Append =============
+    private static final String INSERT_QUERY_UPDATE_REGIONS = "with new_build as\n" +
+            "(\n" +
+            "   select SUBSTR(jobName, instr(jobName, '-') +  1) as UpdateRegion, BuildTime from new.RunSummary \n" +
+            "            WHERE DisplayName  = 'Compile' \n" +
+            "            order by UpdateRegion\n" +
+            ")\n" +
+            "UPDATE main.UPDATE_REGIONS_TREND set %s =\n" +
+            "(\n" +
+            "            select BuildTime from new_build\n" +
+            "            WHERE main.UPDATE_REGIONS_TREND.UpdateRegion  = new_build.UpdateRegion \n" +
+            ")";
+
+    private static final String INSERT_QUERY_PRODUCTS = "with new_build as \n" +
+            "(\n" +
+            "    select SUBSTR(SUBSTR(jobName, instr(jobName, '-') + 1), 0, instr(SUBSTR(jobName, instr(jobName, '-') + 1), '_')) as product,  " +
+            "    sum(BuildTime) as BuildTime from new.RunSummary\n" +
+            "            WHERE DisplayName  = 'Compile'\n" +
+            "            group by product\n" +
+            "            order by product\n" +
+            ")\n" +
+            "UPDATE main.PRODUCTS_TREND set %s =\n" +
+            "(\n" +
+            "            select BuildTime from new_build\n" +
+            "            WHERE main.PRODUCTS_TREND.product  = new_build.product \n" +
+            ")";
 
     private static final Map<String, String> INSERT_QUERIES = ImmutableMap.<String, String>builder()
             .put("UPDATE_REGIONS_TREND", INSERT_QUERY_UPDATE_REGIONS)
             .put("PRODUCTS_TREND", INSERT_QUERY_PRODUCTS)
             .build();
 
-    private static final ToIntFunction<Path> TO_BUILD_NUMBER = path ->
-            Integer.parseInt(path.getFileName().toString().replaceAll(".sq3", "").replaceAll("[^\\d]", ""));
-
-    private String folder;
-    // TODO: implement enum later on {NPB-FULL, NPB-EXTENDED, PreSubmit, Validation_Suite_Pre_Submit}
-    private String jobType;
-
-    public BuildsDiffer(String jobType) {
-        this.jobType = jobType;
+    public void appendToTrend(BuildInfo upstreamBuild)
+    {
+        Settings settings = Settings.getInstance();
+        // connections\<jobName>\<DVN>\<build_timestamp>\<jobName>-<buildNumber>.sq3
+        Path inputFolder = Paths.get(settings.getDbOutputDir(),
+                "connections", settings.getJobName(), settings.getDvn(), BUILD_START_DATE.format(new Date(upstreamBuild.getTimestamp())));
+        Path buildPath = inputFolder.resolve(settings.getJobName() + "-" + settings.getBuildNumber() + ".sq3");
+        appendBuildsToTrend(buildPath);
     }
 
-    // TODO: create table for the first build
-    public void collectBuildTimeTrend(Settings settings) {
-        try {
-            Path outputFolder = Paths.get(settings.getDbOutputDir(), "trend", settings.getJobName(), settings.getDvn());
-            Files.createDirectories(outputFolder);
-            List<Path> buildFiles = Files.find(Paths.get(settings.getDbOutputDir()),
-                    Short.MAX_VALUE,
-                    (filePath, fileAttr) -> fileAttr.isRegularFile() && filePath.toString().contains(settings.getJobName())
-                            && filePath.toString().contains("connections"))
-                    .sorted(Comparator.comparingInt(TO_BUILD_NUMBER))
-                    .collect(Collectors.toList());
-            Path outputFilePath = outputFolder.resolve(settings.getJobName() + ".sq3");
-            Files.deleteIfExists(outputFilePath);
-            Files.createFile(outputFilePath);
-            writeRegionStat(outputFilePath, buildFiles, "UPDATE_REGIONS_TREND");
-        } catch (IOException e) {
-            System.err.println("Unable to create build time trend folder: " + e.getMessage());
-        }
-    }
-
-    private String buildCreateTableQuery(String tableName, List<Path> buildFiles) {
-        StringBuilder query = new StringBuilder();
-        query.append("CREATE TABLE ").append(tableName).append(" AS");
-
-        query.append("SELECT DISTINCT SUBSTR(b1.KeepUser, 0, instr(b1.KeepUser, '_10_126')) as UpdateRegion, ");
-        query.append("WHERE b1.DisplayName  = 'Compile'");
-        return query.toString();
-    }
-
-
-    private void writeRegionStat(Path buildTimeTrendDbPath, List<Path> buildPaths, String tableName) {
-        try (Connection connection = DriverManager.getConnection(DB_URI_PREFIX + buildTimeTrendDbPath.toString());
+    private void appendBuildsToTrend(Path... buildPaths) {
+        try (Connection connection = DriverManager.getConnection(DB_URI_PREFIX + outputFilePath.toString());
              Statement statement = connection.createStatement()) {
             for (Path buildPath : buildPaths) {
                 int buildNumber = TO_BUILD_NUMBER.applyAsInt(buildPath);
                 String buildColumn = String.format("'Build#%d'", buildNumber);
                 // attach
-                statement.execute(String.format(ATTACH_QUERY, buildPath, NEW_CATALOG));
-                // alter
-                statement.execute(String.format(ALTER_QUERY, tableName, buildColumn));
-                // insert
-                statement.execute(String.format(INSERT_QUERIES.get(tableName), buildColumn));
-                // detach
-                statement.execute(String.format(DETACH_QUERY, NEW_CATALOG));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    // NPB-160-EU-FULL.sq3
-    public void compareBuilds(String pathToFirstBuild, String pathToSecondBuild) {
-        Path path1 = Paths.get(pathToFirstBuild);
-        Path path2 = Paths.get(pathToSecondBuild);
-        int buildNumber1 = Integer.parseInt(path1.getFileName().toString().replaceAll(".sq3", "")
-                .replaceAll("[^\\d]", ""));
-        int buildNumber2 = Integer.parseInt(path2.getFileName().toString().replaceAll(".sq3", "")
-                .replaceAll("[^\\d]", ""));
-        // TODO: probably buildNUmber comparison to get max (new) and min (old)
-        Path resultFile = Paths.get("C:\\HERE-CARDS\\products_per_dvn\\diff",
-                jobType + "_" + buildNumber1 + "_vs_" + buildNumber2 + ".sq3");
-        writeRegionStat(pathToFirstBuild, pathToSecondBuild, resultFile.toString());
-    }
-
-    private void writeRegionStat(String pathToFirstBuild, String pathToSecondBuild, String resultFile) {
-        try (Connection connection = DriverManager.getConnection(DB_URI_PREFIX + resultFile);
-             Statement statement = connection.createStatement()) {
-            // extra attach as create in another db
-            statement.execute(String.format(ATTACH_QUERY, pathToFirstBuild, PREV_CATALOG));
-            statement.execute(String.format(ATTACH_QUERY, pathToSecondBuild, NEW_CATALOG));
-
-            if (statement.execute(REGION_CREATE_QUERY)) {
-                System.out.println("UPDATE_REGIONS_TREND table created");
-            }
-
-            if (statement.execute(PRODUCT_CREATE_QUERY)) {
-                System.out.println("PRODUCTS_TREND table created");
-            }
-
-            statement.execute(String.format(DETACH_QUERY, PREV_CATALOG));
-            statement.execute(String.format(DETACH_QUERY, NEW_CATALOG));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private Set<Long> getJavaPIDs()
-    {
-        Set<Long> pids = new HashSet<>();
-        try
-        {
-            System.out.println("======== Getting java process pids =========");
-            String command = "pgrep java";
-            ProcessBuilder builder = new ProcessBuilder("bash", "-c", command);
-            Process process = builder.start();
-            BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String s;
-            while ((s = stdInput.readLine()) != null)
-            {
-                System.out.println(s);
-                try
-                {
-                    long pid = Long.parseLong(s.replaceAll("[^\\d]", ""));
-                    pids.add(pid);
+                statement.execute(String.format(ATTACH_QUERY, buildPath));
+                for (Map.Entry<String, String> entry : INSERT_QUERIES.entrySet()) {
+                    String tableName = entry.getKey();
+                    String query = entry.getValue();
+                    // alter
+                    statement.execute(String.format(ALTER_QUERY, tableName, buildColumn));
+                    // insert
+                    statement.execute(String.format(query, buildColumn));
                 }
-                catch (NumberFormatException ignored){}
+                // detach
+                statement.execute(DETACH_QUERY);
             }
-        }
-        catch (Exception e)
-        {
-            System.err.println(e);
-        }
-        return pids;
-    }
-
-    private long getOwnPID()
-    {
-        System.out.println("======== Getting java process pid =========");
-        String processName = ManagementFactory.getRuntimeMXBean().getName();
-        return Long.parseLong(processName.split("@")[0]);
-    }
-
-    private static void printMemoryUsage(long pid) throws IOException {
-        String command = "jmap -histo " + pid;
-        ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", command);
-        Process process = builder.start();
-        BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        String s;
-        while ((s = stdInput.readLine()) != null)
-        {
-            System.out.println(s);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
     public static void main(String[] args) throws IOException {
-        String pathToFirstBuild = "C:\\HERE-CARDS\\products_per_dvn\\191F0\\connections\\31-08-2019\\NPB-148-NAR-FULL.sq3";
-        String pathToSecondBuild = "C:\\HERE-CARDS\\products_per_dvn\\191F0\\connections\\04-09-2019\\NPB-150-NAR-FULL.sq3";
-        new BuildsDiffer("NAR_FULL").compareBuilds(pathToFirstBuild, pathToSecondBuild);
+       /* String pathToFirstBuild = "C:\\HERE-CARDS\\products_per_dvn\\191F0\\connections\\31-08-2019\\NPB-148-NAR-FULL.sq3";
+        String pathToSecondBuild = "C:\\HERE-CARDS\\products_per_dvn\\191F0\\connections\\04-09-2019\\NPB-150-NAR-FULL.sq3";*/
+        new BuildsDiffer().collectBuildTimeTrend();
     }
 
 }
