@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 import static jenkins.extensions.Convertor.BUILD_START_DATE;
 
 public class BuildsDiffer {
-    private static final String DB_URI_PREFIX = "jdbc:sqlite:file:";
+    static final String DB_URI_PREFIX = "jdbc:sqlite:file:";
     private static final String ATTACH_QUERY = "ATTACH database '%s' as new";
     private static final String ALTER_QUERY = "ALTER TABLE main.%s ADD %s INT (6)";
     private static final String DETACH_QUERY = "DETACH database new";
@@ -137,8 +137,7 @@ public class BuildsDiffer {
             .put("PRODUCTS_TREND", INSERT_QUERY_PRODUCTS)
             .build();
 
-    public void appendToTrend(BuildInfo upstreamBuild)
-    {
+    public void appendToTrend(BuildInfo upstreamBuild) {
         Settings settings = Settings.getInstance();
         // connections\<jobName>\<DVN>\<build_timestamp>\<jobName>-<buildNumber>.sq3
         Path inputFolder = Paths.get(settings.getDbOutputDir(),
@@ -169,6 +168,18 @@ public class BuildsDiffer {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String getDbUriPrefix() {
+        return DB_URI_PREFIX;
+    }
+
+    public Path getOutputFilePath() {
+        return outputFilePath;
+    }
+
+    public String getJobType() {
+        return jobType;
     }
 
     public static void main(String[] args) throws IOException {
