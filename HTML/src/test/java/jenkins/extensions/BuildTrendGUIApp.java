@@ -40,7 +40,7 @@ public class BuildTrendGUIApp extends Application {
 
 //        XYChart<String, Number> chart = new LineChart<>(xAxis, yAxis);
         XYChart<String, Number> chart = new BarChart<>(xAxis, yAxis);
-        yAxis.setLabel("Build time");
+        yAxis.setLabel("Build time, sec");
         xAxis.setLabel("Build Number");
         chart.setTitle("Build Time per Product");
 

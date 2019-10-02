@@ -54,4 +54,9 @@ public class UsersReader {
         }
     }
 
+    public static String convertToDbUserWithDVN(String region, String dvn)
+    {
+        return String.format(CDC_USER_PATTERN, region, dvn);
+    }
+
 }

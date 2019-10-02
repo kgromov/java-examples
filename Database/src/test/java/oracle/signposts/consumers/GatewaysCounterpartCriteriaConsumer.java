@@ -16,9 +16,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GatewaysCounterpartCriteriaConsumer implements ICriteriaConsumer {
     private static final int DEFAULT_FETCH_SIZE = 1_000;
 
+    private String market;
+
     private Map<Integer, AtomicInteger> gatewaysCount = new HashMap<>();
     private Map<GatewayFeatureType, Set<Integer>> gatewaysPerType = new EnumMap<>(GatewayFeatureType.class);
     private Map<String, Set<Integer>> gatewaysPerUR = new HashMap<>();
+    // by regions
+    private Map<Integer, Set<String>> gatewayIdToRegions = new HashMap<>();
+
+    public GatewaysCounterpartCriteriaConsumer(String market) {
+        this.market = market;
+    }
 
     @Override
     public void processDbUser(String dbUser, String dbServerURL) {
@@ -39,6 +47,8 @@ public class GatewaysCounterpartCriteriaConsumer implements ICriteriaConsumer {
                     gatewaysCount.computeIfAbsent(gatewayId, value -> new AtomicInteger()).incrementAndGet();
 //                    gatewaysPerType.computeIfAbsent(gatewayType, value -> new HashSet<>()).add(gatewayId);
                     gatewaysPerUR.computeIfAbsent(dbUser, value -> new HashSet<>()).add(gatewayId);
+
+                    gatewayIdToRegions.computeIfAbsent(gatewayId, value -> new HashSet<>()).add(dbUser);
                 }
             } catch (SQLException e) {
                 System.err.println(String.format("Unable to process dbUser = %s, dbServerURL = %s, query = %s. Cause:%n%s",
@@ -60,5 +70,25 @@ public class GatewaysCounterpartCriteriaConsumer implements ICriteriaConsumer {
         singleGateways.forEach((type, gatewayIDs) ->
 //                System.out.println(String.format("Gateways = %s have no counterpart, feature type = %s", gatewayIDs, type)));
                 System.out.println(String.format("Gateways = %s have no counterpart, update region = %s", gatewayIDs, type)));
+    }
+
+    public void printGatewaysForRegion(String dbUser)
+    {
+        System.out.println(String.format("Show all gateways for %s and it neighbours", dbUser));
+        gatewayIdToRegions.entrySet().stream()
+                .filter(e -> e.getValue().contains(dbUser))
+                .forEach(e -> System.out.println(String.format("GatewayId = %d => %s",  e.getKey(), e.getValue())));
+    }
+
+    public void printGatewaysForRegion(String market, String dbUser, Set<Integer> targetGatewayIDs)
+    {
+        if (this.market.equals(market))
+        {
+            System.out.println(String.format("Show all gateways for %s and it neighbours", dbUser));
+            gatewayIdToRegions.entrySet().stream()
+                    .filter(e -> targetGatewayIDs.contains(e.getKey()))
+                    .filter(e -> e.getValue().contains(dbUser))
+                    .forEach(e -> System.out.println(String.format("GatewayId = %d => %s",  e.getKey(), e.getValue())));
+        }
     }
 }
