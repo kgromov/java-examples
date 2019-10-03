@@ -23,10 +23,11 @@ public class RdfDataChecker {
     private static final String SPECIFIC_REGIONS = " and REGEXP_LIKE(username, '%s')";
     private static final String DB_PASSWORD = "password";
     private static final String DB_SERVER_URL = "jdbc:oracle:thin:@akela-%s-%s-0%d.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl";
+    // TODO: put to build_config.properties or split by different files
     private static final Map<String, String> MARKET_TO_DVN = ImmutableMap.<String, String>builder()
-            .put("eu", "19122")
-            .put("nar", "191F0")
-            .put("mrm", "191E3")
+            .put("eu", "191T1")
+            .put("nar", "191T1")
+            .put("mrm", "191T1")
             .build();
 
     public static void main(String[] args) {
@@ -81,13 +82,13 @@ public class RdfDataChecker {
                 });
                 LOGGER.info("Remaining users: " + iterateUsers);
                 consumer.printGatewaysWithoutCounterPart();
-                // list problematic gateways in specific regions
+             /*   // list problematic gateways in specific regions
                 consumer.printGatewaysForRegion("eu", UsersReader.convertToDbUserWithDVN("GBR_E3_CE", dvn),
                         Sets.newHashSet(320429, 341252, 341353, 341888, 342127, 342152, 342398, 342418, 342485,
                                 342488, 342602, 342616, 342669, 342676, 342679, 342681, 342723, 342725, 342732, 342734, 342758, 342811, 342812, 342947, 343008, 343030, 412259, 429209));
                 consumer.printGatewaysForRegion("eu", UsersReader.convertToDbUserWithDVN("GBR_E3_NO", dvn),
                         Sets.newHashSet(320338, 320357, 342485, 342488, 342602, 342616, 342669, 342676, 342679,
-                                342681, 342723, 342725, 342732, 342734, 342758, 342811, 342812, 342947, 342971, 343030, 412259, 429209));
+                                342681, 342723, 342725, 342732, 342734, 342758, 342811, 342812, 342947, 342971, 343030, 412259, 429209));*/
 
             });
         } catch (ClassNotFoundException e) {
