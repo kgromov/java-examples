@@ -54,8 +54,8 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.25.2</version>
         </dependency>
-        <!-- try another approach -->
-        <!--<dependency>
+        <!-- own requests approach -->
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.9.4</version>
@@ -79,7 +79,7 @@
             <groupId>org.glassfish.jersey.inject</groupId>
             <artifactId>jersey-hk2</artifactId>
             <version>2.26</version>
-        </dependency>-->
+        </dependency>
     </dependencies>
 
     <profiles>
