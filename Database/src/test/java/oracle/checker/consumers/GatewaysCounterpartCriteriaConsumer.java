@@ -1,16 +1,19 @@
-package oracle.signposts.consumers;
+package oracle.checker.consumers;
 
-import oracle.signposts.gateways.GatewayFeatureType;
+import oracle.checker.gateways.GatewayFeatureType;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GatewaysCounterpartCriteriaConsumer implements ICriteriaConsumer {
@@ -90,5 +93,20 @@ public class GatewaysCounterpartCriteriaConsumer implements ICriteriaConsumer {
                     .filter(e -> e.getValue().contains(dbUser))
                     .forEach(e -> System.out.println(String.format("GatewayId = %d => %s",  e.getKey(), e.getValue())));
         }
+    }
+
+    public void printNeighbours()
+    {
+        Map<String, Set<String>> neighbourRegions = new TreeMap<>();
+        gatewaysPerUR.forEach((region, gateways) ->
+        {
+            gateways.forEach(gatewayId ->
+            {
+                Set<String> neighbours = gatewayIdToRegions.getOrDefault(gatewayId, Collections.emptySet());
+                neighbourRegions.computeIfAbsent(region, value -> new TreeSet<>()).addAll(neighbours);
+            });
+            neighbourRegions.get(region).remove(region);
+        });
+        System.out.println("Region with neighbours: " + neighbourRegions);
     }
 }

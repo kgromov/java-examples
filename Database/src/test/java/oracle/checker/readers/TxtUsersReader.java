@@ -1,4 +1,4 @@
-package oracle.signposts;
+package oracle.checker.readers;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,16 +7,15 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class UsersReader {
-    private static final String RESOURCES_FILE = "C:\\Projects\\java-examples\\Database\\src\\test\\java\\oracle\\signposts\\resources\\%s_users.txt";
-    private static final String CDC_USER_PATTERN = "CDCA_%s_%s";
+public class TxtUsersReader implements UserReader{
+    private static final String RESOURCES_FILE = "C:\\Projects\\java-examples\\Database\\src\\test\\java\\oracle\\checker\\resources\\%s_users.txt";
     private static final Set<String> SAMPLE_USERS = readRegions("sample");
 
     private String market;
     private String dvn;
     private Set<String> cdcUsers;
 
-    public UsersReader(String market, String dvn) {
+    public TxtUsersReader(String market, String dvn) {
         this.market = market;
         this.dvn = dvn;
         this.cdcUsers = readRegions(market).stream()
@@ -24,6 +23,7 @@ public class UsersReader {
                 .collect(Collectors.toSet());
     }
 
+    @Override
     public Set<String> getCdcUsers() {
             return cdcUsers;
     }
@@ -52,11 +52,6 @@ public class UsersReader {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static String convertToDbUserWithDVN(String region, String dvn)
-    {
-        return String.format(CDC_USER_PATTERN, region, dvn);
     }
 
 }

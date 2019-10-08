@@ -1,4 +1,4 @@
-package oracle.signposts.criterias;
+package oracle.checker.criterias;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,17 +41,17 @@ public enum GatewaysCriteria implements ICriteria {
                             "where exists (select 1 from RDF_ADMIN_ATTRIBUTE)";
                 }
             },
-    ADMIN_WIDE_REGULATIONS2
+    REGIONS_WITH_UTURN_RESTRICTIONS
             {
                 @Override
                 public String getIdentity(ResultSet resultSet) throws SQLException {
-                    return String.format("ADMIN_PLACE_ID = %d, ADMIN_WIDE_REGULATION = %s",
+                    return String.format("ADMIN_PLACE_ID = %d, ADMIN_WIDE_REGULATIONS = %s",
                             resultSet.getInt(1), resultSet.getObject(2));
                 }
 
                 @Override
                 public String getQuery() {
-                    return "select ADMIN_PLACE_ID, ADMIN_WIDE_REGULATION from RDF_ADMIN_ATTRIBUTE where count(*) > 0";
+                    return "select ADMIN_PLACE_ID, ADMIN_WIDE_REGULATIONS from RDF_ADMIN_ATTRIBUTE";
                 }
             }
 }

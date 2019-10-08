@@ -1,7 +1,7 @@
-package oracle.signposts.consumers;
+package oracle.checker.consumers;
 
 import com.google.common.base.Objects;
-import oracle.signposts.criterias.ICriteria;
+import oracle.checker.criterias.ICriteria;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.sql.Connection;

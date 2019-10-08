@@ -1,4 +1,4 @@
-package oracle.signposts.criterias;
+package oracle.checker.criterias;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

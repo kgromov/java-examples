@@ -1,4 +1,4 @@
-package oracle.signposts.gateways;
+package oracle.checker.gateways;
 
 import java.io.BufferedReader;
 import java.io.IOException;

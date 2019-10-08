@@ -1,8 +1,10 @@
-package oracle.signposts;
+package oracle.checker;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
-import oracle.signposts.consumers.GatewaysCounterpartCriteriaConsumer;
+import oracle.checker.consumers.BasicCriteriaConsumer;
+import oracle.checker.consumers.GatewaysCounterpartCriteriaConsumer;
+import oracle.checker.criterias.GatewaysCriteria;
+import oracle.checker.readers.TxtUsersReader;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,16 +20,16 @@ import java.util.stream.IntStream;
 public class RdfDataChecker {
     private static final Logger LOGGER = Logger.getLogger(RdfDataChecker.class.getName());
     private static final String USERS_QUERY = "select username from dba_users WHERE REGEXP_LIKE(username, '^CDCA_.*_%s$')";
-    private static final String NO_SAMPLE_USERS = String.format("%s and not REGEXP_LIKE(username, '%s')", USERS_QUERY, UsersReader.getSampleRegions());
+    private static final String NO_SAMPLE_USERS = String.format("%s and not REGEXP_LIKE(username, '%s')", USERS_QUERY, TxtUsersReader.getSampleRegions());
     // when it's required to determine specific regions
     private static final String SPECIFIC_REGIONS = " and REGEXP_LIKE(username, '%s')";
     private static final String DB_PASSWORD = "password";
     private static final String DB_SERVER_URL = "jdbc:oracle:thin:@akela-%s-%s-0%d.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl";
     // TODO: put to build_config.properties or split by different files
     private static final Map<String, String> MARKET_TO_DVN = ImmutableMap.<String, String>builder()
-            .put("eu", "191T1")
-            .put("nar", "191T1")
-            .put("mrm", "191T1")
+//            .put("eu", "191T1")
+//            .put("nar", "191T1")
+            .put("mrm", "191E3")
             .build();
 
     public static void main(String[] args) {
@@ -39,7 +41,7 @@ public class RdfDataChecker {
             {
                 LOGGER.info(String.format("################## market = %s, dvn = %s ##################", market, dvn));
                 Set<Integer> processedServers = IntStream.rangeClosed(1, 8).boxed().collect(Collectors.toSet());
-                UsersReader reader = new UsersReader(market, dvn);
+                TxtUsersReader reader = new TxtUsersReader(market, dvn);
                 Set<String> allUsers = reader.getCdcUsers();
 //                Set<String> allUsers = reader.getSampleCdcUserWithDVN(dvn);
                 Set<String> iterateUsers = new HashSet<>(allUsers);
@@ -61,10 +63,10 @@ public class RdfDataChecker {
                             // users
                             dbServerUsers.forEach(userName ->
                             {
-                                // Basic
-                                // POI -> BasicCriteriaConsumer({StubbleCriteria.STUB_POI, StubbleCriteria.STUB_LOCAL_POI})
-                                // Counterparts
-                                consumer.processDbUser(connection, userName, dbServerUrl);
+                                // Basic: e.g. POI -> new BasicCriteriaConsumer({StubbleCriteria.STUB_POI, StubbleCriteria.STUB_LOCAL_POI})
+                                //                      .processDbUser(connection, userName, dbServerUrl);
+                                // Specific - e.g. GatewaysCounterpartCriteriaConsumer
+//                                consumer.processDbUser(connection, userName, dbServerUrl);
 
                                 synchronized (iterateUsers) {
                                     iterateUsers.remove(userName);
@@ -81,15 +83,8 @@ public class RdfDataChecker {
                     }
                 });
                 LOGGER.info("Remaining users: " + iterateUsers);
-                consumer.printGatewaysWithoutCounterPart();
-             /*   // list problematic gateways in specific regions
-                consumer.printGatewaysForRegion("eu", UsersReader.convertToDbUserWithDVN("GBR_E3_CE", dvn),
-                        Sets.newHashSet(320429, 341252, 341353, 341888, 342127, 342152, 342398, 342418, 342485,
-                                342488, 342602, 342616, 342669, 342676, 342679, 342681, 342723, 342725, 342732, 342734, 342758, 342811, 342812, 342947, 343008, 343030, 412259, 429209));
-                consumer.printGatewaysForRegion("eu", UsersReader.convertToDbUserWithDVN("GBR_E3_NO", dvn),
-                        Sets.newHashSet(320338, 320357, 342485, 342488, 342602, 342616, 342669, 342676, 342679,
-                                342681, 342723, 342725, 342732, 342734, 342758, 342811, 342812, 342947, 342971, 343030, 412259, 429209));*/
-
+                /*consumer.printGatewaysWithoutCounterPart();
+                consumer.printNeighbours();*/
             });
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

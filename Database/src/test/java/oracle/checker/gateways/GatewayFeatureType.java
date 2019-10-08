@@ -1,4 +1,4 @@
-package oracle.signposts.gateways;
+package oracle.checker.gateways;
 
 public enum GatewayFeatureType {
     BORDER_LINK ("SELECT STUB_ID FROM %s.SC_BORDER_LINK"),

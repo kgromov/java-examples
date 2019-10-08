@@ -1,4 +1,4 @@
-package oracle.signposts.consumers;
+package oracle.checker.consumers;
 
 import java.sql.Connection;
 import java.util.logging.Logger;

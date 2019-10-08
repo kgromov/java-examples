@@ -1,7 +1,7 @@
-package oracle.signposts.consumers;
+package oracle.checker.consumers;
 
-import oracle.signposts.criterias.ICriteria;
-import oracle.signposts.gateways.StubbleGraphContainer;
+import oracle.checker.criterias.ICriteria;
+import oracle.checker.gateways.StubbleGraphContainer;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

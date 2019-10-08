@@ -1,16 +1,16 @@
-package oracle.signposts.consumers;
+package oracle.checker.consumers;
 
-import oracle.signposts.criterias.ICriteria;
+import oracle.checker.criterias.ICriteria;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class BasicCriteriaConsumer implements ICriteriaConsumer {
-    private ICriteria[] iCriterias;
+    private ICriteria[] criterias;
 
-    public BasicCriteriaConsumer(ICriteria... iCriterias) {
-        this.iCriterias = iCriterias;
+    public BasicCriteriaConsumer(ICriteria... criterias) {
+        this.criterias = criterias;
     }
 
     @Override
@@ -20,9 +20,9 @@ public class BasicCriteriaConsumer implements ICriteriaConsumer {
 
     @Override
     public void processDbUser(Connection connection, String dbUser, String dbServerURL) {
-        for (ICriteria criteria : iCriterias)
+        for (ICriteria criteria : criterias)
         {
-            try (ResultSet resultSet = connection.createStatement().executeQuery(criteria.getQuery())) {
+            try (ResultSet resultSet = connection.createStatement().executeQuery(ICriteria.getQuery(criteria.getQuery(), dbUser))) {
                 if (resultSet.next()) {
                     LOGGER.info(String.format("SourceDbUser = %s, dbServer = %s", dbUser, dbServerURL));
                     LOGGER.info( criteria.getIdentity(resultSet));

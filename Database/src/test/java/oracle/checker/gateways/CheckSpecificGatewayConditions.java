@@ -1,4 +1,4 @@
-package oracle.signposts.gateways;
+package oracle.checker.gateways;
 
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.tuple.Pair;

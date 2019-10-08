@@ -49,6 +49,8 @@ public class JenkinsClientTest {
         Report.writeToReport(jobInfo);
         // convert to sq3
         Convertor.convertToSqLite(jobInfo);
+        // append to build time trend
+        new BuildsDiffer().appendToTrend(jobInfo);
     }
 
     @Test(enabled = true)
