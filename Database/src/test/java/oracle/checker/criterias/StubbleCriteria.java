@@ -9,29 +9,81 @@ public enum StubbleCriteria implements ICriteria {
 
            @Override
             public String getQuery() {
-                return "select distinct snl.LINK_ID\n" +
+                return "select distinct snl.LINK_ID, snl.POI_ACCESS, rp.POI_ID, rp.CAT_ID\n" +
                         "from STUB_NAV_LINK snl\n" +
-                        "join RDF_LOCATION l on snl.LINK_ID = l.LINK_ID\n" +
-                    /*    "join RDF_POI_ADDRESS rpa on rpa.LOCATION_ID = l.LOCATION_ID\n" +
-                        "join RDF_POI rp on rp.POI_ID = rpa.POI_ID\n" +*/
-                        "where snl.POI_ACCESS = 'Y'";
+                        "join RDF_LOCATION rl on rl.LINK_ID = snl.LINK_ID\n" +
+                        "join RDF_POI_ADDRESS rpa on rpa.LOCATION_ID = rl.LOCATION_ID\n" +
+                        "join RDF_POI rp on rp.POI_ID = rpa.POI_ID";
         }
-    },
+
+           @Override
+           public String getIdentity(ResultSet resultSet) throws SQLException {
+               return String.format("STUB_POI: {LINK_ID = %d, POI_ACCESS = '%s' POI_ID = %d, CAT_ID = %d}",
+                       resultSet.getInt(1), resultSet.getString(2), resultSet.getInt(3), resultSet.getInt(4));
+           }
+       },
 
     STUB_LOCAL_POI
             {
                 @Override
                 public String getQuery() {
-                    return "select distinct rnl.LINK_ID\n" +
-                            "from RDF_NAV_LINK rnl\n" +
-                            "join STUB_LINK_LOCAL sll on sll.LINK_ID = rnl.LINK_ID\n" +
-                            "join RDF_LOCATION l on rnl.LINK_ID = l.LINK_ID\n" +
-                       /*     "join RDF_POI_ADDRESS rpa on rpa.LOCATION_ID = l.LOCATION_ID\n" +
-                            "join RDF_POI rp on rp.POI_ID = rpa.POI_ID\n" +*/
-                            "where rnl.POI_ACCESS = 'Y'";
+                    return "select distinct snl.LINK_ID, rnl.POI_ACCESS, rp.POI_ID, rp.CAT_ID\n" +
+                            "from STUB_LINK_LOCAL snl\n" +
+                            "join RDF_NAV_LINK rnl on rnl.LINK_ID = snl.LINK_ID\n" +
+                            "join STUB_LOCATION rl on rl.LINK_ID = snl.LINK_ID\n" +
+                            "join RDF_POI_ADDRESS rpa on rpa.LOCATION_ID = rl.LOCATION_ID\n" +
+                            "join RDF_POI rp on rp.POI_ID = rpa.POI_ID";
+                }
+
+                @Override
+                public String getIdentity(ResultSet resultSet) throws SQLException {
+                    return String.format("STUB_LOCAL_POI: {LINK_ID = %d, POI_ACCESS = '%s' POI_ID = %d, CAT_ID = %d}",
+                            resultSet.getInt(1), resultSet.getString(2), resultSet.getInt(3), resultSet.getInt(4));
+                }
+            },
+    STUB_POI_AIRPORT
+            {
+
+                @Override
+                public String getQuery() {
+                    return "select distinct l.LINK_ID\n" +
+                            "from RDF_LOCATION l\n" +
+                            "join STUB_LINK sl on l.LINK_ID = sl.LINK_ID\n" +
+                            "join RDF_POI_ADDRESS pa on pa.LOCATION_ID = l.LOCATION_ID\n" +
+                            "join RDF_POI p on p.POI_ID = pa.POI_ID\n" +
+                            "where p.CAT_ID = 4581";
                 }
             },
 
+    STUB_LOCAL_POI_AIRPORT
+            {
+                @Override
+                public String getQuery() {
+                    return "select distinct l.LINK_ID\n" +
+                            "from RDF_LOCATION l\n" +
+                            "join STUB_LINK_LOCAL sl on l.LINK_ID = sl.LINK_ID\n" +
+                            "join RDF_POI_ADDRESS pa on pa.LOCATION_ID = l.LOCATION_ID\n" +
+                            "join RDF_POI p on p.POI_ID = pa.POI_ID\n" +
+                            "where p.CAT_ID = 4581";
+                }
+            },
+    STUB_POI_ADDRESS
+            {
+                @Override
+                public String getQuery() {
+                    return "select distinct snl.LINK_ID, rp.CAT_ID, rp.POI_ID from stub_nav_link snl\n" +
+                            "join rdf_location rl on rl.LINK_ID = snl.LINK_ID\n" +
+                            "join RDF_POI_ADDRESS ra on ra.LOCATION_ID = rl.LOCATION_ID\n" +
+                            "join RDF_POI rp on rp.POI_ID = rpa.POI_ID\n"+
+                            "where ra.ACTUAL_ADDRESS is not null";
+                }
+
+                @Override
+                public String getIdentity(ResultSet resultSet) throws SQLException {
+                    return String.format("LINK_ID = %d, POI_ID = %d",
+                            resultSet.getInt(1), resultSet.getInt(2));
+                }
+            },
     STUB_POI_COUNT_DIFF
     {
         @Override

@@ -1,9 +1,7 @@
 package oracle.checker;
 
 import com.google.common.collect.ImmutableMap;
-import oracle.checker.consumers.BasicCriteriaConsumer;
-import oracle.checker.consumers.GatewaysCounterpartCriteriaConsumer;
-import oracle.checker.criterias.GatewaysCriteria;
+import oracle.checker.consumers.PoiStubCriteriaConsumer;
 import oracle.checker.readers.TxtUsersReader;
 
 import java.sql.Connection;
@@ -27,9 +25,9 @@ public class RdfDataChecker {
     private static final String DB_SERVER_URL = "jdbc:oracle:thin:@akela-%s-%s-0%d.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl";
     // TODO: put to build_config.properties or split by different files
     private static final Map<String, String> MARKET_TO_DVN = ImmutableMap.<String, String>builder()
-//            .put("eu", "191T1")
+            .put("eu", "191T1")
 //            .put("nar", "191T1")
-            .put("mrm", "191E3")
+//            .put("mrm", "191T1")
             .build();
 
     public static void main(String[] args) {
@@ -45,7 +43,8 @@ public class RdfDataChecker {
                 Set<String> allUsers = reader.getCdcUsers();
 //                Set<String> allUsers = reader.getSampleCdcUserWithDVN(dvn);
                 Set<String> iterateUsers = new HashSet<>(allUsers);
-                GatewaysCounterpartCriteriaConsumer consumer = new GatewaysCounterpartCriteriaConsumer(market);
+//                GatewaysCounterpartCriteriaConsumer consumer = new GatewaysCounterpartCriteriaConsumer(market);
+                PoiStubCriteriaConsumer consumer = new PoiStubCriteriaConsumer();
                 allUsers.stream().filter(iterateUsers::contains).forEach(cdcUser ->
                 {
                     for (int i : processedServers) {
@@ -65,8 +64,10 @@ public class RdfDataChecker {
                             {
                                 // Basic: e.g. POI -> new BasicCriteriaConsumer({StubbleCriteria.STUB_POI, StubbleCriteria.STUB_LOCAL_POI})
                                 //                      .processDbUser(connection, userName, dbServerUrl);
+                               /* new BasicCriteriaConsumer(StubbleCriteria.STUB_POI, StubbleCriteria.STUB_LOCAL_POI)
+                                        .processDbUser(connection, userName, dbServerUrl);*/
                                 // Specific - e.g. GatewaysCounterpartCriteriaConsumer
-//                                consumer.processDbUser(connection, userName, dbServerUrl);
+                                consumer.processDbUser(connection, userName, dbServerUrl);
 
                                 synchronized (iterateUsers) {
                                     iterateUsers.remove(userName);
@@ -83,6 +84,10 @@ public class RdfDataChecker {
                     }
                 });
                 LOGGER.info("Remaining users: " + iterateUsers);
+                consumer.printAll();
+                consumer.printOddPoi();
+                /*consumer.printGatewaysForRegion(market, UserReader.convertToDbUserWithDVN("AR_BA", dvn), Sets.newHashSet(141296, 141353, 44761986));
+                consumer.printGatewaysForRegion(market, UserReader.convertToDbUserWithDVN("AR_BA", dvn), Sets.newHashSet(44762070, 44762071));*/
                 /*consumer.printGatewaysWithoutCounterPart();
                 consumer.printNeighbours();*/
             });

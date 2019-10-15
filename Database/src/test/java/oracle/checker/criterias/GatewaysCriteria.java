@@ -45,13 +45,15 @@ public enum GatewaysCriteria implements ICriteria {
             {
                 @Override
                 public String getIdentity(ResultSet resultSet) throws SQLException {
-                    return String.format("ADMIN_PLACE_ID = %d, ADMIN_WIDE_REGULATIONS = %s",
-                            resultSet.getInt(1), resultSet.getObject(2));
+                    return String.format("ADMIN_PLACE_ID = %d, ADMIN_ORDER = %d, ISO_COUNTRY_CODE = %s",
+                            resultSet.getInt(1), resultSet.getInt(2), resultSet.getString(3));
                 }
 
                 @Override
                 public String getQuery() {
-                    return "select ADMIN_PLACE_ID, ADMIN_WIDE_REGULATIONS from RDF_ADMIN_ATTRIBUTE";
+                    return "select a.ADMIN_PLACE_ID, h.ADMIN_ORDER, h.ISO_COUNTRY_CODE from RDF_ADMIN_HIERARCHY h\n" +
+                            "join RDF_ADMIN_ATTRIBUTE a on a.ADMIN_PLACE_ID = h.ADMIN_PLACE_ID\n" +
+                            "where a.ADMIN_WIDE_REGULATIONS = 1";
                 }
             }
 }
