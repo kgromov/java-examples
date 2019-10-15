@@ -1,6 +1,9 @@
-package jenkins.domain;
+package jenkins.core;
 
 
+import jenkins.Settings;
+import jenkins.domain.Job;
+import jenkins.domain.MainView;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 
 import javax.ws.rs.client.Client;
@@ -30,9 +33,9 @@ public class JenkinsClient {
     }
 
     // or add generic wrapper response logic: {check response status; log raw; serialize via mapper}
-    private Map<String, Job> getJobs()
+    public Map<String, Job> getJobs()
     {
-        Response response = client.target(url).path("veiw").request(MediaType.APPLICATION_JSON_TYPE).get();
+        Response response = client.target(url).path("view").request(MediaType.APPLICATION_JSON_TYPE).get();
         MainView mainView = response.readEntity(MainView.class);
         return mainView.getJobs().stream()
                 .peek(job -> job.setClient(client))

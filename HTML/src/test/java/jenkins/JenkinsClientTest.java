@@ -1,5 +1,9 @@
 package jenkins;
 
+import com.offbytwo.jenkins.JenkinsServer;
+import jenkins.core.JenkinsClient;
+import jenkins.domain.Job;
+import jenkins.domain.JobWithDetails;
 import jenkins.forkjoinpool.BuildInfo;
 import jenkins.forkjoinpool.JobInfoTask;
 import org.testng.annotations.BeforeMethod;
@@ -11,6 +15,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
@@ -43,6 +50,18 @@ public class JenkinsClientTest {
             throw new RuntimeException("Settings were not instantiated cause " +
                     "of incorrect file or file format passed by " + System.getProperty("my.properties"));
         }
+    }
+
+    @Test
+    public void checkNewImplementation() throws URISyntaxException, IOException {
+        new JenkinsServer(new URI(settings.getJenkinsURL()), settings.getLogin(), settings.getPassword()).getJobs();
+
+        JenkinsClient jenkinsClient = new JenkinsClient(settings.getJenkinsURL(), settings.getLogin(), settings.getPassword());
+        Map<String, Job> jobs = jenkinsClient.getJobs();
+        Job presubmit = jobs.get(settings.getJobName());
+        JobWithDetails  jobWithDetails = presubmit.details();
+        jobWithDetails.getBuildByNumber(1);
+        jenkinsClient.close();
     }
 
    /* @Test
