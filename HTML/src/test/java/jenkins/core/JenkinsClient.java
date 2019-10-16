@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * Created by konstantin on 06.10.2019.
  */
 public class JenkinsClient {
-    private Client client;
+    private HttpClientWrapper client;
     private final String url;
     private final String user;
     private final String password;
@@ -27,16 +27,18 @@ public class JenkinsClient {
         this.user = user;
         this.password = password;
         HttpAuthenticationFeature auth = HttpAuthenticationFeature.basic(user, password);
-        this.client = ClientBuilder.newBuilder()
+        Client client = ClientBuilder.newBuilder()
                 .register(auth)
                 .build();
+        this.client = new HttpClientWrapper(client);
     }
 
     // or add generic wrapper response logic: {check response status; log raw; serialize via mapper}
     public Map<String, Job> getJobs()
     {
-        Response response = client.target(url).path("view").request(MediaType.APPLICATION_JSON_TYPE).get();
-        MainView mainView = response.readEntity(MainView.class);
+        Response response = client.target(url).path("api").path("json").request(MediaType.APPLICATION_JSON_TYPE).get();
+//        MainView mainView = response.readEntity(MainView.class);
+        MainView mainView = new HttpClientWrapper(client).unmarshal(response.readEntity(String.class), MainView.class);
         return mainView.getJobs().stream()
                 .peek(job -> job.setClient(client))
                 .collect(Collectors.toMap(Job::getName, e -> e));

@@ -1,5 +1,6 @@
 package jenkins.domain;
 
+import jenkins.core.HttpClientWrapper;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +9,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Getter
 @EqualsAndHashCode(exclude = {"buildNumberToBuild", "client"})
@@ -30,25 +32,24 @@ public class JobWithDetails {
     private List<Job> downstreamProjects;
     private List<Job> upstreamProjects;
     @Setter
-    private Client client;
+    private HttpClientWrapper client;
     private String url;
     private Map<Integer, Build> buildNumberToBuild;
 
     public JobWithDetails() {
+        this.buildNumberToBuild = builds.stream().collect(Collectors.toMap(Build::getNumber, b -> b));
     }
 
     public Build getBuildByNumber(int buildNumber)
     {
         return buildNumberToBuild.containsKey(buildNumber)
                 ? buildNumberToBuild.get(buildNumber)
-                : client.target(url).path("job").path(String.valueOf(buildNumber))
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .get(Build.class);
+                : client.get(url, MediaType.APPLICATION_JSON_TYPE, Build.class);
     }
 
     public Build getLatestBuild()
     {
-        return null;
+        return builds.get(0);
     }
 
     public List<Build> getLastBuilds()

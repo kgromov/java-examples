@@ -54,8 +54,6 @@ public class JenkinsClientTest {
 
     @Test
     public void checkNewImplementation() throws URISyntaxException, IOException {
-        new JenkinsServer(new URI(settings.getJenkinsURL()), settings.getLogin(), settings.getPassword()).getJobs();
-
         JenkinsClient jenkinsClient = new JenkinsClient(settings.getJenkinsURL(), settings.getLogin(), settings.getPassword());
         Map<String, Job> jobs = jenkinsClient.getJobs();
         Job presubmit = jobs.get(settings.getJobName());
