@@ -96,6 +96,11 @@ public class JenkinsUtils {
 
     public static void findBuildsByCommitMessage(Predicate<String> condition) {
         JobWithDetails presubmitJob = getJobByName("PreSubmit");
+        try {
+            presubmitJob.getAllBuilds();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         List<Build> presubmitsBuilds = presubmitJob.getBuilds();
         for (Build build : presubmitsBuilds) {
             int number = build.getNumber();

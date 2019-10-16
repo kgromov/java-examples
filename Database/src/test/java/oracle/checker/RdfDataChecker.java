@@ -2,7 +2,10 @@ package oracle.checker;
 
 import com.google.common.collect.ImmutableMap;
 import oracle.checker.consumers.PoiStubCriteriaConsumer;
+import oracle.checker.consumers.SpeedProfilesCriteriaConsumer;
 import oracle.checker.readers.TxtUsersReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,12 +14,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class RdfDataChecker {
-    private static final Logger LOGGER = Logger.getLogger(RdfDataChecker.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(RdfDataChecker.class);
     private static final String USERS_QUERY = "select username from dba_users WHERE REGEXP_LIKE(username, '^CDCA_.*_%s$')";
     private static final String NO_SAMPLE_USERS = String.format("%s and not REGEXP_LIKE(username, '%s')", USERS_QUERY, TxtUsersReader.getSampleRegions());
     // when it's required to determine specific regions
@@ -26,8 +28,8 @@ public class RdfDataChecker {
     // TODO: put to build_config.properties or split by different files
     private static final Map<String, String> MARKET_TO_DVN = ImmutableMap.<String, String>builder()
             .put("eu", "191T1")
-//            .put("nar", "191T1")
-//            .put("mrm", "191T1")
+            .put("nar", "191T1")
+            .put("mrm", "191T1")
             .build();
 
     public static void main(String[] args) {
@@ -44,7 +46,7 @@ public class RdfDataChecker {
 //                Set<String> allUsers = reader.getSampleCdcUserWithDVN(dvn);
                 Set<String> iterateUsers = new HashSet<>(allUsers);
 //                GatewaysCounterpartCriteriaConsumer consumer = new GatewaysCounterpartCriteriaConsumer(market);
-                PoiStubCriteriaConsumer consumer = new PoiStubCriteriaConsumer();
+                SpeedProfilesCriteriaConsumer consumer = new SpeedProfilesCriteriaConsumer(market, dvn);
                 allUsers.stream().filter(iterateUsers::contains).forEach(cdcUser ->
                 {
                     for (int i : processedServers) {
@@ -58,7 +60,7 @@ public class RdfDataChecker {
                                 dbServerUsers.add(userNames.getString(1));
                             }
                             dbServerUsers = reader.withoutSampleUsers(dbServerUsers);
-                            LOGGER.info("Start processing dbServer = " + dbServerUrl);
+                            LOGGER.debug("Start processing dbServer = " + dbServerUrl);
                             // users
                             dbServerUsers.forEach(userName ->
                             {
@@ -78,14 +80,15 @@ public class RdfDataChecker {
                         }
                         if (!dbServerUsers.isEmpty()) {
                             processedServers.remove(i);
-                            LOGGER.info("Finish processing dbServer = " + dbServerUrl);
+                            LOGGER.debug("Finish processing dbServer = " + dbServerUrl);
                             break;
                         }
                     }
                 });
-                LOGGER.info("Remaining users: " + iterateUsers);
-                consumer.printAll();
-                consumer.printOddPoi();
+                LOGGER.debug("Remaining users: " + iterateUsers);
+                consumer.printSpeedProfiles();
+               /* consumer.printAll();
+                consumer.printOddPoi();*/
                 /*consumer.printGatewaysForRegion(market, UserReader.convertToDbUserWithDVN("AR_BA", dvn), Sets.newHashSet(141296, 141353, 44761986));
                 consumer.printGatewaysForRegion(market, UserReader.convertToDbUserWithDVN("AR_BA", dvn), Sets.newHashSet(44762070, 44762071));*/
                 /*consumer.printGatewaysWithoutCounterPart();
