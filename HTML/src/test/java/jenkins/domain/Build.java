@@ -1,10 +1,10 @@
 package jenkins.domain;
 
+import jenkins.core.HttpClientWrapper;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.ws.rs.client.Client;
 import javax.ws.rs.core.MediaType;
 
 @Getter
@@ -14,7 +14,7 @@ public class Build {
 //    private int queueId;
     private String url;
     @Setter
-    private Client client;
+    private HttpClientWrapper client;
 
     public Build() {
     }
@@ -26,7 +26,7 @@ public class Build {
 
     public BuildWithDetails details()
     {
-        BuildWithDetails buildWithDetails = client.target(url).request(MediaType.APPLICATION_JSON_TYPE).get(BuildWithDetails.class);;
+        BuildWithDetails buildWithDetails = client.get(url, MediaType.APPLICATION_JSON_TYPE, BuildWithDetails.class);
         buildWithDetails.setClient(client);
         return buildWithDetails;
     }

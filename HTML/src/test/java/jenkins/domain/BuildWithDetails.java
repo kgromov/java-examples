@@ -1,14 +1,14 @@
 package jenkins.domain;
 
 import com.offbytwo.jenkins.model.BuildResult;
+import jenkins.core.HttpClientWrapper;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.ws.rs.client.Client;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Getter
@@ -33,12 +33,10 @@ public class BuildWithDetails extends Build{
     private String builtOn;
     private List<BuildChangeSetAuthor> culprits;*/
     @Setter
-    private Client client;
+    private HttpClientWrapper client;
 
     public String getConsoleLog()
     {
-        Response response = client.target(getUrl()).path("consoleText")
-                .request(MediaType.TEXT_PLAIN).get();
-        return response.readEntity(String.class);
+        return client.getRaw(Paths.get(getUrl(), "consoleText").toString(), MediaType.TEXT_PLAIN_TYPE);
     }
 }

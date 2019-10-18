@@ -1,5 +1,6 @@
 package jenkins.domain;
 
+import com.google.common.collect.ImmutableMap;
 import jenkins.core.HttpClientWrapper;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -29,22 +30,28 @@ public class JobWithDetails {
     private int nextBuildNumber;
     private boolean inQueue;
 //    private QueueItem queueItem;
-    private List<Job> downstreamProjects;
-    private List<Job> upstreamProjects;
+//    private List<Job> downstreamProjects;
+//    private List<Job> upstreamProjects;
     @Setter
     private HttpClientWrapper client;
     private String url;
     private Map<Integer, Build> buildNumberToBuild;
 
     public JobWithDetails() {
-        this.buildNumberToBuild = builds.stream().collect(Collectors.toMap(Build::getNumber, b -> b));
+        this.buildNumberToBuild = builds.stream()
+                .peek(build -> build.setClient(client))
+                .collect(Collectors.toMap(Build::getNumber, b -> b));
     }
 
     public Build getBuildByNumber(int buildNumber)
     {
-        return buildNumberToBuild.containsKey(buildNumber)
-                ? buildNumberToBuild.get(buildNumber)
-                : client.get(url, MediaType.APPLICATION_JSON_TYPE, Build.class);
+        Build build = buildNumberToBuild.get(buildNumber);
+        if (build == null)
+        {
+            build = client.get(url, MediaType.APPLICATION_JSON_TYPE, Build.class);
+            buildNumberToBuild.put(buildNumber, build);
+        }
+        return build;
     }
 
     public Build getLatestBuild()
@@ -54,11 +61,14 @@ public class JobWithDetails {
 
     public List<Build> getLastBuilds()
     {
-        return null;
+        return builds;
     }
 
     public List<Build> getAllBuilds()
     {
-        return null;
+        return client.get(url,
+                MediaType.APPLICATION_JSON_TYPE,
+                ImmutableMap.of("tree", "allBuilds[number[*],url[*],queueId[*]]"),
+                Builds.class).getBuilds();
     }
 }

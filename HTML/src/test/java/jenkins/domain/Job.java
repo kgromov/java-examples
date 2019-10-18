@@ -6,9 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.ws.rs.client.Client;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 @Getter
 @ToString
@@ -18,7 +16,7 @@ public class Job {
     private String url;
     private String fullName;
     @Setter
-    private Client client;
+    private HttpClientWrapper client;
 
     public Job() {
     }
@@ -29,8 +27,7 @@ public class Job {
         /*JobWithDetails jobWithDetails = client.target(url)
                 .path("api").path("json")
                 .request(MediaType.APPLICATION_JSON_TYPE).get(JobWithDetails.class);*/
-        Response response = client.target(url).path("api").path("json").request(MediaType.APPLICATION_JSON_TYPE).get();
-        JobWithDetails jobWithDetails = new HttpClientWrapper(client).unmarshal(response.readEntity(String.class), JobWithDetails.class);
+        JobWithDetails jobWithDetails = client.get(url, MediaType.APPLICATION_JSON_TYPE, JobWithDetails.class);
         jobWithDetails.setClient(client);
         return jobWithDetails;
     }

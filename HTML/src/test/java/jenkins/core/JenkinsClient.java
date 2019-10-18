@@ -1,7 +1,6 @@
 package jenkins.core;
 
 
-import jenkins.Settings;
 import jenkins.domain.Job;
 import jenkins.domain.MainView;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
@@ -9,7 +8,6 @@ import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -34,11 +32,10 @@ public class JenkinsClient {
     }
 
     // or add generic wrapper response logic: {check response status; log raw; serialize via mapper}
-    public Map<String, Job> getJobs()
-    {
-        Response response = client.target(url).path("api").path("json").request(MediaType.APPLICATION_JSON_TYPE).get();
+    public Map<String, Job> getJobs() {
+//        Response response = client.target(url).path("api").path("json").request(MediaType.APPLICATION_JSON_TYPE).get();
 //        MainView mainView = response.readEntity(MainView.class);
-        MainView mainView = new HttpClientWrapper(client).unmarshal(response.readEntity(String.class), MainView.class);
+        MainView mainView = client.get(url, MediaType.APPLICATION_JSON_TYPE, MainView.class);
         return mainView.getJobs().stream()
                 .peek(job -> job.setClient(client))
                 .collect(Collectors.toMap(Job::getName, e -> e));
@@ -52,8 +49,7 @@ public class JenkinsClient {
     }
 
     // Probably AutoClosable?
-    public void close()
-    {
+    public void close() {
         client.close();
     }
 }
