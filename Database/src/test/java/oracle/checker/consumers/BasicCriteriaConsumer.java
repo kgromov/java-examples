@@ -28,7 +28,7 @@ public class BasicCriteriaConsumer implements ICriteriaConsumer {
                     LOGGER.info( criteria.getIdentity(resultSet));
                 }
             } catch (SQLException e) {
-                LOGGER.severe(String.format("Unable to process dbUser = %s, dbServerURL = %s. Cause:%n%s", dbUser, dbServerURL, e));
+                LOGGER.error(String.format("Unable to process dbUser = %s, dbServerURL = %s. Cause:%n%s", dbUser, dbServerURL, e));
             }
         }
     }

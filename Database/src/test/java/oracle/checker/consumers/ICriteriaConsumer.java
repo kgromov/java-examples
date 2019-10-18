@@ -1,11 +1,13 @@
 package oracle.checker.consumers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
-import java.util.logging.Logger;
 
 public interface ICriteriaConsumer {
-    // TODO: replace with sl4j logger
-    Logger LOGGER = Logger.getLogger(ICriteriaConsumer.class.getName());
+    Logger LOGGER = LoggerFactory.getLogger(ICriteriaConsumer.class.getName());
+    int DEFAULT_FETCH_SIZE = 1000;
 
     @Deprecated
     void processDbUser(String dbUser, String dbServerURL);

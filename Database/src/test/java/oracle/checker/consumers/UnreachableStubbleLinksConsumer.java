@@ -9,8 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UnreachableStubbleLinksConsumer implements ICriteriaConsumer {
-    private static final int DEFAULT_FETCH_SIZE = 1000;
-
     // TODO: move to criteria query
     private static final String STUB_NODES_QUERY = "SELECT NODE_ID FROM STUB_NODE";
     private static final String STUB_LINKS_QUERY = "select link_id, ref_node_id, nonref_node_id from STUB_LINK";

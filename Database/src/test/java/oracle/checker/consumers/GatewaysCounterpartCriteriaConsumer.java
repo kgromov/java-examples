@@ -17,8 +17,6 @@ import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GatewaysCounterpartCriteriaConsumer implements ICriteriaConsumer {
-    private static final int DEFAULT_FETCH_SIZE = 1_000;
-
     private String market;
 
     private Map<Integer, AtomicInteger> gatewaysCount = new HashMap<>();
