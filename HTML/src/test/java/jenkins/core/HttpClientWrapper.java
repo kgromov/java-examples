@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Map;
 
-import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
+import static com.fasterxml.jackson.databind.DeserializationFeature.*;
 
 /**
  * Created by konstantin on 06.10.2019.
@@ -27,6 +27,8 @@ public class HttpClientWrapper {
         this.client = client;
         this.mapper = new ObjectMapper();
         mapper.disable(FAIL_ON_UNKNOWN_PROPERTIES);
+     /*   mapper.disable(FAIL_ON_NULL_CREATOR_PROPERTIES);
+        mapper.disable(FAIL_ON_NULL_FOR_PRIMITIVES);*/
     }
 
     public HttpClientWrapper(WebTarget baseURI) {

@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 @Getter
 @EqualsAndHashCode(exclude = "client")
 public class Build {
+    @Getter
     private int number;
 //    private int queueId;
     private String url;

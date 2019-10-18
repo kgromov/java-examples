@@ -6,8 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.ws.rs.client.Client;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -29,7 +29,7 @@ public class JobWithDetails {
     private Build lastUnsuccessfulBuild;
     private int nextBuildNumber;
     private boolean inQueue;
-//    private QueueItem queueItem;
+    //    private QueueItem queueItem;
 //    private List<Job> downstreamProjects;
 //    private List<Job> upstreamProjects;
     @Setter
@@ -38,34 +38,36 @@ public class JobWithDetails {
     private Map<Integer, Build> buildNumberToBuild;
 
     public JobWithDetails() {
+        this(new ArrayList<>());
+    }
+
+    public JobWithDetails(List<Build> builds)
+    {
+        this.builds = builds;
         this.buildNumberToBuild = builds.stream()
                 .peek(build -> build.setClient(client))
                 .collect(Collectors.toMap(Build::getNumber, b -> b));
     }
 
-    public Build getBuildByNumber(int buildNumber)
-    {
+    public Build getBuildByNumber(int buildNumber) {
         Build build = buildNumberToBuild.get(buildNumber);
-        if (build == null)
-        {
-            build = client.get(url, MediaType.APPLICATION_JSON_TYPE, Build.class);
+        if (build == null) {
+            build = client.get(url + buildNumber, MediaType.APPLICATION_JSON_TYPE, Build.class);
             buildNumberToBuild.put(buildNumber, build);
         }
+        build.setClient(client);
         return build;
     }
 
-    public Build getLatestBuild()
-    {
+    public Build getLatestBuild() {
         return builds.get(0);
     }
 
-    public List<Build> getLastBuilds()
-    {
+    public List<Build> getLastBuilds() {
         return builds;
     }
 
-    public List<Build> getAllBuilds()
-    {
+    public List<Build> getAllBuilds() {
         return client.get(url,
                 MediaType.APPLICATION_JSON_TYPE,
                 ImmutableMap.of("tree", "allBuilds[number[*],url[*],queueId[*]]"),

@@ -2,6 +2,8 @@ package jenkins;
 
 import com.offbytwo.jenkins.JenkinsServer;
 import jenkins.core.JenkinsClient;
+import jenkins.domain.Build;
+import jenkins.domain.BuildWithDetails;
 import jenkins.domain.Job;
 import jenkins.domain.JobWithDetails;
 import jenkins.forkjoinpool.BuildInfo;
@@ -53,12 +55,14 @@ public class JenkinsClientTest {
     }
 
     @Test
-    public void checkNewImplementation() throws URISyntaxException, IOException {
+    public void checkNewImplementation(){
         JenkinsClient jenkinsClient = new JenkinsClient(settings.getJenkinsURL(), settings.getLogin(), settings.getPassword());
         Map<String, Job> jobs = jenkinsClient.getJobs();
         Job presubmit = jobs.get(settings.getJobName());
         JobWithDetails  jobWithDetails = presubmit.details();
-        jobWithDetails.getBuildByNumber(1);
+        Build build =  jobWithDetails.getBuildByNumber(31565);
+        BuildWithDetails buildWithDetails = build.details();
+        buildWithDetails.getConsoleLog();
         jenkinsClient.close();
     }
 
