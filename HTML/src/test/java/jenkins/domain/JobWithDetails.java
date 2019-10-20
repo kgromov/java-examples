@@ -1,20 +1,18 @@
 package jenkins.domain;
 
 import com.google.common.collect.ImmutableMap;
-import jenkins.core.HttpClientWrapper;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Getter
-@EqualsAndHashCode(exclude = {"buildNumberToBuild", "client"})
-public class JobWithDetails {
+@EqualsAndHashCode(callSuper = true)
+public class JobWithDetails extends Job {
     private String description;
     private String displayName;
     private boolean buildable;
@@ -32,45 +30,39 @@ public class JobWithDetails {
     //    private QueueItem queueItem;
 //    private List<Job> downstreamProjects;
 //    private List<Job> upstreamProjects;
-    @Setter
-    private HttpClientWrapper client;
-    private String url;
-    private Map<Integer, Build> buildNumberToBuild;
+    private final static Map<Integer, Build> BUILD_NUMBER_TO_BUILD = new HashMap<>();
 
     public JobWithDetails() {
         this(new ArrayList<>());
     }
 
-    public JobWithDetails(List<Build> builds)
-    {
+    public JobWithDetails(List<Build> builds) {
         this.builds = builds;
-        this.buildNumberToBuild = builds.stream()
-                .peek(build -> build.setClient(client))
-                .collect(Collectors.toMap(Build::getNumber, b -> b));
+        setBuilds(builds);
     }
 
     public Build getBuildByNumber(int buildNumber) {
-        Build build = buildNumberToBuild.get(buildNumber);
-        if (build == null) {
-            build = client.get(url + buildNumber, MediaType.APPLICATION_JSON_TYPE, Build.class);
-            buildNumberToBuild.put(buildNumber, build);
-        }
+        Build build = BUILD_NUMBER_TO_BUILD.computeIfAbsent(buildNumber,
+                b -> client.get(url + buildNumber, MediaType.APPLICATION_JSON_TYPE, Build.class));
         build.setClient(client);
         return build;
     }
 
-    public Build getLatestBuild() {
-        return builds.get(0);
-    }
 
     public List<Build> getLastBuilds() {
         return builds;
     }
 
     public List<Build> getAllBuilds() {
-        return client.get(url,
+        List<Build> bulds = client.get(url,
                 MediaType.APPLICATION_JSON_TYPE,
                 ImmutableMap.of("tree", "allBuilds[number[*],url[*],queueId[*]]"),
                 Builds.class).getBuilds();
+        setBuilds(bulds);
+        return bulds;
+    }
+
+    public synchronized void setBuilds(List<Build> builds) {
+        builds.forEach(build -> BUILD_NUMBER_TO_BUILD.put(build.getNumber(), build));
     }
 }

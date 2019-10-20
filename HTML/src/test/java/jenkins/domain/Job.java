@@ -13,10 +13,10 @@ import javax.ws.rs.core.MediaType;
 @EqualsAndHashCode(exclude = "client")
 public class Job {
     private String name;
-    private String url;
+    protected String url;
     private String fullName;
     @Setter
-    private HttpClientWrapper client;
+    protected HttpClientWrapper client;
 
     public Job() {
     }
