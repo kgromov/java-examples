@@ -1,11 +1,12 @@
 package jenkins;
 
-import com.offbytwo.jenkins.JenkinsServer;
 import jenkins.core.JenkinsClient;
 import jenkins.domain.Build;
 import jenkins.domain.BuildWithDetails;
 import jenkins.domain.Job;
 import jenkins.domain.JobWithDetails;
+import jenkins.extensions.BuildsDiffer;
+import jenkins.extensions.Convertor;
 import jenkins.forkjoinpool.BuildInfo;
 import jenkins.forkjoinpool.JobInfoTask;
 import org.testng.annotations.BeforeMethod;
@@ -16,11 +17,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 
@@ -28,22 +25,12 @@ import java.util.concurrent.TimeUnit;
  * Created by konstantin on 11.03.2018.
  */
 public class JenkinsClientTest {
-    private static final String DEFAULT_MY_PROPERTIES = "templates/build_config.properties";
     private Settings settings;
 
     @BeforeTest
     public void initSettings() {
-        String pathToProperties = System.getProperty("my.properties", DEFAULT_MY_PROPERTIES);
-        if (pathToProperties != null && !pathToProperties.isEmpty()) {
-            Properties properties = new Properties();
-            try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(DEFAULT_MY_PROPERTIES)) {
-//                prop.load(new FileReader(new File(pathToProperties)));
-                properties.load(is);
-                this.settings = Settings.getInstance(properties);
-                System.out.println(settings);
-            } catch (IOException ignored) {
-            }
-        }
+        this.settings = Settings.getInstance();
+        System.out.println(settings);
     }
 
     @BeforeMethod
@@ -55,12 +42,12 @@ public class JenkinsClientTest {
     }
 
     @Test
-    public void checkNewImplementation(){
+    public void checkNewImplementation() {
         JenkinsClient jenkinsClient = new JenkinsClient(settings.getJenkinsURL(), settings.getLogin(), settings.getPassword());
         Map<String, Job> jobs = jenkinsClient.getJobs();
         Job presubmit = jobs.get(settings.getJobName());
-        JobWithDetails  jobWithDetails = presubmit.details();
-        Build build =  jobWithDetails.getBuildByNumber(31565);
+        JobWithDetails jobWithDetails = presubmit.details();
+        Build build = jobWithDetails.getBuildByNumber(31565);
         BuildWithDetails buildWithDetails = build.details();
         buildWithDetails.getConsoleLog();
         jenkinsClient.close();
@@ -99,7 +86,9 @@ public class JenkinsClientTest {
         Report.copyTemplates();
         Report.writeToReport(jobInfo);
         // convert to sq3
-        Convertor.convertToSqLite(settings, jobInfo);
+        Convertor.convertToSqLite(jobInfo);
+        // append to build time trend
+        new BuildsDiffer().appendToTrend(jobInfo);
     }
 
     @Test(enabled = true)
@@ -130,7 +119,9 @@ public class JenkinsClientTest {
         Report.copyTemplates();
         Report.writeToReport(buildInfo);
         // convert to sq3
-        Convertor.convertToSqLite(settings, buildInfo);
+        Convertor.convertToSqLite(buildInfo);
+        // append to build time trend
+        new BuildsDiffer().appendToTrend(buildInfo);
     }
 
     @Test(enabled = false)
@@ -154,7 +145,7 @@ public class JenkinsClientTest {
 
     @Test
     public void checkBuldTimer() {
-        new BuildsDiffer(settings.getJobName()).collectBuildTimeTrend(settings);
+        new BuildsDiffer().collectBuildTimeTrend();
     }
 
     public static void main(String[] args) throws IOException {
@@ -171,6 +162,5 @@ public class JenkinsClientTest {
         int index = consoleLog.lastIndexOf("s3://");
         String sub = consoleLog.substring(index);
     }
-
 
 }
