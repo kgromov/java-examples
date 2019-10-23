@@ -7,6 +7,7 @@ import oracle.checker.criterias.StubbleCriteria;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -20,8 +21,8 @@ public class PoiStubCriteriaConsumer implements ICriteriaConsumer {
 
     private Map<Integer, Set<String>> localPoiPerRegion = new TreeMap<>();
     private Map<Integer, Set<String>> stubPoiPerRegion = new TreeMap<>();
-    private Set<Integer> localLinks = new HashSet<>();
-    private Set<Integer> stubLinks = new HashSet<>();
+    private Map<Integer, Set<Integer>> localLinksPerCatId = new TreeMap<>();
+    private Map<Integer, Set<Integer>> stubLinksPerCatId = new TreeMap<>();
 
     @Override
     public void processDbUser(String dbUser, String dbServerURL) {
@@ -40,25 +41,33 @@ public class PoiStubCriteriaConsumer implements ICriteriaConsumer {
             System.err.println(String.format("Unable to process dbUser = %s, dbServerURL = %s, query = %s. Cause:%n%s",
                     dbUser, dbServerURL, criteria.getQuery(dbUser), e));
         }*/
-        ICriteria stubPoi = StubbleCriteria.STUB_POI_AIRPORT;
-        try (ResultSet resultSet = connection.createStatement().executeQuery(stubPoi.getQuery(dbUser))) {
+        ICriteria stubPoi = StubbleCriteria.STUB_POI;
+        try (Statement statement = connection.createStatement()) {
+            statement.setFetchSize(DEFAULT_FETCH_SIZE);
+            ResultSet resultSet = statement.executeQuery(stubPoi.getQuery(dbUser));
             while (resultSet.next()) {
                 int linkId = resultSet.getInt(1);
+                int catId = resultSet.getInt(4);
                 stubPoiPerRegion.computeIfAbsent(linkId, regions -> new TreeSet<>()).add(dbUser);
-                stubLinks.add(linkId);
+                stubLinksPerCatId.computeIfAbsent(catId, links -> new HashSet<>()).add(linkId);
             }
+            resultSet.close();
         } catch (SQLException e) {
             System.err.println(String.format("Unable to process dbUser = %s, dbServerURL = %s, query = %s. Cause:%n%s",
                     dbUser, dbServerURL, stubPoi.getQuery(dbUser), e));
         }
 
-        ICriteria localPoi = StubbleCriteria.STUB_LOCAL_POI_AIRPORT;
-        try (ResultSet resultSet = connection.createStatement().executeQuery(localPoi.getQuery(dbUser))) {
+        ICriteria localPoi = StubbleCriteria.STUB_LOCAL_POI;
+        try (Statement statement = connection.createStatement()) {
+            statement.setFetchSize(DEFAULT_FETCH_SIZE);
+            ResultSet resultSet = statement.executeQuery(localPoi.getQuery(dbUser));
             while (resultSet.next()) {
                 int linkId = resultSet.getInt(1);
+                int catId = resultSet.getInt(4);
                 localPoiPerRegion.computeIfAbsent(linkId, regions -> new TreeSet<>()).add(dbUser);
-                localLinks.add(linkId);
+                localLinksPerCatId.computeIfAbsent(catId, links -> new HashSet<>()).add(linkId);
             }
+            resultSet.close();
         } catch (SQLException e) {
             System.err.println(String.format("Unable to process dbUser = %s, dbServerURL = %s, query = %s. Cause:%n%s",
                     dbUser, dbServerURL, localPoi.getQuery(dbUser), e));
@@ -70,21 +79,35 @@ public class PoiStubCriteriaConsumer implements ICriteriaConsumer {
         System.out.println("POI categories:\n" + stubPoiCategories);
     }
 
-    public void printAll()
-    {
-        System.out.println("STUB_POI_LINKS:\n"+ stubPoiPerRegion);
-        System.out.println("STUB_POI_LOCAL_LINKS:\n"+ localPoiPerRegion);
-    }
-
     public void printOddPoi()
     {
         System.out.println("Odd links:");
-        Sets.difference(localLinks, stubLinks).forEach(linkId ->
-                System.out.println(String.format("REGION = %s, LINK_ID = %d has no stub counterpart",
-                        localPoiPerRegion.get(linkId), linkId)));
+        Set<Integer> catIdStubLinks = stubLinksPerCatId.keySet();
+        Set<Integer> catIdLocalLinks = localLinksPerCatId.keySet();
+        // missed whole links group by categoryId
+        System.out.println(String.format("Missed CAT_IDs = %s for local links (up to stub)", Sets.difference(catIdStubLinks, catIdLocalLinks)));
+        System.out.println(String.format("Missed CAT_IDs = %s for stub links (up to local)", Sets.difference(catIdLocalLinks, catIdStubLinks)));
+        // difference in linkIDs by categoryId
+        System.out.println("Difference in linkIDs by categoryId");
+        String balancedTemplate = "Balanced stub/stub local link by POI: CAT_ID = %d, same = %d";
+        String notBalancedTemplate = "Not balanced stub/stub local link by POI: CAT_ID = %d, same = %d, stubDiff = %d, localDiff = %d";
+        Sets.intersection(catIdStubLinks, catIdLocalLinks).forEach(catId ->
+        {
+            Set<Integer> stubLinksByCategory = stubLinksPerCatId.get(catId);
+            Set<Integer> localLinksByCategory = localLinksPerCatId.get(catId);
 
-        Sets.difference(stubLinks, localLinks).forEach(linkId ->
-                System.out.println(String.format("REGION = %s, LINK_ID = %d has no stub local counterpart",
-                        stubPoiPerRegion.get(linkId), linkId)));
+            int sameLinksAmount = Sets.intersection(stubLinksByCategory, localLinksByCategory).size();
+            int diffStubLinkAmount = Sets.difference(stubLinksByCategory, localLinksByCategory).size();
+            int diffLocalLinksAmount = Sets.difference(localLinksByCategory, stubLinksByCategory).size();
+
+            if (diffLocalLinksAmount == 0 && diffStubLinkAmount == diffLocalLinksAmount)
+            {
+                System.out.println(String.format(balancedTemplate, catId, sameLinksAmount));
+            }
+            else
+            {
+                System.out.println(String.format(notBalancedTemplate, catId, sameLinksAmount, diffStubLinkAmount, diffLocalLinksAmount));
+            }
+        });
     }
 }

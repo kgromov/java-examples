@@ -1,11 +1,15 @@
 package oracle.speed_profiles;
 
-import com.google.common.collect.Lists;
+import oracle.checker.consumers.SpeedProfilesCriteriaConsumer;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.IntSummaryStatistics;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class SpeedProfile {
@@ -46,6 +50,11 @@ public class SpeedProfile {
         return statistics.getMax();
     }
 
+    public int getAverageSpeed()
+    {
+        return (int) statistics.getAverage();
+    }
+
     public int getPatternId() {
         return patternId;
     }
@@ -60,20 +69,56 @@ public class SpeedProfile {
 
     public boolean isMergeable(SpeedProfile otherProfile, int threshold) {
         return this.samplingId == otherProfile.samplingId
-                && Math.abs(this.getMinSpeed() - otherProfile.getMinSpeed()) <= threshold
-                && Math.abs(this.getMaxSpeed() - otherProfile.getMaxSpeed()) <= threshold;
+                && Math.abs(this.getAverageSpeed() - otherProfile.getAverageSpeed()) <= threshold
+              /*  && Math.abs(this.getMinSpeed() - otherProfile.getMinSpeed()) <= threshold
+                && Math.abs(this.getMaxSpeed() - otherProfile.getMaxSpeed()) <= threshold*/;
     }
 
-    public SpeedProfile getCalibratedProfile(int depth)
+    public Set<Integer> getAggregatedPatternIDs()
     {
+        return Collections.emptySet();
+    }
+
+    public SpeedProfile getCalibratedProfile(int depth) {
+        if (depth == 1)
+        {
+            return this;
+        }
         int periods = speedPerTime.size() / depth;
         List<Integer> speeds = new ArrayList<>(periods);
-        for (int i = 0; i< periods; i++)
-        {
-            int resSpeed  = (int) Math.round(IntStream.range(0, depth).summaryStatistics().getAverage());
+        for (int i = 0; i < periods; i++) {
+            int finalI = i;
+            int resSpeed = (int) Math.round(IntStream.range(0, depth).boxed()
+                    .mapToInt(k -> speedPerTime.get(finalI * depth + k))
+                    .summaryStatistics().getAverage());
             speeds.add(resSpeed);
         }
-        return new SpeedProfile(patternId, samplingId * depth, speeds);
+//        return new SpeedProfile(patternId, samplingId * depth, speeds);
+        return new SpeedProfile(patternId, 2, speeds);
+    }
+
+    public List<SpeedProfilesCriteriaConsumer.SpeedProfileRow> toDbRows() {
+        int seqNums = speedPerTime.size();
+        long deltaInMinutes = MINUTE_IN_DAY / seqNums;
+        List<LocalTime> timePeriods = new ArrayList<>(seqNums);
+        LocalTime midnight = LocalTime.MIDNIGHT;
+        timePeriods.add(midnight);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        for (int i = 1; i < seqNums; i++)
+        {
+            LocalTime startTime = i == 1 ? midnight : timePeriods.get(i - 1);
+            timePeriods.add(startTime.plusMinutes(deltaInMinutes));
+        }
+        return IntStream.range(0, seqNums).boxed()
+                .map(i -> new SpeedProfilesCriteriaConsumer.SpeedProfileRow(
+                        patternId,
+                        i + 1,
+                        samplingId,
+                        timePeriods.get(i).format(formatter),
+                        timePeriods.get((i + 1) % seqNums).format(formatter),
+                        speedPerTime.get(i)
+                ))
+                .collect(Collectors.toList());
     }
 
 }

@@ -1,6 +1,7 @@
 package oracle.checker;
 
 import com.google.common.collect.ImmutableMap;
+import oracle.checker.consumers.PoiStubCriteriaConsumer;
 import oracle.checker.consumers.SpeedProfilesCriteriaConsumer;
 import oracle.checker.readers.TxtUsersReader;
 import org.slf4j.Logger;
@@ -27,9 +28,9 @@ public class RdfDataChecker {
     private static final String DB_SERVER_URL = "jdbc:oracle:thin:@akela-%s-%s-0%d.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl";
     // TODO: put to build_config.properties or split by different files
     private static final Map<String, String> MARKET_TO_DVN = ImmutableMap.<String, String>builder()
-            .put("eu", "19122")
-            .put("nar", "19122")
-            .put("mrm", "191E3")
+            .put("eu", "191T1")
+            .put("nar", "191T1")
+            .put("mrm", "191T1")
             .build();
 
     private static void processTraversingUsers()
@@ -42,7 +43,8 @@ public class RdfDataChecker {
                 Set<String> allUsers = reader.getCdcUsers();
 //                Set<String> allUsers = reader.getSampleCdcUserWithDVN(dvn);
                 Set<String> iterateUsers = new HashSet<>(allUsers);
-                SpeedProfilesCriteriaConsumer consumer = new SpeedProfilesCriteriaConsumer(market, dvn);
+//                SpeedProfilesCriteriaConsumer consumer = new SpeedProfilesCriteriaConsumer(market, dvn);
+                PoiStubCriteriaConsumer consumer = new PoiStubCriteriaConsumer();
                 allUsers.stream().filter(iterateUsers::contains).forEach(cdcUser ->
                 {
                     for (int i : processedServers) {
@@ -50,9 +52,9 @@ public class RdfDataChecker {
                                 // exceptional case
                                 .replaceAll("_", "-");
                         Set<String> dbServerUsers = new HashSet<>();
-                        LOGGER.debug("Start processing dbServer = " + dbServerUrl);
                         try (Connection connection = DriverManager.getConnection(dbServerUrl, cdcUser, DB_PASSWORD);
                              ResultSet userNames = connection.createStatement().executeQuery(String.format(USERS_QUERY, dvn))) { // + NO_SAMPLE_USERS_PREDICATE
+                            LOGGER.debug("Start processing dbServer = " + dbServerUrl);
                             while (userNames.next()) {
                                 dbServerUsers.add(userNames.getString(1));
                             }
@@ -82,8 +84,9 @@ public class RdfDataChecker {
                     }
                 });
                 LOGGER.debug("Remaining users: " + iterateUsers);
-                consumer.printSpeedProfiles();
-                consumer.exportToSq3();
+              /*  consumer.printSpeedProfiles();
+                consumer.exportToSq3();*/
+              consumer.printOddPoi();
             });
     }
 

@@ -1,5 +1,6 @@
 package oracle.speed_profiles;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -23,5 +24,16 @@ public class AggregatedSpeedProfile extends SpeedProfile {
     {
         aggregatedPatternIDs.add(patternId);
         return this;
+    }
+
+    public AggregatedSpeedProfile addPatternId(Collection<Integer> patternIDs)
+    {
+        aggregatedPatternIDs.addAll(patternIDs);
+        return this;
+    }
+
+    @Override
+    public Set<Integer> getAggregatedPatternIDs() {
+        return aggregatedPatternIDs;
     }
 }

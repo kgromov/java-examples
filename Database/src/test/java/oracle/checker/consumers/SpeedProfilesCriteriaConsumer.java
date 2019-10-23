@@ -15,8 +15,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -25,8 +25,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class SpeedProfilesCriteriaConsumer implements ICriteriaConsumer {
-    private static final String DB_URI_PREFIX = "jdbc:sqlite:file:";
-        private static final String TABLE_NAME = "NTTP_SPEED_PATTERN";
+    public static final String DB_URI_PREFIX = "jdbc:sqlite:file:";
+    public static final String TABLE_NAME = "NTTP_SPEED_PATTERN";
 
     private static final String TEXT_TYPE = "TEXT";
     private static final String INTEGER_TYPE = "INTEGER";
@@ -138,6 +138,11 @@ public class SpeedProfilesCriteriaConsumer implements ICriteriaConsumer {
 
     public void exportToSq3() {
         Path outputFile = Paths.get("Database", "src", "test", "java", "oracle", "output", "NTP_SPEED_PROFILES_"+ market + ".sq3");
+       exportToSq3(outputFile, speedProfileRows);
+    }
+
+    public void exportToSq3(Path outputFile, Collection<SpeedProfileRow> speedProfileRows)
+    {
         try
         {
             Files.deleteIfExists(outputFile);
@@ -179,7 +184,7 @@ public class SpeedProfilesCriteriaConsumer implements ICriteriaConsumer {
         }
     }
 
-    private void writeToSqLite(Connection connection, Set<SpeedProfileRow> speedProfileRows) throws SQLException {
+    private void writeToSqLite(Connection connection, Collection<SpeedProfileRow> speedProfileRows) throws SQLException {
         try  (  PreparedStatement statement = connection.prepareStatement(getInsertQuery())){
             connection.setAutoCommit(false);
             for (SpeedProfileRow row : speedProfileRows)
@@ -199,7 +204,7 @@ public class SpeedProfilesCriteriaConsumer implements ICriteriaConsumer {
     }
 
     @Data
-    private static final class SpeedProfileRow
+    public static final class SpeedProfileRow
     {
         private final int patternId;
         private final int seqNum;
