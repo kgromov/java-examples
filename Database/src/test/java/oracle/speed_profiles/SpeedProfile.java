@@ -19,6 +19,8 @@ public class SpeedProfile {
     private final int samplingId;
     private final List<Integer> speedPerTime;
     private IntSummaryStatistics statistics;
+    private IntSummaryStatistics nightTimeStatistics;
+    private IntSummaryStatistics dayTimeStatistics;
 
     public SpeedProfile(int patternId, int samplingId) {
         this.patternId = patternId;
@@ -27,6 +29,8 @@ public class SpeedProfile {
         int periods = samplingId == 1 ? MINUTE_IN_DAY / 60 : MINUTE_IN_DAY / 15;
         this.speedPerTime = new ArrayList<>(periods);
         this.statistics = speedPerTime.stream().mapToInt(i -> i).summaryStatistics();
+        this.dayTimeStatistics = new IntSummaryStatistics();
+        this.nightTimeStatistics = new IntSummaryStatistics();
     }
 
     public SpeedProfile(int patternId, int samplingId, List<Integer> speedPerTime) {
@@ -34,9 +38,22 @@ public class SpeedProfile {
         this.samplingId = samplingId;
         this.speedPerTime = speedPerTime;
         this.statistics = speedPerTime.stream().mapToInt(i -> i).summaryStatistics();
+        // 1 hour
+        /*this.nightTimeStatistics = speedPerTime.subList(0, 7).stream().mapToInt(i -> i).summaryStatistics();
+        this.nightTimeStatistics = speedPerTime.subList(22, 24).stream().mapToInt(i -> i).summaryStatistics();
+        this.dayTimeStatistics = speedPerTime.subList(8, 22).stream().mapToInt(i -> i).summaryStatistics();*/
     }
 
     public SpeedProfile addSpeed(int speed) {
+        // 1 hour only
+        if (speedPerTime.size() < 7 || speedPerTime.size() > 21)
+        {
+            nightTimeStatistics.accept(speed);
+        }
+        else
+        {
+            dayTimeStatistics.accept(speed);
+        }
         speedPerTime.add(speed);
         statistics.accept(speed);
         return this;
@@ -55,6 +72,27 @@ public class SpeedProfile {
         return (int) statistics.getAverage();
     }
 
+    public int getAverageNightSpeed()
+    {
+        return (int) nightTimeStatistics.getAverage();
+    }
+
+    public int getAverageDaySpeed()
+    {
+        return (int) dayTimeStatistics.getAverage();
+    }
+
+    public int getFirstSpeed()
+    {
+        return speedPerTime.get(0);
+    }
+
+    public int getLastSpeed()
+    {
+        return speedPerTime.get(speedPerTime.size() - 1);
+    }
+
+
     public int getPatternId() {
         return patternId;
     }
@@ -70,8 +108,8 @@ public class SpeedProfile {
     public boolean isMergeable(SpeedProfile otherProfile, int threshold) {
         return this.samplingId == otherProfile.samplingId
                 && Math.abs(this.getAverageSpeed() - otherProfile.getAverageSpeed()) <= threshold
-              /*  && Math.abs(this.getMinSpeed() - otherProfile.getMinSpeed()) <= threshold
-                && Math.abs(this.getMaxSpeed() - otherProfile.getMaxSpeed()) <= threshold*/;
+                /*&& Math.abs(this.getFirstSpeed() - otherProfile.getFirstSpeed()) <= threshold * 2
+                && Math.abs(this.getLastSpeed() - otherProfile.getLastSpeed()) <= threshold * 2*/;
     }
 
     public Set<Integer> getAggregatedPatternIDs()
@@ -79,7 +117,8 @@ public class SpeedProfile {
         return Collections.emptySet();
     }
 
-    public SpeedProfile getCalibratedProfile(int depth) {
+    public SpeedProfile getCalibratedProfile() {
+        int depth =  Aggregation.AGGREGATION_DEPTH.getOrDefault(getSamplingId(), 1);
         if (depth == 1)
         {
             return this;
