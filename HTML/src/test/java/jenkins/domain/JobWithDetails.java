@@ -3,12 +3,14 @@ package jenkins.domain;
 import com.google.common.collect.ImmutableMap;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import org.apache.commons.lang3.Range;
 
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
@@ -41,28 +43,46 @@ public class JobWithDetails extends Job {
         setBuilds(builds);
     }
 
-    public Build getBuildByNumber(int buildNumber) {
+    public Build getBuildByNumber_(int buildNumber) {
         Build build = BUILD_NUMBER_TO_BUILD.computeIfAbsent(buildNumber,
                 b -> client.get(url + buildNumber, MediaType.APPLICATION_JSON_TYPE, Build.class));
         build.setClient(client);
         return build;
     }
 
+    public Build getBuildByNumber(int buildNumber) {
+        Build build = BUILD_NUMBER_TO_BUILD.get(buildNumber);
+        if (build == null)
+        {
+            List<Build> builds = getAllBuilds();
+            setBuilds(builds);
+            build = BUILD_NUMBER_TO_BUILD.get(buildNumber);
+        }
+        Optional.ofNullable(build).ifPresent(b -> b.setClient(client));
+        return build;
+    }
 
     public List<Build> getLastBuilds() {
         return builds;
     }
 
+    // FIXME
     public List<Build> getAllBuilds() {
-        List<Build> bulds = client.get(url,
+        List<Build> builds = client.get(url,
                 MediaType.APPLICATION_JSON_TYPE,
                 ImmutableMap.of("tree", "allBuilds[number[*],url[*],queueId[*]]"),
                 Builds.class).getBuilds();
-        setBuilds(bulds);
-        return bulds;
+        setBuilds(builds);
+        return builds;
+    }
+
+    public List<Build> getAllBuilds(Range<Integer> range) {
+        return null;
     }
 
     public synchronized void setBuilds(List<Build> builds) {
-        builds.forEach(build -> BUILD_NUMBER_TO_BUILD.put(build.getNumber(), build));
+        builds.stream()
+                .peek(b -> b.setClient(client))
+                .forEach(build -> BUILD_NUMBER_TO_BUILD.put(build.getNumber(), build));
     }
 }

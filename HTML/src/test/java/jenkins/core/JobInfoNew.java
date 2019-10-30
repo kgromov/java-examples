@@ -1,15 +1,17 @@
-package jenkins;
+package jenkins.core;
 
 import com.offbytwo.jenkins.model.BuildResult;
-import com.offbytwo.jenkins.model.BuildWithDetails;
 import javafx.util.Pair;
+import jenkins.JenkinsUtils;
+import jenkins.domain.Build;
+import jenkins.domain.BuildWithDetails;
+import jenkins.domain.JobWithDetails;
 import jenkins.forkjoinpool.BuildInfo;
+import lombok.Setter;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
@@ -18,38 +20,26 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class JobInfo extends BuildInfo {
-    // "\\w{4,}\\s*#\\d+"
-//    private static final Pattern JOB_BUILD = Pattern.compile("[^\\d]{4,}\\s*#\\d+"); // or strictly specify job names
+public class JobInfoNew extends BuildInfo {
     private static final String BUILD_PREFIX = "\\s*#%d";
     private static final Pattern JOB_BUILD = Pattern.compile("(Compile|Merge|Validation_Suite|Compile Market|City_FTS|Nuance)\\s*#\\d+");
-    //    private static final Pattern PATH_TO_RESULT_PATTERN = Pattern.compile("^.*(s3://akela-artifacts).*$"); // (s3://akela-artifacts).*$
-    private static final Pattern PATH_TO_RESULT_PATTERN = Pattern.compile(".*(s3://akela-artifacts).*"); // (s3://akela-artifacts).*$
+    private static final Pattern PATH_TO_RESULT_PATTERN = Pattern.compile(".*(s3://akela-artifacts).*");
     private static final String PATH_TO_RESULT = "s3://"; // and aws and ticket (auto) and .sq3
     private static final Predicate<String> IS_FOLDER = path -> path.charAt(path.length() - 1) == '/';
     // patters
-//    private final static Pattern EXCEPTION_PATTERN = Pattern.compile("Exception\\b:");
-//    private final static Pattern EXCEPTION_PATTERN = Pattern.compile("(?s)(?<=Exception:).*?(?=Caused)");
     private final static String NEW_STRING_RECORD_PATTERN = "\\d{2,4}-\\d{2}-\\d{2}\\s?\\d{2}:\\d{2}:\\d{2}(,\\d{3})?";
     private final static Pattern EXCEPTION_PATTERN = Pattern.compile(".+Exception[^\\n]++(\\s+at .++)+");
+    @Setter
+    private JenkinsClient client;
 
-    // to parse console output
-    public JobInfo(String consoleOutput) {
-        // consoleOutput
-        super(null, -1);
-        BigDecimal decimal = BigDecimal.valueOf(consoleOutput.getBytes().length);
-        this.logSize = decimal.divide(BigDecimal.valueOf(1024), 2, RoundingMode.HALF_UP).floatValue();
-        this.downstreamBuilds = new ArrayList<>();
-        // parse consoleOutput
-        parseConsoleLog(consoleOutput).forEach(job ->
-                downstreamBuilds.add(new JobInfo(job.getKey(), job.getValue()))
-        );
+
+    public JobInfoNew(String jobName, int buildNumber) {
+        super(jobName, buildNumber);
     }
 
-    // to get job directly from Jenkins
-    public JobInfo(String jobName, int buildNumber) {
-        super(jobName, buildNumber);
-        Optional<BuildWithDetails> build = JenkinsUtils.getBuildLogByNumber(jobName, buildNumber);
+    public void collectDownStreamJobs() {
+        JobWithDetails jobWithDetails = client.getJobs().get(jobName).details();
+        Optional<BuildWithDetails> build = Optional.ofNullable(jobWithDetails.getBuildByNumber(buildNumber)).map(Build::details);
         build.ifPresent(info ->
         {
             this.buildName = info.getDisplayName(); // or set with jobName ?
@@ -61,10 +51,7 @@ public class JobInfo extends BuildInfo {
             this.exceptions = new LinkedHashSet<>();
             // consoleOutput
             try {
-                String consoleOutput = info.getConsoleOutputText();
-                if (consoleOutput.contains("2 nav_strands expected, but it only has")) {
-                    System.out.println(info.getUrl());
-                }
+                String consoleOutput = info.getConsoleLog();
                 BigDecimal decimal = BigDecimal.valueOf(consoleOutput.getBytes().length);
                 this.logSize = decimal.divide(BigDecimal.valueOf(1024), 2, RoundingMode.HALF_UP).floatValue();
                 this.downstreamBuilds = new ArrayList<>();
@@ -73,10 +60,12 @@ public class JobInfo extends BuildInfo {
                     this.dbCredentials = JenkinsUtils.getCredentials(consoleOutput);
                 }
                 // parse consoleOutput
-                parseConsoleLog(consoleOutput).forEach(job ->
-                        downstreamBuilds.add(new JobInfo(job.getKey(), job.getValue()))
-                );
-            } catch (IOException e) {
+                parseConsoleLog(consoleOutput).stream()
+                        .map(job -> new JobInfoNew(job.getKey(), job.getValue()))
+                        .peek(job -> job.setClient(client))
+                        .peek(job -> downstreamBuilds.add(job))
+                        .forEach(JobInfoNew::collectDownStreamJobs);
+            } catch (Exception e) {
                 throw new RuntimeException(String.format("ConsoleOutput of job's '%s', " +
                         "build '%d' could not be provided", jobName, buildNumber), e);
             }

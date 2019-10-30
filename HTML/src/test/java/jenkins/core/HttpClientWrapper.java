@@ -8,11 +8,13 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Paths;
 import java.util.Map;
 
-import static com.fasterxml.jackson.databind.DeserializationFeature.*;
+import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 
 /**
  * Created by konstantin on 06.10.2019.
@@ -48,12 +50,25 @@ public class HttpClientWrapper {
         return client.target(path).request(mediaType).get(String.class);
     }
 
+    // probably use UriBuilder
     public synchronized <T> T get(String url, MediaType mediaType, Class<T> clazz)
     {
-        String requestedURI  = mediaType == MediaType.APPLICATION_JSON_TYPE
-                ? new StringBuilder(url).append("/api/json").toString()
-                : url;
+        URI requestedURI  = mediaType == MediaType.APPLICATION_JSON_TYPE
+                ? UriBuilder.fromPath(url).path("api").path("json").build()
+                : UriBuilder.fromPath(url).build();
         Response response = client.target(requestedURI).request(mediaType).get();
+        String rawJson = response.readEntity(String.class);
+        try {
+            return mapper.readValue(rawJson, clazz);
+        } catch (IOException e) {
+            logger.error(response.toString());
+            throw new RuntimeException(String.format("Unable to deserialize %s to class = %s", rawJson, clazz), e);
+        }
+    }
+
+    public synchronized <T> T getDirectly(String url, MediaType mediaType, Class<T> clazz)
+    {
+        Response response = client.target(url).request(mediaType).get();
         String rawJson = response.readEntity(String.class);
         try {
             return mapper.readValue(rawJson, clazz);
@@ -65,13 +80,15 @@ public class HttpClientWrapper {
 
     public synchronized <T> T get(String url, MediaType mediaType, Map<String, String> queryParams, Class<T> clazz)
     {
-        String requestedURI  = mediaType == MediaType.APPLICATION_JSON_TYPE
-                ? Paths.get(url).resolve("api").resolve("json").toString()
-                : url;
-
-        WebTarget webTarget = client.target(requestedURI);
+        UriBuilder builder = mediaType == MediaType.APPLICATION_JSON_TYPE
+                ? UriBuilder.fromPath(url).path("api").path("json")
+                : UriBuilder.fromPath(url);
+        queryParams.forEach(builder::queryParam);
+        URI requestedURI = builder.build();
+       /* WebTarget webTarget = client.target(requestedURI);
         queryParams.forEach(webTarget::queryParam);
-        Response response = webTarget.request(mediaType).get();
+        Response response = webTarget.request(mediaType).get();*/
+        Response response = client.target(requestedURI).request(mediaType).get();
         String rawJson = response.readEntity(String.class);
         try {
             return mapper.readValue(rawJson, clazz);
@@ -80,7 +97,6 @@ public class HttpClientWrapper {
             throw new RuntimeException(String.format("Unable to deserialize %s to class = %s", rawJson, clazz), e);
         }
     }
-
 
     public void close() {
         client.close();

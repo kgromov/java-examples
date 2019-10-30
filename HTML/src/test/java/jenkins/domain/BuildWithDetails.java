@@ -8,7 +8,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.ws.rs.core.MediaType;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @EqualsAndHashCode(callSuper = false)
@@ -36,5 +38,10 @@ public class BuildWithDetails extends Build {
 
     public String getConsoleLog() {
         return client.getRaw(getUrl() + "consoleText", MediaType.TEXT_PLAIN_TYPE);
+    }
+
+    // TODO: implement
+    public Map<String, String> getParameters() {
+        return Collections.emptyMap();
     }
 }

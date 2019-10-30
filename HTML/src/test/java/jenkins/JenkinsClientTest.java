@@ -1,6 +1,7 @@
 package jenkins;
 
 import jenkins.core.JenkinsClient;
+import jenkins.core.JobInfoNew;
 import jenkins.domain.Build;
 import jenkins.domain.BuildWithDetails;
 import jenkins.domain.Job;
@@ -51,6 +52,24 @@ public class JenkinsClientTest {
         BuildWithDetails buildWithDetails = build.details();
         buildWithDetails.getConsoleLog();
         jenkinsClient.close();
+    }
+
+    @Test(enabled = true)
+    public void checkBuild_new() {
+        JenkinsClient client = new JenkinsClient(settings.getJenkinsURL(), settings.getLogin(), settings.getPassword());
+        JobInfoNew jobInfo = new JobInfoNew(settings.getJobName(), settings.getBuildNumber());
+        jobInfo.setClient(client);
+        jobInfo.collectDownStreamJobs();
+        // log all jobs info
+        System.out.println(jobInfo);
+        jobInfo.getDownstreamBuilds().forEach(System.out::println);
+        // check for consoleOutput and downstreamJobs
+        Report.copyTemplates();
+        Report.writeToReport(jobInfo);
+       // convert to sq3
+        Convertor.convertToSqLite(jobInfo);
+        // append to build time trend
+//        new BuildsDiffer().appendToTrend(jobInfo);
     }
 
    /* @Test
