@@ -5,6 +5,7 @@ import oracle.speed_profiles.SpeedProfile;
 import java.util.Optional;
 
 public interface MergeStrategy {
+//    int DEFAULT_THRESHOLD = 500;
     int DEFAULT_THRESHOLD = 5;
     float DIV = 2;
 

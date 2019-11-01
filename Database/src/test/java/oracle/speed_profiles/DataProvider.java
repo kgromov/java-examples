@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 public class DataProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(DataProvider.class.getName());
     private static final String QUERY = "select * from " + SpeedProfilesCriteriaConsumer.TABLE_NAME + " order by PATTERN_ID, SEQ_NUM";
+    private static final String USAGE_QUERY = "select * from PROFILES_USAGE_BY_LINKS";
     private static final String OUTPUT_FOLDER = "C:\\Projects\\java-examples\\Database\\src\\test\\java\\oracle\\output";
 
     public enum Extension
@@ -72,8 +73,7 @@ public class DataProvider {
 
     public static Map<Integer, List<SpeedProfile>> extractSpeedProfiles(String market) {
         long start = System.nanoTime();
-        Path outFolder = Paths.get(OUTPUT_FOLDER);
-        Path dbPath = outFolder.resolve("NTP_SPEED_PROFILES_" + market + Extension.SQ3.getValue());
+        Path dbPath = getPath("NTP_SPEED_PROFILES" , market, Extension.SQ3);
         try (Connection connection = DriverManager.getConnection(SpeedProfilesCriteriaConsumer.DB_URI_PREFIX + dbPath.toString());
              ResultSet resultSet = connection.createStatement().executeQuery(QUERY)) {
             Map<Integer, List<SpeedProfile>> speedProfilesPerSamplingId = new HashMap<>();
@@ -81,11 +81,10 @@ public class DataProvider {
             while (resultSet.next()) {
                 int samplingId = resultSet.getInt("SAMPLING_ID");
                 int patternId = resultSet.getInt("PATTERN_ID");
-                // TODO: probably speed = speed * 100 for more accurate precision
                 int speed = resultSet.getInt("SPEED_KPH");
-               /* int seqNum = resultSet.getInt("SEQ_NUM");
-                String startTime = resultSet.getString("START_TIME");
-                String endTime = resultSet.getString("END_TIME");*/
+                // speed = speed * 100 for more accurate precision
+//                int speed = resultSet.getInt("SPEED_KPH") * 100;
+
                 SpeedProfile speedProfile = speedProfiles.computeIfAbsent(patternId, profile -> new SpeedProfile(patternId, samplingId));
                 // performance optimization - add new created speedProfile
                 if (speedProfile.getSpeedPerTime().isEmpty())
@@ -97,6 +96,29 @@ public class DataProvider {
             return speedProfilesPerSamplingId;
         } catch (SQLException e) {
            throw  new RuntimeException("Unable to extractSpeedProfiles; query = %s" + QUERY, e);
+        } finally {
+            LOGGER.trace(String.format("#extractSpeedProfiles: Time elapsed = %d ms",
+                    TimeUnit.MILLISECONDS.convert(System.nanoTime() - start, TimeUnit.NANOSECONDS)));
+        }
+    }
+
+
+    public static Map<Integer, Map<Integer, Integer>> getSpeedProfilesUsage(String market)
+    {
+        long start = System.nanoTime();
+        Path dbPath = getPath("NTP_SPEED_PROFILES" , market, Extension.SQ3);
+        try (Connection connection = DriverManager.getConnection(SpeedProfilesCriteriaConsumer.DB_URI_PREFIX + dbPath.toString());
+             ResultSet resultSet = connection.createStatement().executeQuery(USAGE_QUERY)) {
+            Map<Integer, Map<Integer, Integer>> profilesUsage = new HashMap<>();
+            while (resultSet.next()) {
+                int samplingId = resultSet.getInt("SAMPLING_ID");
+                int patternId = resultSet.getInt("PATTERN_ID");
+                int usagesCount = resultSet.getInt("USAGES_COUNT");
+                profilesUsage.computeIfAbsent(samplingId, profiles -> new HashMap<>()).put(patternId, usagesCount);
+            }
+            return profilesUsage;
+        } catch (SQLException e) {
+            throw  new RuntimeException("Unable to extract speedProfiles usage; query = %s" + USAGE_QUERY, e);
         } finally {
             LOGGER.trace(String.format("#extractSpeedProfiles: Time elapsed = %d ms",
                     TimeUnit.MILLISECONDS.convert(System.nanoTime() - start, TimeUnit.NANOSECONDS)));
