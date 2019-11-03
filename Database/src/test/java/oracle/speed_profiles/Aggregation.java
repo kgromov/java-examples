@@ -135,6 +135,13 @@ public class Aggregation {
         consumer.exportToSq3(outputFile, speedProfileRows);
     }
 
+    /*
+     * TODO:
+     * 1) Add extractor (column with aggregated profiles);
+     * 2) Save original calibrated profiles;
+     * 3) Compare original and merged profiles.
+     * 4) Map all original to merged (and log/save diff)
+     */
     public static void main(String[] args) {
         String market = "eu";
         Map<Integer, List<SpeedProfile>> speedProfilesPerSamplingId = DataProvider.extractSpeedProfiles(market);
