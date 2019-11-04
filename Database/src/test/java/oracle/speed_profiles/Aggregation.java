@@ -86,13 +86,11 @@ public class Aggregation {
             {
                 continue;
             }
-//            SpeedProfile speedProfile1 = subSpeedProfiles.get(i).getCalibratedProfile();
             SpeedProfile speedProfile1 = subSpeedProfiles.get(i);
             for (int j = i + 1; j < subSpeedProfiles.size() && !mergedIndexes.contains(i); j++)
             {
                 if (!mergedIndexes.contains(j))
                 {
-//                    SpeedProfile speedProfile2 = subSpeedProfiles.get(j).getCalibratedProfile();
                     SpeedProfile speedProfile2 = subSpeedProfiles.get(j);
                     Optional<? extends SpeedProfile> aggregatedSpeedProfile =
                             strategy.getAggregatedProfile(speedProfile1, speedProfile2);
@@ -117,29 +115,44 @@ public class Aggregation {
         return speedProfiles.stream()
                 .map(s -> Pair.of(s, s.getAggregatedPatternIDs().stream()
                                 .mapToInt(p -> speedProfilesUsage.getOrDefault(p, 0)).sum()))
-                .sorted(Comparator.comparingInt(Pair::getRight))
+                .sorted(Comparator.comparingInt(p -> - p.getRight()))
+                .peek(p -> LOGGER.info(String.format("Aggregated profile: patternId = %d, usages = %d", p.getLeft().getPatternId(), p.getRight())))
                 .map(Pair::getLeft)
                 .limit(200)
                 .collect(Collectors.toList());
     }
 
-    private void exportAggregatedSpeedProfiles(String market, List<? extends SpeedProfile> speedProfiles, int samplingId) {
+    private List<? extends SpeedProfile> getTopUsedSpeedProfiles(List<? extends SpeedProfile> speedProfiles)
+    {
+        return speedProfiles.stream()
+                .sorted(Comparator.comparingInt(p -> - p.getUsages()))
+                .peek(p -> LOGGER.info(String.format("Aggregated profile: patternId = %d, usages = %d", p.getPatternId(), p.getUsages())))
+                .limit(200)
+                .collect(Collectors.toList());
+    }
+
+    private void exportAggregatedSpeedProfiles(String market, List<? extends SpeedProfile> speedProfiles, int samplingId, String fileName) {
         SpeedProfilesCriteriaConsumer consumer = new SpeedProfilesCriteriaConsumer(market, "");
         List<SpeedProfilesCriteriaConsumer.SpeedProfileRow> speedProfileRows = new ArrayList<>();
         speedProfiles.stream()
-                .peek(p -> LOGGER.info(String.format("PatterId = %d aggregates: %s", p.getPatternId(), p.getAggregatedPatternIDs())))
+                .peek(p ->
+                        {if (speedProfiles.size() < 1000) {
+            LOGGER.info(String.format("PatterId = %d aggregates: %s (%d)",
+                    p.getPatternId(), p.getAggregatedPatternIDs(), p.getAggregatedPatternIDs().size()));
+        }})
                 .map(SpeedProfile::toDbRows)
                 .forEach(speedProfileRows::addAll);
         // TODO: probably move to DataProvider
-        Path outputFile = DataProvider.getPath("NTP_SPEED_PROFILES_AGGREGATED_s" + samplingId , market, DataProvider.Extension.SQ3);
+        Path outputFile = DataProvider.getPath(fileName + samplingId , market, DataProvider.Extension.SQ3);
         consumer.exportToSq3(outputFile, speedProfileRows);
+        consumer.exportProfilesAggregation(outputFile, speedProfiles);
     }
 
     /*
      * TODO:
      * 1) Add extractor (column with aggregated profiles);
-     * 2) Save original calibrated profiles;
-     * 3) Compare original and merged profiles.
+     * 2) (/) Save original calibrated profiles;
+     * 3) (/) Compare original and merged profiles.
      * 4) Map all original to merged (and log/save diff)
      */
     public static void main(String[] args) {
@@ -150,19 +163,22 @@ public class Aggregation {
         {
             LOGGER.info(String.format("########################### SAMPLING_ID = %d ###########################", samplingId));
             Map<Integer, Integer> speedProfilesUsage = speedProfilesUsagePerSampleId.get(samplingId);
-            MergeStrategy strategy = new HalfAverageMergeStrategy(speedProfilesUsage);
+            MergeStrategy strategy = new HalfAverageMergeStrategy();
 //        MergeStrategy strategy = new NeighboursAverageMergeStrategy();
             Aggregation aggregation = new Aggregation(strategy, INCREMENT_GROUP_COUNT);
 //            Aggregation aggregation = new Aggregation(strategy, CONSTANT_GROUP_COUNT);
             List<SpeedProfile> profilesToAggregate = speedProfiles.stream()
                     .filter(profile -> profile.getMinSpeed() != profile.getMaxSpeed())
                     .map(SpeedProfile::getCalibratedProfile)
+                    .peek(p -> p.addUsages(speedProfilesUsage.getOrDefault(p.getPatternId(), 0)))
                     .sorted(SPEED_PROFILE_COMPARATOR)
                     .collect(Collectors.toList());
             List<? extends SpeedProfile> aggregatedSpeedProfiles = aggregation.aggregateProfiles(profilesToAggregate, 0);
-             aggregatedSpeedProfiles = aggregation.getTopUsedSpeedProfiles(aggregatedSpeedProfiles, speedProfilesUsage);
+//             aggregatedSpeedProfiles = aggregation.getTopUsedSpeedProfiles(aggregatedSpeedProfiles, speedProfilesUsage);
+             aggregatedSpeedProfiles = aggregation.getTopUsedSpeedProfiles(aggregatedSpeedProfiles);
             LOGGER.info(aggregatedSpeedProfiles.stream().map(SpeedProfile::getPatternId).collect(Collectors.toList()).toString());
-//            aggregation.exportAggregatedSpeedProfiles(market, aggregatedSpeedProfiles, samplingId);
+            aggregation.exportAggregatedSpeedProfiles(market, aggregatedSpeedProfiles, samplingId, "NTP_SPEED_PROFILES_AGGREGATED_s");
+//            aggregation.exportAggregatedSpeedProfiles(market, profilesToAggregate, samplingId, "NTP_SPEED_PROFILES_ORIGINAL_s");
         });
     }
 }

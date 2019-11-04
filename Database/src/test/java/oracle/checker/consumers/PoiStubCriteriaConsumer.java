@@ -41,15 +41,15 @@ public class PoiStubCriteriaConsumer implements ICriteriaConsumer {
             System.err.println(String.format("Unable to process dbUser = %s, dbServerURL = %s, query = %s. Cause:%n%s",
                     dbUser, dbServerURL, criteria.getQuery(dbUser), e));
         }*/
-        ICriteria stubPoi = StubbleCriteria.STUB_POI;
+        ICriteria stubPoi = StubbleCriteria.STUB_POI_AIRPORT;
         try (Statement statement = connection.createStatement()) {
             statement.setFetchSize(DEFAULT_FETCH_SIZE);
             ResultSet resultSet = statement.executeQuery(stubPoi.getQuery(dbUser));
             while (resultSet.next()) {
                 int linkId = resultSet.getInt(1);
-                int catId = resultSet.getInt(4);
+//                int catId = resultSet.getInt(4);
                 stubPoiPerRegion.computeIfAbsent(linkId, regions -> new TreeSet<>()).add(dbUser);
-                stubLinksPerCatId.computeIfAbsent(catId, links -> new HashSet<>()).add(linkId);
+                stubLinksPerCatId.computeIfAbsent(4581, links -> new HashSet<>()).add(linkId);
             }
             resultSet.close();
         } catch (SQLException e) {
@@ -57,15 +57,15 @@ public class PoiStubCriteriaConsumer implements ICriteriaConsumer {
                     dbUser, dbServerURL, stubPoi.getQuery(dbUser), e));
         }
 
-        ICriteria localPoi = StubbleCriteria.STUB_LOCAL_POI;
+        ICriteria localPoi = StubbleCriteria.STUB_LOCAL_POI_AIRPORT;
         try (Statement statement = connection.createStatement()) {
             statement.setFetchSize(DEFAULT_FETCH_SIZE);
             ResultSet resultSet = statement.executeQuery(localPoi.getQuery(dbUser));
             while (resultSet.next()) {
                 int linkId = resultSet.getInt(1);
-                int catId = resultSet.getInt(4);
+//                int catId = resultSet.getInt(4);
                 localPoiPerRegion.computeIfAbsent(linkId, regions -> new TreeSet<>()).add(dbUser);
-                localLinksPerCatId.computeIfAbsent(catId, links -> new HashSet<>()).add(linkId);
+                localLinksPerCatId.computeIfAbsent(4581, links -> new HashSet<>()).add(linkId);
             }
             resultSet.close();
         } catch (SQLException e) {
@@ -77,6 +77,12 @@ public class PoiStubCriteriaConsumer implements ICriteriaConsumer {
     public void printPOI() {
         System.out.println("STUB POI:\n" + stubPOIs);
         System.out.println("POI categories:\n" + stubPoiCategories);
+    }
+
+    public void printAll()
+    {
+        System.out.println("STUB_POI_LINKS:\n"+ stubPoiPerRegion);
+        System.out.println("STUB_POI_LOCAL_LINKS:\n"+ localPoiPerRegion);
     }
 
     public void printOddPoi()

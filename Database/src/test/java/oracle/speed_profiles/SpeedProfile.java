@@ -24,6 +24,7 @@ public class SpeedProfile {
     private IntSummaryStatistics statistics;
     private IntSummaryStatistics nightTimeStatistics;
     private IntSummaryStatistics dayTimeStatistics;
+    private int usages;
 
     public SpeedProfile(int patternId, int samplingId) {
         this.patternId = patternId;
@@ -75,6 +76,16 @@ public class SpeedProfile {
         speedPerTime.add(speed);
         statistics.accept(speed);
         return this;
+    }
+
+    public SpeedProfile addUsages(int usages)
+    {
+        this.usages +=usages;
+        return this;
+    }
+
+    public int getUsages() {
+        return usages;
     }
 
     public int getMinSpeed() {

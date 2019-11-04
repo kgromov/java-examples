@@ -20,6 +20,7 @@ import java.time.DayOfWeek;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -268,6 +269,39 @@ public class SpeedProfilesCriteriaConsumer implements ICriteriaConsumer {
                     statement.setInt(++columnIndex, entry.getKey().getLeft());
                     statement.setInt(++columnIndex, entry.getKey().getRight());
                     statement.setLong(++columnIndex, entry.getValue().get());
+                    statement.addBatch();
+                }
+                statement.executeBatch();
+                connection.commit();
+                statement.close();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Export to sqlite failed", e);
+        }
+    }
+
+    public void exportProfilesAggregation(Path outputFile, List<? extends SpeedProfile> speedProfiles) {
+        try {
+//            Files.deleteIfExists(outputFile);
+//            Files.createFile(outputFile);
+            // register sqlite driver
+            Class.forName("org.sqlite.JDBC");
+            String createQuery = "CREATE TABLE IF NOT EXISTS NTTP_SPEED_PATTERN_AGGREGATION " +
+                    "(PATTERN_ID INTEGER NOT NULL, MERGED_PATTERN_IDS TEXT NOT NULL, MERGED_PATTERN_IDS_COUNT INTEGER NOT NULL, TOTAL_USAGES INTEGER NOT NULL)";
+            String insertQuery = "INSERT INTO NTTP_SPEED_PATTERN_AGGREGATION (PATTERN_ID, MERGED_PATTERN_IDS, MERGED_PATTERN_IDS_COUNT, TOTAL_USAGES) " +
+                    "VALUES (?, ?, ?, ?)";
+            try (Connection connection = DriverManager.getConnection(DB_URI_PREFIX + outputFile.toString());
+                 Statement createStatement = connection.createStatement())
+            {
+                createStatement.execute(createQuery);
+                PreparedStatement statement = connection.prepareStatement(insertQuery);
+                connection.setAutoCommit(false);
+                for (SpeedProfile profile : speedProfiles) {
+                    int columnIndex = 0;
+                    statement.setInt(++columnIndex, profile.getPatternId());
+                    statement.setString(++columnIndex, profile.getAggregatedPatternIDs().toString());
+                    statement.setInt(++columnIndex, profile.getAggregatedPatternIDs().size());
+                    statement.setInt(++columnIndex, profile.getUsages());
                     statement.addBatch();
                 }
                 statement.executeBatch();

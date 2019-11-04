@@ -51,7 +51,7 @@ public enum StubbleCriteria implements ICriteria {
                             "join STUB_LINK sl on l.LINK_ID = sl.LINK_ID\n" +
                             "join RDF_POI_ADDRESS pa on pa.LOCATION_ID = l.LOCATION_ID\n" +
                             "join RDF_POI p on p.POI_ID = pa.POI_ID\n" +
-                            "where p.CAT_ID = 4581";
+                            "join RDF_POI_AIRPORT rpa on rpa.POI_ID = pa.POI_ID";
                 }
             },
 
@@ -64,7 +64,7 @@ public enum StubbleCriteria implements ICriteria {
                             "join STUB_LINK_LOCAL sl on l.LINK_ID = sl.LINK_ID\n" +
                             "join RDF_POI_ADDRESS pa on pa.LOCATION_ID = l.LOCATION_ID\n" +
                             "join RDF_POI p on p.POI_ID = pa.POI_ID\n" +
-                            "where p.CAT_ID = 4581";
+                            "join RDF_POI_AIRPORT rpa on rpa.POI_ID = pa.POI_ID";
                 }
             },
     STUB_POI_COUNT_DIFF

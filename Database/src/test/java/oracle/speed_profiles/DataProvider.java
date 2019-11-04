@@ -3,6 +3,8 @@ package oracle.speed_profiles;
 import dao.CsvDataProvider;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import oracle.appenders.Appender;
+import oracle.appenders.SpeedProfileAppender;
 import oracle.checker.consumers.SpeedProfilesCriteriaConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +28,8 @@ import java.util.concurrent.TimeUnit;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DataProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(DataProvider.class.getName());
+
+    public static final String DB_URI_PREFIX = "jdbc:sqlite:file:";
     private static final String QUERY = "select * from " + SpeedProfilesCriteriaConsumer.TABLE_NAME + " order by PATTERN_ID, SEQ_NUM";
     private static final String USAGE_QUERY = "select * from PROFILES_USAGE_BY_LINKS";
     private static final String OUTPUT_FOLDER = "C:\\Projects\\java-examples\\Database\\src\\test\\java\\oracle\\output";
@@ -122,6 +127,24 @@ public class DataProvider {
         } finally {
             LOGGER.trace(String.format("#extractSpeedProfiles: Time elapsed = %d ms",
                     TimeUnit.MILLISECONDS.convert(System.nanoTime() - start, TimeUnit.NANOSECONDS)));
+        }
+    }
+
+    public static void exportToSq3(Path outputFile, Appender appender, Collection objects)
+    {
+        Appender<SpeedProfile> speedProfileAppender = new SpeedProfileAppender();
+        try {
+            // TODO: add MODE or boolean flag (append/write)
+            Files.deleteIfExists(outputFile);
+            Files.createFile(outputFile);
+            // register sqlite driver
+            Class.forName("org.sqlite.JDBC");
+            try (Connection connection = DriverManager.getConnection(DB_URI_PREFIX + outputFile.toString()))
+            {
+                appender.append(connection, null, objects);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Export to sqlite failed", e);
         }
     }
 

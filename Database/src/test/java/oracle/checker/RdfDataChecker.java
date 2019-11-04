@@ -28,9 +28,9 @@ public class RdfDataChecker {
     private static final String DB_SERVER_URL = "jdbc:oracle:thin:@akela-%s-%s-0%d.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl";
     // TODO: put to build_config.properties or split by different files
     private static final Map<String, String> MARKET_TO_DVN = ImmutableMap.<String, String>builder()
-            .put("eu", "19122")
-//            .put("nar", "19122")
-//            .put("mrm", "191E3")
+            .put("eu", "191T1")
+            .put("nar", "191T1")
+            .put("mrm", "191T1")
             .build();
 
     private static void processTraversingUsers() {
@@ -42,8 +42,8 @@ public class RdfDataChecker {
             Set<String> allUsers = reader.getCdcUsers();
 //                Set<String> allUsers = reader.getSampleCdcUserWithDVN(dvn);
             Set<String> iterateUsers = new HashSet<>(allUsers);
-            SpeedProfilesCriteriaConsumer consumer = new SpeedProfilesCriteriaConsumer(market, dvn);
-//            PoiStubCriteriaConsumer consumer = new PoiStubCriteriaConsumer();
+//            SpeedProfilesCriteriaConsumer consumer = new SpeedProfilesCriteriaConsumer(market, dvn);
+            PoiStubCriteriaConsumer consumer = new PoiStubCriteriaConsumer();
             allUsers.stream().filter(iterateUsers::contains).forEach(cdcUser ->
             {
                 for (int i : processedServers) {
@@ -85,9 +85,10 @@ public class RdfDataChecker {
             LOGGER.debug("Remaining users: " + iterateUsers);
               /*  consumer.printSpeedProfiles();
                 consumer.exportToSq3();*/
-            consumer.exportProfilesUsage();
+//            consumer.exportProfilesUsage();
 
-//            consumer.printOddPoi();
+            consumer.printAll();
+            consumer.printOddPoi();
         });
     }
 
