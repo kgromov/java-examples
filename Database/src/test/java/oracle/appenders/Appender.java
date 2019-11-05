@@ -9,11 +9,18 @@ import java.util.stream.Collectors;
 
 public interface Appender<T> {
 
+    enum Mode
+    {
+        READ,
+        WRITE,
+        APPEND
+    }
+
     void append(PreparedStatement statement, T object);
 
     void append(Connection connection, String query, T object);
 
-    void append(Connection connection, Collection<T> objects) throws SQLException;
+    void append(Connection connection, Collection<? extends T> objects) throws SQLException;
 
     default String getCreateQuery(String tableName, Map<String, String> columnsToType)
     {
@@ -33,4 +40,6 @@ public interface Appender<T> {
                         .map(columnData -> "?")
                         .collect(Collectors.joining(",", "VALUES (", ") "));
     }
+
+    Mode getMode();
 }

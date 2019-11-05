@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiPredicate;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DataProvider {
@@ -33,6 +35,14 @@ public class DataProvider {
     private static final String QUERY = "select * from " + SpeedProfilesCriteriaConsumer.TABLE_NAME + " order by PATTERN_ID, SEQ_NUM";
     private static final String USAGE_QUERY = "select * from PROFILES_USAGE_BY_LINKS";
     private static final String OUTPUT_FOLDER = "C:\\Projects\\java-examples\\Database\\src\\test\\java\\oracle\\output";
+
+    public static final BiPredicate<Path, BasicFileAttributes> ORIGINAL_PROFILES =
+            ((path, attributes) -> attributes.isRegularFile() && path.toString().endsWith(Extension.SQ3.getValue()));
+
+    public static final BiPredicate<Path, BasicFileAttributes> AGGREGATED_PROFILES =
+            ((path, attributes) -> attributes.isRegularFile()
+                    && path.toString().endsWith(Extension.SQ3.getValue())
+                    && path.toString().contains("_AGGREGATED"));
 
     public enum Extension
     {
@@ -50,12 +60,11 @@ public class DataProvider {
         }
     }
 
-    private static void exportSourceDataToCsv() {
+    public static void exportSourceDataToCsv(BiPredicate<Path, BasicFileAttributes> matcher) {
         Path outFolder = Paths.get(OUTPUT_FOLDER);
         try {
             Class.forName("org.sqlite.JDBC");
-            Files.find(outFolder, 1,
-                    ((path, attributes) -> attributes.isRegularFile() && path.toString().endsWith(Extension.SQ3.getValue())))
+            Files.find(outFolder, 1, matcher)
                     .forEach(dbPath ->
                     {
                         Path csvPath = outFolder.resolve(dbPath.getFileName().toString().replace(Extension.SQ3.getValue(), Extension.CSV.getValue()));
@@ -107,7 +116,6 @@ public class DataProvider {
         }
     }
 
-
     public static Map<Integer, Map<Integer, Integer>> getSpeedProfilesUsage(String market)
     {
         long start = System.nanoTime();
@@ -130,18 +138,19 @@ public class DataProvider {
         }
     }
 
-    public static void exportToSq3(Path outputFile, Appender appender, Collection objects)
+    public static <T> void exportToSq3(Path outputFile, Appender<T> appender, Collection<? extends T> objects)
     {
-        Appender<SpeedProfile> speedProfileAppender = new SpeedProfileAppender();
         try {
-            // TODO: add MODE or boolean flag (append/write)
-            Files.deleteIfExists(outputFile);
-            Files.createFile(outputFile);
+            if (appender.getMode() == Appender.Mode.WRITE)
+            {
+                Files.deleteIfExists(outputFile);
+                Files.createFile(outputFile);
+            }
             // register sqlite driver
             Class.forName("org.sqlite.JDBC");
             try (Connection connection = DriverManager.getConnection(DB_URI_PREFIX + outputFile.toString()))
             {
-                appender.append(connection, null, objects);
+                appender.append(connection,  objects);
             }
         } catch (Exception e) {
             throw new RuntimeException("Export to sqlite failed", e);

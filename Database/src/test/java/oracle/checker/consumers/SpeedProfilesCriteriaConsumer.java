@@ -3,11 +3,13 @@ package oracle.checker.consumers;
 import com.google.common.collect.ImmutableMap;
 import lombok.Data;
 import lombok.Getter;
+import oracle.appenders.Appender;
+import oracle.appenders.SpeedProfileAppender;
 import oracle.checker.criterias.ICriteria;
+import oracle.speed_profiles.DataProvider;
 import oracle.speed_profiles.SpeedProfile;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
@@ -18,9 +20,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.DayOfWeek;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -186,64 +186,7 @@ public class SpeedProfilesCriteriaConsumer implements ICriteriaConsumer {
 
     public void exportToSq3() {
         Path outputFile = Paths.get("Database", "src", "test", "java", "oracle", "output", "NTP_SPEED_PROFILES_" + market + ".sq3");
-        exportToSq3(outputFile, speedProfileRows);
-    }
-
-    public void exportToSq3(Path outputFile, Collection<SpeedProfileRow> speedProfileRows) {
-        try {
-            Files.deleteIfExists(outputFile);
-            Files.createFile(outputFile);
-            // register sqlite driver
-            Class.forName("org.sqlite.JDBC");
-            try (Connection connection = DriverManager.getConnection(DB_URI_PREFIX + outputFile.toString())) {
-                createTable(connection);
-                writeToSqLite(connection, speedProfileRows);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Export to sqlite failed", e);
-        }
-    }
-
-    private static String getCreateQuery() {
-        return "CREATE TABLE IF NOT EXISTS " +
-                TABLE_NAME +
-                COLUMN_TYPE_BY_COLUMN_NAME.entrySet().stream()
-                        .map(columnData -> columnData.getKey() + " " + columnData.getValue())
-                        .collect(Collectors.joining(" NOT NULL, ", " (", " NOT NULL)"));
-    }
-
-    private static String getInsertQuery() {
-        return "INSERT INTO " +
-                TABLE_NAME +
-                COLUMN_TYPE_BY_COLUMN_NAME.keySet().stream()
-                        .collect(Collectors.joining(",", " (", ") ")) +
-                COLUMN_TYPE_BY_COLUMN_NAME.entrySet().stream()
-                        .map(columnData -> "?")
-                        .collect(Collectors.joining(",", "VALUES (", ") "));
-    }
-
-    private void createTable(Connection connection) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(getCreateQuery())) {
-            statement.execute();
-        }
-    }
-
-    private void writeToSqLite(Connection connection, Collection<SpeedProfileRow> speedProfileRows) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(getInsertQuery())) {
-            connection.setAutoCommit(false);
-            for (SpeedProfileRow row : speedProfileRows) {
-                int columnIndex = 0;
-                statement.setInt(++columnIndex, row.getPatternId());
-                statement.setInt(++columnIndex, row.getSeqNum());
-                statement.setInt(++columnIndex, row.getSamplingId());
-                statement.setString(++columnIndex, row.getStartTime());
-                statement.setString(++columnIndex, row.getEndTime());
-                statement.setInt(++columnIndex, row.getSpeed());
-                statement.addBatch();
-            }
-            statement.executeBatch();
-            connection.commit();
-        }
+        DataProvider.exportToSq3(outputFile, new SpeedProfileAppender(Appender.Mode.WRITE), speedProfileRows);
     }
 
     public void exportProfilesUsage() {
@@ -269,39 +212,6 @@ public class SpeedProfilesCriteriaConsumer implements ICriteriaConsumer {
                     statement.setInt(++columnIndex, entry.getKey().getLeft());
                     statement.setInt(++columnIndex, entry.getKey().getRight());
                     statement.setLong(++columnIndex, entry.getValue().get());
-                    statement.addBatch();
-                }
-                statement.executeBatch();
-                connection.commit();
-                statement.close();
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Export to sqlite failed", e);
-        }
-    }
-
-    public void exportProfilesAggregation(Path outputFile, List<? extends SpeedProfile> speedProfiles) {
-        try {
-//            Files.deleteIfExists(outputFile);
-//            Files.createFile(outputFile);
-            // register sqlite driver
-            Class.forName("org.sqlite.JDBC");
-            String createQuery = "CREATE TABLE IF NOT EXISTS NTTP_SPEED_PATTERN_AGGREGATION " +
-                    "(PATTERN_ID INTEGER NOT NULL, MERGED_PATTERN_IDS TEXT NOT NULL, MERGED_PATTERN_IDS_COUNT INTEGER NOT NULL, TOTAL_USAGES INTEGER NOT NULL)";
-            String insertQuery = "INSERT INTO NTTP_SPEED_PATTERN_AGGREGATION (PATTERN_ID, MERGED_PATTERN_IDS, MERGED_PATTERN_IDS_COUNT, TOTAL_USAGES) " +
-                    "VALUES (?, ?, ?, ?)";
-            try (Connection connection = DriverManager.getConnection(DB_URI_PREFIX + outputFile.toString());
-                 Statement createStatement = connection.createStatement())
-            {
-                createStatement.execute(createQuery);
-                PreparedStatement statement = connection.prepareStatement(insertQuery);
-                connection.setAutoCommit(false);
-                for (SpeedProfile profile : speedProfiles) {
-                    int columnIndex = 0;
-                    statement.setInt(++columnIndex, profile.getPatternId());
-                    statement.setString(++columnIndex, profile.getAggregatedPatternIDs().toString());
-                    statement.setInt(++columnIndex, profile.getAggregatedPatternIDs().size());
-                    statement.setInt(++columnIndex, profile.getUsages());
                     statement.addBatch();
                 }
                 statement.executeBatch();

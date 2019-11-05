@@ -1,6 +1,8 @@
 package oracle.speed_profiles;
 
 import com.google.common.collect.ImmutableMap;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import oracle.checker.consumers.SpeedProfilesCriteriaConsumer;
 
 import java.time.LocalTime;
@@ -14,6 +16,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@EqualsAndHashCode(exclude = {"statistics", "nightTimeStatistics", "dayTimeStatistics", "usages"})
+@ToString(exclude = {"statistics", "nightTimeStatistics", "dayTimeStatistics"})
 public class SpeedProfile {
     private static final int MINUTE_IN_DAY = 24 * 60;
     private static final Map<Integer, Integer> SAMPLE_IDS_TO_PERIODS = ImmutableMap.of(1, 15, 2, 60, 4, 120);
@@ -67,7 +71,7 @@ public class SpeedProfile {
         }
     }
 
-    public SpeedProfile addSpeed(int speed) {
+    public void addSpeed(int speed) {
         if (speedPerTime.size() < getStartDayIndex() || speedPerTime.size() > getEndDayIndex()) {
             nightTimeStatistics.accept(speed);
         } else {
@@ -75,7 +79,6 @@ public class SpeedProfile {
         }
         speedPerTime.add(speed);
         statistics.accept(speed);
-        return this;
     }
 
     public SpeedProfile addUsages(int usages)
@@ -217,5 +220,7 @@ public class SpeedProfile {
                 ))
                 .collect(Collectors.toList());
     }
+
+
 
 }
