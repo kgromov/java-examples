@@ -2,11 +2,13 @@ package oracle.speed_profiles.merge;
 
 import oracle.speed_profiles.AggregatedSpeedProfile;
 import oracle.speed_profiles.SpeedProfile;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 import java.util.Optional;
 
-public class HalfAverageMergeStrategy implements MergeStrategy {
+public class HalfAverageRangeMergeStrategy implements MergeStrategy {
+    private static final int RANGE_THRESHOLD = DEFAULT_THRESHOLD * 2;
 
     @Override
     public Optional<? extends SpeedProfile> getAggregatedProfile(SpeedProfile profile1, SpeedProfile profile2)
@@ -24,16 +26,23 @@ public class HalfAverageMergeStrategy implements MergeStrategy {
         {
             int speed1 = speedPerTime1.get(i);
             int speed2 = speedPerTime2.get(i);
-//            int threshold = profile1.isNightTime(i) ? DEFAULT_THRESHOLD * 2 : DEFAULT_THRESHOLD;
-            if (!profile1.isNightTime(i) && Math.abs(speed1 - speed2) >  DEFAULT_THRESHOLD)
-//            if ( Math.abs(speed1 - speed2) >  threshold)
+            int min1 = profile1.getMinAggregatedSpeedAt(i);
+            int min2 = profile2.getMinAggregatedSpeedAt(i);
+            int max1 = profile1.getMinAggregatedSpeedAt(i);
+            int max2 = profile1.getMinAggregatedSpeedAt(i);
+
+            if (!profile1.isNightTime(i) &&
+                    (Math.abs(speed1 - speed2) > DEFAULT_THRESHOLD
+                            || Math.abs(min1 - min2) > RANGE_THRESHOLD
+                            || Math.abs(max1 - max2) > RANGE_THRESHOLD
+                    ))
             {
                 return Optional.empty();
             }
-//            int aggregatedSpeed = Math.round((speed1 + speed2) / DIV);
-//            int aggregatedSpeed = MergeStrategy.roundToThreshold(speed1, speed2);
             int aggregatedSpeed = speed1 == speed2 ? speed1 : getAverageSpeedByUsages(profile1, profile2, i);
             aggregateProfile.addSpeed(aggregatedSpeed);
+            Pair<Integer, Integer> range = Pair.of(Math.min(min1, min2), Math.max(max1, max2));
+            aggregateProfile.addRange(range);
         }
         aggregateProfile.addPatternId(profile1.getAggregatedPatternIDs())
                 .addPatternId(profile2.getAggregatedPatternIDs())

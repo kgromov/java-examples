@@ -34,7 +34,7 @@ public class SpeedProfile {
         this.patternId = patternId;
         this.samplingId = samplingId;
         // project specific
-        int periods = MINUTE_IN_DAY / SAMPLE_IDS_TO_PERIODS.get(samplingId) ;
+        int periods = getPeriods();
         this.speedPerTime = new ArrayList<>(periods);
         this.statistics = new IntSummaryStatistics();
         this.dayTimeStatistics = new IntSummaryStatistics();
@@ -111,14 +111,15 @@ public class SpeedProfile {
         return (int) dayTimeStatistics.getAverage();
     }
 
-    public int getFirstSpeed() {
-        return speedPerTime.get(0);
+    public int getMinAggregatedSpeedAt(int index)
+    {
+        return speedPerTime.get(index);
     }
 
-    public int getLastSpeed() {
-        return speedPerTime.get(speedPerTime.size() - 1);
+    public int getMaxAggregatedSpeedAt(int index)
+    {
+        return getMinAggregatedSpeedAt(index);
     }
-
 
     public int getPatternId() {
         return patternId;
@@ -137,15 +138,20 @@ public class SpeedProfile {
         return speedPerTime;
     }
 
+    protected int getPeriods()
+    {
+        return MINUTE_IN_DAY / SAMPLE_IDS_TO_PERIODS.get(samplingId);
+    }
+
     public int getStartDayIndex()
     {
-        int periods =  MINUTE_IN_DAY / SAMPLE_IDS_TO_PERIODS.get(samplingId) ;
+        int periods =  getPeriods();
         return (int) (periods / 24.0 * 2 + 1);
     }
 
     public int getEndDayIndex()
     {
-        int periods =  MINUTE_IN_DAY / SAMPLE_IDS_TO_PERIODS.get(samplingId) ;
+        int periods =  getPeriods();
         return (int) (periods / 24.0 * 21 + 1);
     }
 

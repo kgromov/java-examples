@@ -7,6 +7,7 @@ import oracle.appenders.Appender;
 import oracle.appenders.SpeedProfileAppender;
 import oracle.checker.consumers.SpeedProfilesCriteriaConsumer;
 import oracle.speed_profiles.merge.HalfAverageMergeStrategy;
+import oracle.speed_profiles.merge.HalfAverageRangeMergeStrategy;
 import oracle.speed_profiles.merge.MergeStrategy;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
@@ -30,9 +31,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 
+// TODO: rounding while calibration
 public class Aggregation {
     private static final Logger LOGGER = LoggerFactory.getLogger(Aggregation.class);
-    //    public static final Map<Integer, Integer> AGGREGATION_DEPTH = ImmutableMap.of(1, 4, 2, 1);
+//        public static final Map<Integer, Integer> AGGREGATION_DEPTH = ImmutableMap.of(1, 4, 2, 1);
     public static final Map<Integer, Integer> AGGREGATION_DEPTH = ImmutableMap.of(1, 8, 2, 2, 4, 1);
     private static final Set<String> MARKETS = Sets.newHashSet("eu", "nar", "mrm");
    /* private static final Comparator<SpeedProfile> SPEED_PROFILE_COMPARATOR = Comparator.comparingInt(SpeedProfile::getAverageSpeed)
@@ -118,7 +120,7 @@ public class Aggregation {
                 .map(s -> Pair.of(s, s.getAggregatedPatternIDs().stream()
                         .mapToInt(p -> speedProfilesUsage.getOrDefault(p, 0)).sum()))
                 .sorted(Comparator.comparingInt(p -> -p.getRight()))
-                .peek(p -> LOGGER.info(String.format("Aggregated profile: patternId = %d, usages = %d", p.getLeft().getPatternId(), p.getRight())))
+                .peek(p -> LOGGER.trace(String.format("Aggregated profile: patternId = %d, usages = %d", p.getLeft().getPatternId(), p.getRight())))
                 .map(Pair::getLeft)
                 .limit(200)
                 .collect(Collectors.toList());
@@ -127,7 +129,7 @@ public class Aggregation {
     private List<? extends SpeedProfile> getTopUsedSpeedProfiles(List<? extends SpeedProfile> speedProfiles) {
         return speedProfiles.stream()
                 .sorted(Comparator.comparingInt(p -> -p.getUsages()))
-                .peek(p -> LOGGER.info(String.format("Aggregated profile: patternId = %d, usages = %d", p.getPatternId(), p.getUsages())))
+                .peek(p -> LOGGER.trace(String.format("Aggregated profile: patternId = %d, usages = %d", p.getPatternId(), p.getUsages())))
                 .limit(200)
                 .collect(Collectors.toList());
     }
@@ -138,7 +140,7 @@ public class Aggregation {
                 .peek(p ->
                 {
                     if (speedProfiles.size() < 1000) {
-                        LOGGER.info(String.format("PatterId = %d aggregates: %s (%d)",
+                        LOGGER.debug(String.format("PatterId = %d aggregates: %s (%d)",
                                 p.getPatternId(), p.getAggregatedPatternIDs(), p.getAggregatedPatternIDs().size()));
                     }
                 })
@@ -156,21 +158,23 @@ public class Aggregation {
     // ========================== Verification methods (better to be unit tests) ==========================
     private void checkUsages(List<? extends SpeedProfile> speedProfiles, Map<Integer, Integer> speedProfilesUsage)
     {
-        AtomicInteger totalUsages = new AtomicInteger();
+        AtomicInteger totalUsagesExpected = new AtomicInteger();
+        AtomicInteger totalUsagesActual = new AtomicInteger();
         speedProfiles.forEach(profile ->
         {
             int patternId = profile.getPatternId();
             int expectedUsagesCount = profile.getAggregatedPatternIDs().stream()
                     .mapToInt(p -> speedProfilesUsage.getOrDefault(p, 0)).sum();
             int actualUsagesCount = profile.getUsages();
-            totalUsages.addAndGet(expectedUsagesCount);
+            totalUsagesExpected.addAndGet(expectedUsagesCount);
+            totalUsagesActual.addAndGet(actualUsagesCount);
             if (expectedUsagesCount != actualUsagesCount)
             {
-                LOGGER.warn(String.format("Profile:[patternId = %d] has invalid counted usages: expected = %d, actual = %d",
+                LOGGER.trace(String.format("Profile:[patternId = %d] has invalid counted usages: expected = %d, actual = %d",
                         patternId, expectedUsagesCount, actualUsagesCount));
             }
         });
-        System.out.println(totalUsages);
+        LOGGER.warn(String.format("expected = %s, actual = %s", totalUsagesExpected, totalUsagesActual));
     }
 
     private void checkAggregation(List<? extends SpeedProfile> aggregatedProfiles, List<SpeedProfile> originalProfiles) {
@@ -211,7 +215,8 @@ public class Aggregation {
                 unmergeableProfiles.add(profile);
             }*/
         });
-        unmergeableProfiles.forEach(p -> LOGGER.info(String.format("%s: with avgDaySpeed = %d were not merged with aggregated ones", p, p.getAverageDaySpeed())));
+        LOGGER.warn("Not merged profiles = " + unmergeableProfiles.size());
+        unmergeableProfiles.forEach(p -> LOGGER.trace(String.format("%s: with avgDaySpeed = %d were not merged with aggregated ones", p, p.getAverageDaySpeed())));
         collectDiffPerNotMergedProfile(unmergeableProfiles, profilesByAvgDaySpeed);
     }
 
@@ -263,7 +268,7 @@ public class Aggregation {
                     statistics.accept(delta);
                 }
             });
-            LOGGER.info(String.format("Profile [patternId = %d, avgDaySpeed = %d] has the following closest deltas %s by calibrated avgDaySpeed = %d",
+            LOGGER.trace(String.format("Profile [patternId = %d, avgDaySpeed = %d] has the following closest deltas %s by calibrated avgDaySpeed = %d",
                     profile.getPatternId(), profile.getAverageDaySpeed(), statistics, avgDaySpeed));
         });
     }
@@ -277,7 +282,7 @@ public class Aggregation {
             LOGGER.info(String.format("########################### SAMPLING_ID = %d ###########################", samplingId));
             Map<Integer, Integer> speedProfilesUsage = speedProfilesUsagePerSampleId.get(samplingId);
             MergeStrategy strategy = new HalfAverageMergeStrategy();
-//        MergeStrategy strategy = new NeighboursAverageMergeStrategy();
+//        MergeStrategy strategy = new HalfAverageRangeMergeStrategy();
             Aggregation aggregation = new Aggregation(strategy, INCREMENT_GROUP_COUNT);
 //            Aggregation aggregation = new Aggregation(strategy, CONSTANT_GROUP_COUNT);
             List<SpeedProfile> profilesToAggregate = speedProfiles.stream()
@@ -296,7 +301,7 @@ public class Aggregation {
 
             // verification
 //            aggregation.checkAggregation(aggregatedSpeedProfiles, profilesToAggregate);
-            aggregation.checkUsages(aggregatedSpeedProfiles, speedProfilesUsage);
+//            aggregation.checkUsages(aggregatedSpeedProfiles, speedProfilesUsage);
         });
     }
 }
