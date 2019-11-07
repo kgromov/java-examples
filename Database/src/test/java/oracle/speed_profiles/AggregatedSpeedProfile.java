@@ -36,10 +36,9 @@ public class AggregatedSpeedProfile extends SpeedProfile {
         return this;
     }
 
-    public AggregatedSpeedProfile addRange(Pair<Integer, Integer> range)
+    public void addRange(Pair<Integer, Integer> range)
     {
         aggregatedSpeedRanges.add(range);
-        return this;
     }
 
     @Override

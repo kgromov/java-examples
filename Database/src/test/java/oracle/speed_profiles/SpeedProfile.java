@@ -146,13 +146,13 @@ public class SpeedProfile {
     public int getStartDayIndex()
     {
         int periods =  getPeriods();
-        return (int) (periods / 24.0 * 2 + 1);
+        return (int) (periods / 24.0 * 2);
     }
 
     public int getEndDayIndex()
     {
-        int periods =  getPeriods();
-        return (int) (periods / 24.0 * 21 + 1);
+        int periods = getPeriods();
+        return (int) Math.round(periods / 24.0 * 21);
     }
 
     public boolean isNightTime(int timeIndex)

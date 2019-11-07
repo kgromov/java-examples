@@ -7,11 +7,12 @@ import java.util.List;
 import java.util.Optional;
 
 public class HalfAverageMergeStrategy implements MergeStrategy {
+    private int threshold = MergeStrategy.DEFAULT_THRESHOLD;
 
     @Override
     public Optional<? extends SpeedProfile> getAggregatedProfile(SpeedProfile profile1, SpeedProfile profile2)
     {
-        if (!profile1.isMergeable(profile2, DEFAULT_THRESHOLD))
+        if (!profile1.isMergeable(profile2, threshold))
         {
             return Optional.empty();
         }
@@ -25,7 +26,7 @@ public class HalfAverageMergeStrategy implements MergeStrategy {
             int speed1 = speedPerTime1.get(i);
             int speed2 = speedPerTime2.get(i);
 //            int threshold = profile1.isNightTime(i) ? DEFAULT_THRESHOLD * 2 : DEFAULT_THRESHOLD;
-            if (!profile1.isNightTime(i) && Math.abs(speed1 - speed2) >  DEFAULT_THRESHOLD)
+            if (!profile1.isNightTime(i) && Math.abs(speed1 - speed2) >  threshold)
 //            if ( Math.abs(speed1 - speed2) >  threshold)
             {
                 return Optional.empty();
@@ -40,6 +41,17 @@ public class HalfAverageMergeStrategy implements MergeStrategy {
                 .addUsages(profile1.getUsages() + profile2.getUsages());
         return Optional.of(aggregateProfile);
     }
+
+    @Override
+    public void setThreshold(int value) {
+        this.threshold = value;
+    }
+
+    @Override
+    public int getThreshold() {
+        return threshold;
+    }
+
     private int getAverageSpeedByUsages(SpeedProfile profile1, SpeedProfile profile2, int timeIndex)
     {
         int usages1 = profile1.getUsages();

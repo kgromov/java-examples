@@ -4,7 +4,6 @@ import dao.CsvDataProvider;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import oracle.appenders.Appender;
-import oracle.appenders.SpeedProfileAppender;
 import oracle.checker.consumers.SpeedProfilesCriteriaConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +30,10 @@ import java.util.function.BiPredicate;
 public class DataProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(DataProvider.class.getName());
 
-    public static final String DB_URI_PREFIX = "jdbc:sqlite:file:";
+    private static final String DB_URI_PREFIX = "jdbc:sqlite:file:";
+    public static final String ATTACH_QUERY = "ATTACH database '%s' as %s";
+    public static final String DETACH_QUERY = "DETACH database %s";
+
     private static final String QUERY = "select * from " + SpeedProfilesCriteriaConsumer.TABLE_NAME + " order by PATTERN_ID, SEQ_NUM";
     private static final String USAGE_QUERY = "select * from PROFILES_USAGE_BY_LINKS";
     private static final String OUTPUT_FOLDER = "C:\\Projects\\java-examples\\Database\\src\\test\\java\\oracle\\output";
@@ -74,7 +76,7 @@ public class DataProvider {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        try (Connection connection = DriverManager.getConnection(SpeedProfilesCriteriaConsumer.DB_URI_PREFIX + dbPath.toString())) {
+                        try (Connection connection = getConnection(dbPath)) {
                             CsvDataProvider.convertToCsv(connection, SpeedProfilesCriteriaConsumer.TABLE_NAME, csvPath);
                         } catch (SQLException e) {
                             e.printStackTrace();
@@ -88,7 +90,7 @@ public class DataProvider {
     public static Map<Integer, List<SpeedProfile>> extractSpeedProfiles(String market) {
         long start = System.nanoTime();
         Path dbPath = getPath("NTP_SPEED_PROFILES" , market, Extension.SQ3);
-        try (Connection connection = DriverManager.getConnection(SpeedProfilesCriteriaConsumer.DB_URI_PREFIX + dbPath.toString());
+        try (Connection connection = getConnection(dbPath);
              ResultSet resultSet = connection.createStatement().executeQuery(QUERY)) {
             Map<Integer, List<SpeedProfile>> speedProfilesPerSamplingId = new HashMap<>();
             Map<Integer, SpeedProfile> speedProfiles = new TreeMap<>();
@@ -120,7 +122,7 @@ public class DataProvider {
     {
         long start = System.nanoTime();
         Path dbPath = getPath("NTP_SPEED_PROFILES" , market, Extension.SQ3);
-        try (Connection connection = DriverManager.getConnection(SpeedProfilesCriteriaConsumer.DB_URI_PREFIX + dbPath.toString());
+        try (Connection connection = getConnection(dbPath);
              ResultSet resultSet = connection.createStatement().executeQuery(USAGE_QUERY)) {
             Map<Integer, Map<Integer, Integer>> profilesUsage = new HashMap<>();
             while (resultSet.next()) {
@@ -148,13 +150,18 @@ public class DataProvider {
             }
             // register sqlite driver
             Class.forName("org.sqlite.JDBC");
-            try (Connection connection = DriverManager.getConnection(DB_URI_PREFIX + outputFile.toString()))
+            try (Connection connection = getConnection(outputFile))
             {
                 appender.append(connection,  objects);
             }
         } catch (Exception e) {
             throw new RuntimeException("Export to sqlite failed", e);
         }
+    }
+
+    public static Connection getConnection(Path dbPath) throws SQLException
+    {
+     return DriverManager.getConnection(DB_URI_PREFIX + dbPath.toString());
     }
 
     public static Path getPath(String fileName, String market, Extension extension)

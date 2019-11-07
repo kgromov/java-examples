@@ -14,6 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -34,8 +38,8 @@ import java.util.stream.Collectors;
 // TODO: rounding while calibration
 public class Aggregation {
     private static final Logger LOGGER = LoggerFactory.getLogger(Aggregation.class);
-//        public static final Map<Integer, Integer> AGGREGATION_DEPTH = ImmutableMap.of(1, 4, 2, 1);
-    public static final Map<Integer, Integer> AGGREGATION_DEPTH = ImmutableMap.of(1, 8, 2, 2, 4, 1);
+        public static final Map<Integer, Integer> AGGREGATION_DEPTH = ImmutableMap.of(1, 4, 2, 1);
+//    public static final Map<Integer, Integer> AGGREGATION_DEPTH = ImmutableMap.of(1, 8, 2, 2, 4, 1);
     private static final Set<String> MARKETS = Sets.newHashSet("eu", "nar", "mrm");
    /* private static final Comparator<SpeedProfile> SPEED_PROFILE_COMPARATOR = Comparator.comparingInt(SpeedProfile::getAverageSpeed)
             .thenComparing(SpeedProfile::getAverageDaySpeed)
@@ -80,7 +84,7 @@ public class Aggregation {
                 .distinct()
                 .collect(Collectors.toList());
         ++iterations;
-        LOGGER.info(String.format("Iteration = %d, groupCount = %d, source speedProfiles size = %d, target speedProfiles size = %d",
+        LOGGER.debug(String.format("Iteration = %d, groupCount = %d, source speedProfiles size = %d, target speedProfiles size = %d",
                 iterations, groupCount, speedProfiles.size(), aggregatedSpeedProfiles.size()));
         return aggregatedSpeedProfiles.size() <= 200 || aggregatedSpeedProfiles.size() == speedProfilesAmount
                 ? aggregatedSpeedProfiles
@@ -140,7 +144,7 @@ public class Aggregation {
                 .peek(p ->
                 {
                     if (speedProfiles.size() < 1000) {
-                        LOGGER.debug(String.format("PatterId = %d aggregates: %s (%d)",
+                        LOGGER.trace(String.format("PatterId = %d aggregates: %s (%d)",
                                 p.getPatternId(), p.getAggregatedPatternIDs(), p.getAggregatedPatternIDs().size()));
                     }
                 })
@@ -153,6 +157,75 @@ public class Aggregation {
 
         Appender<SpeedProfile> aggregationAppender = new AggregatedSpeedProfileAppender(Appender.Mode.APPEND);
         DataProvider.exportToSq3(outputFile, aggregationAppender, speedProfiles);
+    }
+
+    // ========================== Summary methods ==========================
+    private void printSummary(String market, int samplingId, SpeedProfile profile)
+    {
+        String deviationQuery = "with t as " +
+                "( " +
+                "SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff " +
+                "FROM main.NTTP_SPEED_PATTERN m " +
+                "JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM " +
+                "WHERE %s"+
+                ") " +
+                "SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t";
+
+        String dayDeviationCondition = "o.SEQ_NUM BETWEEN %d and %d";
+        String nightDeviationCondition = "o.SEQ_NUM NOT BETWEEN %d and %d";
+
+        String dayDeviationQuery = String.format(deviationQuery, String.format(dayDeviationCondition, profile.getStartDayIndex() + 1, profile.getEndDayIndex()));
+        String nightDeviationQuery = String.format(deviationQuery, String.format(nightDeviationCondition, profile.getStartDayIndex() + 1, profile.getEndDayIndex()));
+        LOGGER.debug("dayDeviationQuery = " + dayDeviationQuery);
+        LOGGER.debug("nightDeviationQuery = " + nightDeviationQuery);
+
+        String usagesQuery = "SELECT sum(o.USAGES_COUNT) as original_usages, sum(a.TOTAL_USAGES) as merged_usages\n" +
+                "FROM PROFILES_USAGE_BY_LINKS o\n" +
+                "join NTTP_SPEED_PATTERN_AGGREGATION a on a.PATTERN_ID  = o.PATTERN_ID \n";
+//                "GROUP by a.PATTERN_ID";
+
+        Path originalProfilesDbPath = DataProvider.getPath("NTP_SPEED_PROFILES" , market, DataProvider.Extension.SQ3);
+        Path calibratedProfilesPath = DataProvider.getPath("NTP_SPEED_PROFILES_ORIGINAL_s" + samplingId, market, DataProvider.Extension.SQ3);
+        Path aggregatedProfilesPath = DataProvider.getPath("NTP_SPEED_PROFILES_AGGREGATED_s" + samplingId, market, DataProvider.Extension.SQ3);
+        try (Connection connection = DataProvider.getConnection(aggregatedProfilesPath);
+             Statement statement = connection.createStatement()) {
+            statement.execute(String.format(DataProvider.ATTACH_QUERY, originalProfilesDbPath.toString(), "original"));
+            statement.execute(String.format(DataProvider.ATTACH_QUERY, calibratedProfilesPath.toString(), "calibrated"));
+
+            ResultSet deviation = connection.createStatement().executeQuery(dayDeviationQuery);
+            while (deviation.next())
+            {
+                int min = deviation.getInt("min");
+                int max = deviation.getInt("max");
+                double avg = deviation.getDouble("avg");
+                LOGGER.info(String.format("Day: [Min = %d, Max = %d, Avg = %f]", min, max, avg));
+            }
+            deviation.close();
+
+            deviation = connection.createStatement().executeQuery(nightDeviationQuery);
+            while (deviation.next())
+            {
+                int min = deviation.getInt("min");
+                int max = deviation.getInt("max");
+                double avg = deviation.getDouble("avg");
+                LOGGER.info(String.format("Night: [Min = %d, Max = %d, Avg = %f]", min, max, avg));
+            }
+            deviation.close();
+
+            ResultSet usages = connection.createStatement().executeQuery(usagesQuery);
+            while (usages.next())
+            {
+                int originalUsages = usages.getInt("original_usages");
+                int mergedUsages = usages.getInt("merged_usages");
+                LOGGER.info(String.format("originalUsages = %d, mergedUsages = %d", originalUsages, mergedUsages));
+            }
+            usages.close();
+
+            statement.execute(String.format(DataProvider.DETACH_QUERY, "original"));
+            statement.execute(String.format(DataProvider.DETACH_QUERY, "calibrated"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     // ========================== Verification methods (better to be unit tests) ==========================
@@ -185,8 +258,7 @@ public class Aggregation {
         // map original to aggregated ones
         originalProfiles.forEach(originalProfile ->
         {
-            int avgSpeed = originalProfile.getAverageDaySpeed();
-            int threshold = MergeStrategy.DEFAULT_THRESHOLD;
+
             Optional<? extends SpeedProfile> mergedWith = Optional.empty();
 //            for (Set<SpeedProfile> profiles : profilesByAvgDaySpeed.subMap(avgSpeed - threshold - 1, avgSpeed + threshold).values())
             for (Set<SpeedProfile> profiles : profilesByAvgDaySpeed.values())
@@ -209,13 +281,16 @@ public class Aggregation {
                 unmergeableProfiles.add(originalProfile);
 
             }
-            /*if (profilesByAvgDaySpeed.subMap(avgSpeed - threshold - 1, avgSpeed + threshold).values().stream()
+            /*
+            int avgSpeed = originalProfile.getAverageDaySpeed();
+            int threshold = MergeStrategy.DEFAULT_THRESHOLD;
+            if (profilesByAvgDaySpeed.subMap(avgSpeed - threshold - 1, avgSpeed + threshold).values().stream()
                     .noneMatch(profiles -> isAnyApplicable(profiles, profile).isPresent()))
             {
                 unmergeableProfiles.add(profile);
             }*/
         });
-        LOGGER.warn("Not merged profiles = " + unmergeableProfiles.size());
+        LOGGER.warn(String.format("Not merged profiles = %d, threshold = %d" , unmergeableProfiles.size(), strategy.getThreshold()));
         unmergeableProfiles.forEach(p -> LOGGER.trace(String.format("%s: with avgDaySpeed = %d were not merged with aggregated ones", p, p.getAverageDaySpeed())));
         collectDiffPerNotMergedProfile(unmergeableProfiles, profilesByAvgDaySpeed);
     }
@@ -247,7 +322,7 @@ public class Aggregation {
             }
             else if (!profilesByAvgDaySpeed.containsKey(avgDaySpeed))
             {
-                for (int i = 1; i < 5; i++)
+                for (int i = 1; i < strategy.getThreshold(); i++)
                 {
                     int negDeltaCandidates = profilesByAvgDaySpeed.getOrDefault(avgDaySpeed - i, Collections.emptySet()).size();
                     int posDeltaCandidates = profilesByAvgDaySpeed.getOrDefault(avgDaySpeed + i, Collections.emptySet()).size();
@@ -277,31 +352,55 @@ public class Aggregation {
         String market = "eu";
         Map<Integer, List<SpeedProfile>> speedProfilesPerSamplingId = DataProvider.extractSpeedProfiles(market);
         Map<Integer, Map<Integer, Integer>> speedProfilesUsagePerSampleId = DataProvider.getSpeedProfilesUsage(market);
-        speedProfilesPerSamplingId.forEach((samplingId, speedProfiles) ->
-        {
-            LOGGER.info(String.format("########################### SAMPLING_ID = %d ###########################", samplingId));
-            Map<Integer, Integer> speedProfilesUsage = speedProfilesUsagePerSampleId.get(samplingId);
-            MergeStrategy strategy = new HalfAverageMergeStrategy();
-//        MergeStrategy strategy = new HalfAverageRangeMergeStrategy();
-            Aggregation aggregation = new Aggregation(strategy, INCREMENT_GROUP_COUNT);
-//            Aggregation aggregation = new Aggregation(strategy, CONSTANT_GROUP_COUNT);
-            List<SpeedProfile> profilesToAggregate = speedProfiles.stream()
-                    .filter(profile -> profile.getMinSpeed() != profile.getMaxSpeed())
-                    .map(SpeedProfile::getCalibratedProfile)
-                    .peek(p -> p.addUsages(speedProfilesUsage.getOrDefault(p.getPatternId(), 0)))
-                    .sorted(SPEED_PROFILE_COMPARATOR)
-                    .collect(Collectors.toList());
-            List<? extends SpeedProfile> aggregatedSpeedProfiles = aggregation.aggregateProfiles(profilesToAggregate, 0);
-//             aggregatedSpeedProfiles = aggregation.getTopUsedSpeedProfiles(aggregatedSpeedProfiles, speedProfilesUsage);
-            aggregatedSpeedProfiles = aggregation.getTopUsedSpeedProfiles(aggregatedSpeedProfiles);
-//            LOGGER.info(aggregatedSpeedProfiles.stream().map(SpeedProfile::getPatternId).collect(Collectors.toList()).toString());
-//            aggregation.exportAggregatedSpeedProfiles(market, aggregatedSpeedProfiles, samplingId, "NTP_SPEED_PROFILES_AGGREGATED_s");
-//            aggregation.exportAggregatedSpeedProfiles(market, profilesToAggregate, samplingId, "NTP_SPEED_PROFILES_ORIGINAL_s");
-//            DataProvider.exportSourceDataToCsv(DataProvider.AGGREGATED_PROFILES);
 
-            // verification
-//            aggregation.checkAggregation(aggregatedSpeedProfiles, profilesToAggregate);
-//            aggregation.checkUsages(aggregatedSpeedProfiles, speedProfilesUsage);
-        });
+        for (int i = 1; i <=5; i++)
+        {
+            int threshold = MergeStrategy.DEFAULT_THRESHOLD * i;
+            speedProfilesPerSamplingId.forEach((samplingId, speedProfiles) ->
+            {
+//                MergeStrategy strategy = new HalfAverageMergeStrategy();
+                MergeStrategy strategy = new HalfAverageRangeMergeStrategy();
+                strategy.setThreshold(threshold);
+                LOGGER.info(String.format("########################### SAMPLING_ID = %d, THRESHOLD = %d, Strategy = %s ###########################",
+                        samplingId, threshold, strategy.getClass().getSimpleName()));
+                Map<Integer, Integer> speedProfilesUsage = speedProfilesUsagePerSampleId.get(samplingId);
+                Aggregation aggregation = new Aggregation(strategy, INCREMENT_GROUP_COUNT);
+//              Aggregation aggregation = new Aggregation(strategy, CONSTANT_GROUP_COUNT);
+                List<SpeedProfile> profilesToAggregate = speedProfiles.stream()
+                        .filter(profile -> profile.getMinSpeed() != profile.getMaxSpeed())
+                        .map(SpeedProfile::getCalibratedProfile)
+                        .peek(p -> p.addUsages(speedProfilesUsage.getOrDefault(p.getPatternId(), 0)))
+                        .sorted(SPEED_PROFILE_COMPARATOR)
+                        .collect(Collectors.toList());
+                List<? extends SpeedProfile> aggregatedSpeedProfiles = aggregation.aggregateProfiles(profilesToAggregate, 0);
+                LOGGER.info(String.format("profilesToAggregate size = %d, aggregatedSpeedProfiles size = %d",
+                        profilesToAggregate.size(), aggregatedSpeedProfiles.size()));
+                // verification - all
+                aggregation.checkAggregation(aggregatedSpeedProfiles, profilesToAggregate);
+                strategy.setThreshold((int)Math.round(threshold * 1.5));
+                aggregation.checkAggregation(aggregatedSpeedProfiles, profilesToAggregate);
+                strategy.setThreshold(threshold * 2);
+                aggregation.checkAggregation(aggregatedSpeedProfiles, profilesToAggregate);
+                aggregation.checkUsages(aggregatedSpeedProfiles, speedProfilesUsage);
+                // verification - top 200
+                if (aggregatedSpeedProfiles.size() > 200)
+                {
+                    aggregatedSpeedProfiles = aggregation.getTopUsedSpeedProfiles(aggregatedSpeedProfiles);
+                    strategy.setThreshold(threshold);
+                    aggregation.checkAggregation(aggregatedSpeedProfiles, profilesToAggregate);
+                    strategy.setThreshold((int)Math.round(threshold * 1.5));
+                    aggregation.checkAggregation(aggregatedSpeedProfiles, profilesToAggregate);
+                    strategy.setThreshold(threshold * 2);
+                    aggregation.checkAggregation(aggregatedSpeedProfiles, profilesToAggregate);
+                    aggregation.checkUsages(aggregatedSpeedProfiles, speedProfilesUsage);
+                }
+                // export
+                aggregation.exportAggregatedSpeedProfiles(market, aggregatedSpeedProfiles, samplingId, "NTP_SPEED_PROFILES_AGGREGATED_s");
+                aggregation.exportAggregatedSpeedProfiles(market, profilesToAggregate, samplingId, "NTP_SPEED_PROFILES_ORIGINAL_s");
+//            DataProvider.exportSourceDataToCsv(DataProvider.AGGREGATED_PROFILES);
+                // summary
+                aggregation.printSummary(market, samplingId, profilesToAggregate.get(0));
+            });
+        }
     }
 }

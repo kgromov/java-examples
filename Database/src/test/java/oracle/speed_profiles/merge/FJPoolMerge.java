@@ -15,4 +15,14 @@ public class FJPoolMerge extends RecursiveTask<SpeedProfile> implements MergeStr
     public Optional<? extends SpeedProfile> getAggregatedProfile(SpeedProfile profile1, SpeedProfile profile2) {
         return Optional.empty();
     }
+
+    @Override
+    public void setThreshold(int value) {
+
+    }
+
+    @Override
+    public int getThreshold() {
+        return DEFAULT_THRESHOLD;
+    }
 }

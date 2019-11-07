@@ -48,7 +48,7 @@ public class AggregatedSpeedProfileAppender implements Appender<SpeedProfile> {
                 statement.setInt(++columnIndex, profile.getPatternId());
                 statement.setString(++columnIndex, profile.getAggregatedPatternIDs().toString());
                 statement.setInt(++columnIndex, profile.getAggregatedPatternIDs().size());
-                statement.setInt(++columnIndex, profile.getPatternId());
+                statement.setInt(++columnIndex, profile.getUsages());
                 statement.addBatch();
             }
             statement.executeBatch();

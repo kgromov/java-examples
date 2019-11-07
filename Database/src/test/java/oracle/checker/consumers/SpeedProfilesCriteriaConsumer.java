@@ -13,7 +13,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,7 +29,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 public class SpeedProfilesCriteriaConsumer implements ICriteriaConsumer {
-    public static final String DB_URI_PREFIX = "jdbc:sqlite:file:";
     public static final String TABLE_NAME = "NTTP_SPEED_PATTERN";
 
     private static final String TEXT_TYPE = "TEXT";
@@ -201,7 +199,7 @@ public class SpeedProfilesCriteriaConsumer implements ICriteriaConsumer {
                     "(SAMPLING_ID INTEGER NOT NULL, PATTERN_ID INTEGER NOT NULL, USAGES_COUNT INTEGER NOT NULL)";
             String insertQuery = "INSERT INTO PROFILES_USAGE_BY_LINKS (SAMPLING_ID, PATTERN_ID, USAGES_COUNT) " +
                     "VALUES (?, ?, ?)";
-            try (Connection connection = DriverManager.getConnection(DB_URI_PREFIX + outputFile.toString());
+            try (Connection connection = DataProvider.getConnection(outputFile);
                  Statement createStatement = connection.createStatement())
             {
                 createStatement.execute(createQuery);
