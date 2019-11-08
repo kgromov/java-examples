@@ -110,7 +110,7 @@ public class JenkinsClientTest {
         new BuildsDiffer().appendToTrend(jobInfo);
     }
 
-    @Test(enabled = true)
+    @Test(enabled = false)
     public void checkBuild_task() {
 //        JenkinsUtils.authenticate("http://akela-dev.nds.ext.here.com:8080/", "kgromov", "Here1501!");
         JenkinsUtils.authenticate(settings.getJenkinsURL(), settings.getLogin(), settings.getPassword());

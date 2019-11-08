@@ -12,6 +12,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
@@ -54,13 +55,14 @@ public class JobInfoNew extends BuildInfo {
                 String consoleOutput = info.getConsoleLog();
                 BigDecimal decimal = BigDecimal.valueOf(consoleOutput.getBytes().length);
                 this.logSize = decimal.divide(BigDecimal.valueOf(1024), 2, RoundingMode.HALF_UP).floatValue();
-                this.downstreamBuilds = new ArrayList<>();
+//                this.downstreamBuilds = new ArrayList<>();
+                this.downstreamBuilds = Collections.synchronizedList(new ArrayList<>());
                 // parse db credentials
                 if (isCredentialsApplicable()) {
                     this.dbCredentials = JenkinsUtils.getCredentials(consoleOutput);
                 }
                 // parse consoleOutput
-                parseConsoleLog(consoleOutput).stream()
+                parseConsoleLog(consoleOutput).parallelStream()
                         .map(job -> new JobInfoNew(job.getKey(), job.getValue()))
                         .peek(job -> job.setClient(client))
                         .peek(job -> downstreamBuilds.add(job))

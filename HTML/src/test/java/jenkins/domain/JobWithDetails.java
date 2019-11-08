@@ -1,6 +1,5 @@
 package jenkins.domain;
 
-import com.google.common.collect.ImmutableMap;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.apache.commons.lang3.Range;
@@ -68,10 +67,15 @@ public class JobWithDetails extends Job {
 
     // FIXME
     public List<Build> getAllBuilds() {
-        List<Build> builds = client.get(url,
+     /*   List<Build> builds = client.get(url,
                 MediaType.APPLICATION_JSON_TYPE,
                 ImmutableMap.of("tree", "allBuilds[number[*],url[*],queueId[*]]"),
-                Builds.class).getBuilds();
+                Builds.class).getBuilds();*/
+        List<Build> builds = client.getDirectly(url +
+            "/api/json?tree=allBuilds[number[*],url[*],queueId[*]]",
+                MediaType.APPLICATION_JSON_TYPE,
+                AllBuilds.class).getAllBuilds();
+
         setBuilds(builds);
         return builds;
     }
