@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import oracle.checker.consumers.SpeedProfilesCriteriaConsumer;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -21,6 +22,11 @@ import java.util.stream.IntStream;
 public class SpeedProfile {
     private static final int MINUTE_IN_DAY = 24 * 60;
     private static final Map<Integer, Integer> SAMPLE_IDS_TO_PERIODS = ImmutableMap.of(1, 15, 2, 60, 4, 120);
+    private static final Map<Pair<Integer, Integer>, Integer> DEPTH_TO_CALIBRATED_SAMPLE_ID = ImmutableMap.of(
+            Pair.of(1 ,4), 2,
+            Pair.of(1, 8), 4,
+            Pair.of(2, 2), 4
+    );
 
     private int patternId;
     private final int samplingId;
@@ -152,12 +158,12 @@ public class SpeedProfile {
     public int getEndDayIndex()
     {
         int periods = getPeriods();
-        return (int) Math.round(periods / 24.0 * 21);
+        return (int) (periods / 24.0 * 21);
     }
 
-    public boolean isNightTime(int timeIndex)
+    public boolean isDayTime(int timeIndex)
     {
-        return timeIndex < getStartDayIndex() || timeIndex > getEndDayIndex();
+        return timeIndex >= getStartDayIndex() && timeIndex <= getEndDayIndex();
     }
 
     public boolean isMergeable(SpeedProfile otherProfile, int threshold) {
@@ -187,7 +193,8 @@ public class SpeedProfile {
             speeds.add(resSpeed);
         }
 //        return new SpeedProfile(patternId, samplingId * depth, speeds);
-        return new SpeedProfile(patternId, 2 * samplingId, speeds);
+//        return new SpeedProfile(patternId, 2 * samplingId, speeds);
+        return new SpeedProfile(patternId, DEPTH_TO_CALIBRATED_SAMPLE_ID.get(Pair.of(samplingId, depth)), speeds);
     }
 
 

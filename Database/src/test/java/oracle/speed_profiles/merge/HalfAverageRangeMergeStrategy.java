@@ -32,7 +32,7 @@ public class HalfAverageRangeMergeStrategy implements MergeStrategy {
             int max1 = profile1.getMinAggregatedSpeedAt(i);
             int max2 = profile1.getMinAggregatedSpeedAt(i);
 
-            if (!profile1.isNightTime(i) &&
+            if (profile1.isDayTime(i) &&
                     (Math.abs(speed1 - speed2) > threshold
                             || Math.abs(min1 - min2) > rangeThreshold
                             || Math.abs(max1 - max2) > rangeThreshold

@@ -25,8 +25,8 @@ public class HalfAverageMergeStrategy implements MergeStrategy {
         {
             int speed1 = speedPerTime1.get(i);
             int speed2 = speedPerTime2.get(i);
-//            int threshold = profile1.isNightTime(i) ? DEFAULT_THRESHOLD * 2 : DEFAULT_THRESHOLD;
-            if (!profile1.isNightTime(i) && Math.abs(speed1 - speed2) >  threshold)
+//            int threshold = profile1.isDayTime(i) ? DEFAULT_THRESHOLD : DEFAULT_THRESHOLD * 2;
+            if (profile1.isDayTime(i) && Math.abs(speed1 - speed2) >  threshold)
 //            if ( Math.abs(speed1 - speed2) >  threshold)
             {
                 return Optional.empty();

@@ -1,909 +1,162 @@
-18:47:38.134 [main] INFO oracle.speed_profiles.Aggregation - ########################### SAMPLING_ID = 1, THRESHOLD = 5, Strategy = HalfAverageMergeStrategy ###########################
-18:47:38.319 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 1, groupCount = 2, source speedProfiles size = 12493, target speedProfiles size = 12299
-18:47:38.339 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 2, groupCount = 4, source speedProfiles size = 12299, target speedProfiles size = 12010
-18:47:38.393 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 3, groupCount = 6, source speedProfiles size = 12010, target speedProfiles size = 11768
-18:47:38.447 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 4, groupCount = 8, source speedProfiles size = 11768, target speedProfiles size = 11589
-18:47:38.478 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 5, groupCount = 10, source speedProfiles size = 11589, target speedProfiles size = 11451
-18:47:38.526 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 6, groupCount = 12, source speedProfiles size = 11451, target speedProfiles size = 11344
-18:47:38.598 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 7, groupCount = 14, source speedProfiles size = 11344, target speedProfiles size = 11233
-18:47:38.670 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 8, groupCount = 16, source speedProfiles size = 11233, target speedProfiles size = 11149
-18:47:38.727 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 9, groupCount = 18, source speedProfiles size = 11149, target speedProfiles size = 11072
-18:47:38.790 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 10, groupCount = 20, source speedProfiles size = 11072, target speedProfiles size = 10992
-18:47:38.847 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 11, groupCount = 22, source speedProfiles size = 10992, target speedProfiles size = 10931
-18:47:38.905 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 12, groupCount = 24, source speedProfiles size = 10931, target speedProfiles size = 10880
-18:47:38.951 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 13, groupCount = 26, source speedProfiles size = 10880, target speedProfiles size = 10826
-18:47:39.001 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 14, groupCount = 28, source speedProfiles size = 10826, target speedProfiles size = 10781
-18:47:39.084 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 15, groupCount = 30, source speedProfiles size = 10781, target speedProfiles size = 10743
-18:47:39.166 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 16, groupCount = 32, source speedProfiles size = 10743, target speedProfiles size = 10702
-18:47:39.224 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 17, groupCount = 34, source speedProfiles size = 10702, target speedProfiles size = 10668
-18:47:39.287 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 18, groupCount = 36, source speedProfiles size = 10668, target speedProfiles size = 10642
-18:47:39.361 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 19, groupCount = 38, source speedProfiles size = 10642, target speedProfiles size = 10613
-18:47:39.431 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 20, groupCount = 40, source speedProfiles size = 10613, target speedProfiles size = 10579
-18:47:39.502 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 21, groupCount = 42, source speedProfiles size = 10579, target speedProfiles size = 10562
-18:47:39.617 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 22, groupCount = 44, source speedProfiles size = 10562, target speedProfiles size = 10529
-18:47:39.748 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 23, groupCount = 46, source speedProfiles size = 10529, target speedProfiles size = 10502
-18:47:39.849 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 24, groupCount = 48, source speedProfiles size = 10502, target speedProfiles size = 10480
-18:47:39.965 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 25, groupCount = 50, source speedProfiles size = 10480, target speedProfiles size = 10457
-18:47:40.054 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 26, groupCount = 52, source speedProfiles size = 10457, target speedProfiles size = 10432
-18:47:40.148 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 27, groupCount = 54, source speedProfiles size = 10432, target speedProfiles size = 10412
-18:47:40.282 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 28, groupCount = 56, source speedProfiles size = 10412, target speedProfiles size = 10391
-18:47:40.379 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 29, groupCount = 58, source speedProfiles size = 10391, target speedProfiles size = 10366
-18:47:40.477 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 30, groupCount = 60, source speedProfiles size = 10366, target speedProfiles size = 10352
-18:47:40.585 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 31, groupCount = 62, source speedProfiles size = 10352, target speedProfiles size = 10335
-18:47:40.760 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 32, groupCount = 64, source speedProfiles size = 10335, target speedProfiles size = 10318
-18:47:40.951 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 33, groupCount = 66, source speedProfiles size = 10318, target speedProfiles size = 10303
-18:47:41.141 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 34, groupCount = 68, source speedProfiles size = 10303, target speedProfiles size = 10288
-18:47:41.254 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 35, groupCount = 70, source speedProfiles size = 10288, target speedProfiles size = 10271
-18:47:41.369 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 36, groupCount = 72, source speedProfiles size = 10271, target speedProfiles size = 10262
-18:47:41.494 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 37, groupCount = 74, source speedProfiles size = 10262, target speedProfiles size = 10248
-18:47:41.610 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 38, groupCount = 76, source speedProfiles size = 10248, target speedProfiles size = 10234
-18:47:41.737 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 39, groupCount = 78, source speedProfiles size = 10234, target speedProfiles size = 10221
-18:47:41.872 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 40, groupCount = 80, source speedProfiles size = 10221, target speedProfiles size = 10209
-18:47:42.002 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 41, groupCount = 82, source speedProfiles size = 10209, target speedProfiles size = 10196
-18:47:42.136 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 42, groupCount = 84, source speedProfiles size = 10196, target speedProfiles size = 10188
-18:47:42.279 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 43, groupCount = 86, source speedProfiles size = 10188, target speedProfiles size = 10176
-18:47:42.416 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 44, groupCount = 88, source speedProfiles size = 10176, target speedProfiles size = 10164
-18:47:42.601 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 45, groupCount = 90, source speedProfiles size = 10164, target speedProfiles size = 10148
-18:47:42.874 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 46, groupCount = 92, source speedProfiles size = 10148, target speedProfiles size = 10134
-18:47:43.134 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 47, groupCount = 94, source speedProfiles size = 10134, target speedProfiles size = 10123
-18:47:43.325 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 48, groupCount = 96, source speedProfiles size = 10123, target speedProfiles size = 10105
-18:47:43.473 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 49, groupCount = 98, source speedProfiles size = 10105, target speedProfiles size = 10092
-18:47:43.622 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 50, groupCount = 100, source speedProfiles size = 10092, target speedProfiles size = 10078
-18:47:43.783 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 51, groupCount = 102, source speedProfiles size = 10078, target speedProfiles size = 10062
-18:47:43.943 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 52, groupCount = 104, source speedProfiles size = 10062, target speedProfiles size = 10055
-18:47:44.107 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 53, groupCount = 106, source speedProfiles size = 10055, target speedProfiles size = 10047
-18:47:44.269 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 54, groupCount = 108, source speedProfiles size = 10047, target speedProfiles size = 10034
-18:47:44.437 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 55, groupCount = 110, source speedProfiles size = 10034, target speedProfiles size = 10024
-18:47:44.603 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 56, groupCount = 112, source speedProfiles size = 10024, target speedProfiles size = 10015
-18:47:44.778 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 57, groupCount = 114, source speedProfiles size = 10015, target speedProfiles size = 10000
-18:47:44.960 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 58, groupCount = 116, source speedProfiles size = 10000, target speedProfiles size = 9990
-18:47:45.136 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 59, groupCount = 118, source speedProfiles size = 9990, target speedProfiles size = 9984
-18:47:45.319 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 60, groupCount = 120, source speedProfiles size = 9984, target speedProfiles size = 9977
-18:47:45.499 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 61, groupCount = 122, source speedProfiles size = 9977, target speedProfiles size = 9972
-18:47:45.684 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 62, groupCount = 124, source speedProfiles size = 9972, target speedProfiles size = 9959
-18:47:45.871 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 63, groupCount = 126, source speedProfiles size = 9959, target speedProfiles size = 9944
-18:47:46.059 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 64, groupCount = 128, source speedProfiles size = 9944, target speedProfiles size = 9934
-18:47:46.254 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 65, groupCount = 130, source speedProfiles size = 9934, target speedProfiles size = 9924
-18:47:46.446 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 66, groupCount = 132, source speedProfiles size = 9924, target speedProfiles size = 9908
-18:47:46.645 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 67, groupCount = 134, source speedProfiles size = 9908, target speedProfiles size = 9897
-18:47:46.866 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 68, groupCount = 136, source speedProfiles size = 9897, target speedProfiles size = 9887
-18:47:47.073 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 69, groupCount = 138, source speedProfiles size = 9887, target speedProfiles size = 9877
-18:47:47.284 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 70, groupCount = 140, source speedProfiles size = 9877, target speedProfiles size = 9868
-18:47:47.495 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 71, groupCount = 142, source speedProfiles size = 9868, target speedProfiles size = 9850
-18:47:47.704 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 72, groupCount = 144, source speedProfiles size = 9850, target speedProfiles size = 9834
-18:47:47.917 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 73, groupCount = 146, source speedProfiles size = 9834, target speedProfiles size = 9820
-18:47:48.138 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 74, groupCount = 148, source speedProfiles size = 9820, target speedProfiles size = 9809
-18:47:48.359 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 75, groupCount = 150, source speedProfiles size = 9809, target speedProfiles size = 9799
-18:47:48.577 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 76, groupCount = 152, source speedProfiles size = 9799, target speedProfiles size = 9789
-18:47:48.803 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 77, groupCount = 154, source speedProfiles size = 9789, target speedProfiles size = 9784
-18:47:49.029 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 78, groupCount = 156, source speedProfiles size = 9784, target speedProfiles size = 9773
-18:47:49.259 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 79, groupCount = 158, source speedProfiles size = 9773, target speedProfiles size = 9765
-18:47:49.492 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 80, groupCount = 160, source speedProfiles size = 9765, target speedProfiles size = 9754
-18:47:49.725 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 81, groupCount = 162, source speedProfiles size = 9754, target speedProfiles size = 9738
-18:47:49.977 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 82, groupCount = 164, source speedProfiles size = 9738, target speedProfiles size = 9725
-18:47:50.221 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 83, groupCount = 166, source speedProfiles size = 9725, target speedProfiles size = 9712
-18:47:50.466 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 84, groupCount = 168, source speedProfiles size = 9712, target speedProfiles size = 9691
-18:47:50.709 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 85, groupCount = 170, source speedProfiles size = 9691, target speedProfiles size = 9674
-18:47:50.959 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 86, groupCount = 172, source speedProfiles size = 9674, target speedProfiles size = 9651
-18:47:51.207 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 87, groupCount = 174, source speedProfiles size = 9651, target speedProfiles size = 9629
-18:47:51.456 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 88, groupCount = 176, source speedProfiles size = 9629, target speedProfiles size = 9612
-18:47:51.708 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 89, groupCount = 178, source speedProfiles size = 9612, target speedProfiles size = 9593
-18:47:51.969 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 90, groupCount = 180, source speedProfiles size = 9593, target speedProfiles size = 9582
-18:47:52.225 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 91, groupCount = 182, source speedProfiles size = 9582, target speedProfiles size = 9563
-18:47:52.487 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 92, groupCount = 184, source speedProfiles size = 9563, target speedProfiles size = 9550
-18:47:52.746 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 93, groupCount = 186, source speedProfiles size = 9550, target speedProfiles size = 9524
-18:47:53.025 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 94, groupCount = 188, source speedProfiles size = 9524, target speedProfiles size = 9510
-18:47:53.294 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 95, groupCount = 190, source speedProfiles size = 9510, target speedProfiles size = 9492
-18:47:53.566 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 96, groupCount = 192, source speedProfiles size = 9492, target speedProfiles size = 9468
-18:47:53.839 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 97, groupCount = 194, source speedProfiles size = 9468, target speedProfiles size = 9451
-18:47:54.114 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 98, groupCount = 196, source speedProfiles size = 9451, target speedProfiles size = 9433
-18:47:54.389 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 99, groupCount = 198, source speedProfiles size = 9433, target speedProfiles size = 9410
-18:47:54.665 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 100, groupCount = 200, source speedProfiles size = 9410, target speedProfiles size = 9385
-18:47:54.944 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 101, groupCount = 202, source speedProfiles size = 9385, target speedProfiles size = 9369
-18:47:55.230 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 102, groupCount = 204, source speedProfiles size = 9369, target speedProfiles size = 9359
-18:47:55.512 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 103, groupCount = 206, source speedProfiles size = 9359, target speedProfiles size = 9347
-18:47:55.797 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 104, groupCount = 208, source speedProfiles size = 9347, target speedProfiles size = 9331
-18:47:56.093 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 105, groupCount = 210, source speedProfiles size = 9331, target speedProfiles size = 9312
-18:47:56.387 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 106, groupCount = 212, source speedProfiles size = 9312, target speedProfiles size = 9288
-18:47:56.677 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 107, groupCount = 214, source speedProfiles size = 9288, target speedProfiles size = 9266
-18:47:56.969 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 108, groupCount = 216, source speedProfiles size = 9266, target speedProfiles size = 9240
-18:47:57.271 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 109, groupCount = 218, source speedProfiles size = 9240, target speedProfiles size = 9205
-18:47:57.577 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 110, groupCount = 220, source speedProfiles size = 9205, target speedProfiles size = 9180
-18:47:57.894 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 111, groupCount = 222, source speedProfiles size = 9180, target speedProfiles size = 9161
-18:47:58.218 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 112, groupCount = 224, source speedProfiles size = 9161, target speedProfiles size = 9130
-18:47:58.535 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 113, groupCount = 226, source speedProfiles size = 9130, target speedProfiles size = 9102
-18:47:58.869 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 114, groupCount = 228, source speedProfiles size = 9102, target speedProfiles size = 9080
-18:47:59.203 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 115, groupCount = 230, source speedProfiles size = 9080, target speedProfiles size = 9058
-18:47:59.534 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 116, groupCount = 232, source speedProfiles size = 9058, target speedProfiles size = 9032
-18:47:59.864 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 117, groupCount = 234, source speedProfiles size = 9032, target speedProfiles size = 9010
-18:48:00.203 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 118, groupCount = 236, source speedProfiles size = 9010, target speedProfiles size = 8983
-18:48:00.516 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 119, groupCount = 238, source speedProfiles size = 8983, target speedProfiles size = 8963
-18:48:00.833 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 120, groupCount = 240, source speedProfiles size = 8963, target speedProfiles size = 8940
-18:48:01.153 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 121, groupCount = 242, source speedProfiles size = 8940, target speedProfiles size = 8924
-18:48:01.477 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 122, groupCount = 244, source speedProfiles size = 8924, target speedProfiles size = 8905
-18:48:01.797 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 123, groupCount = 246, source speedProfiles size = 8905, target speedProfiles size = 8883
-18:48:02.118 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 124, groupCount = 248, source speedProfiles size = 8883, target speedProfiles size = 8859
-18:48:02.467 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 125, groupCount = 250, source speedProfiles size = 8859, target speedProfiles size = 8846
-18:48:02.829 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 126, groupCount = 252, source speedProfiles size = 8846, target speedProfiles size = 8831
-18:48:03.161 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 127, groupCount = 254, source speedProfiles size = 8831, target speedProfiles size = 8819
-18:48:03.504 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 128, groupCount = 256, source speedProfiles size = 8819, target speedProfiles size = 8810
-18:48:03.846 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 129, groupCount = 258, source speedProfiles size = 8810, target speedProfiles size = 8795
-18:48:04.186 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 130, groupCount = 260, source speedProfiles size = 8795, target speedProfiles size = 8785
-18:48:04.523 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 131, groupCount = 262, source speedProfiles size = 8785, target speedProfiles size = 8777
-18:48:04.863 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 132, groupCount = 264, source speedProfiles size = 8777, target speedProfiles size = 8763
-18:48:05.236 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 133, groupCount = 266, source speedProfiles size = 8763, target speedProfiles size = 8751
-18:48:05.584 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 134, groupCount = 268, source speedProfiles size = 8751, target speedProfiles size = 8741
-18:48:05.964 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 135, groupCount = 270, source speedProfiles size = 8741, target speedProfiles size = 8729
-18:48:06.372 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 136, groupCount = 272, source speedProfiles size = 8729, target speedProfiles size = 8721
-18:48:06.729 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 137, groupCount = 274, source speedProfiles size = 8721, target speedProfiles size = 8716
-18:48:07.084 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 138, groupCount = 276, source speedProfiles size = 8716, target speedProfiles size = 8712
-18:48:07.448 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 139, groupCount = 278, source speedProfiles size = 8712, target speedProfiles size = 8705
-18:48:07.805 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 140, groupCount = 280, source speedProfiles size = 8705, target speedProfiles size = 8701
-18:48:08.167 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 141, groupCount = 282, source speedProfiles size = 8701, target speedProfiles size = 8698
-18:48:08.533 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 142, groupCount = 284, source speedProfiles size = 8698, target speedProfiles size = 8691
-18:48:08.898 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 143, groupCount = 286, source speedProfiles size = 8691, target speedProfiles size = 8688
-18:48:09.270 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 144, groupCount = 288, source speedProfiles size = 8688, target speedProfiles size = 8684
-18:48:09.635 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 145, groupCount = 290, source speedProfiles size = 8684, target speedProfiles size = 8682
-18:48:10.036 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 146, groupCount = 292, source speedProfiles size = 8682, target speedProfiles size = 8679
-18:48:10.413 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 147, groupCount = 294, source speedProfiles size = 8679, target speedProfiles size = 8673
-18:48:10.792 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 148, groupCount = 296, source speedProfiles size = 8673, target speedProfiles size = 8668
-18:48:11.203 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 149, groupCount = 298, source speedProfiles size = 8668, target speedProfiles size = 8664
-18:48:11.604 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 150, groupCount = 300, source speedProfiles size = 8664, target speedProfiles size = 8664
-18:48:11.604 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate size = 12493, aggregatedSpeedProfiles size = 8664
-18:48:16.698 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 316, threshold = 5
-18:48:21.876 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 8
-18:48:27.084 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 10
-18:48:27.099 [main] WARN oracle.speed_profiles.Aggregation - expected = 354671850, actual = 354671860
-18:48:27.470 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 11840, threshold = 5
-18:48:27.991 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 10776, threshold = 8
-18:48:28.492 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 9345, threshold = 10
-18:48:28.554 [main] WARN oracle.speed_profiles.Aggregation - expected = 353181424, actual = 353181434
-18:48:29.217 [main] DEBUG oracle.speed_profiles.Aggregation - dayDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM BETWEEN 3 and 21) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
-18:48:29.217 [main] DEBUG oracle.speed_profiles.Aggregation - nightDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM NOT BETWEEN 3 and 21) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
-18:48:29.267 [main] INFO oracle.speed_profiles.Aggregation - Day: [Min = -4, Max = 4, Avg = 0.264000]
-18:48:29.285 [main] INFO oracle.speed_profiles.Aggregation - Night: [Min = -3, Max = 8, Avg = 0.377500]
-18:48:29.289 [main] INFO oracle.speed_profiles.Aggregation - originalUsages = 113050212, mergedUsages = 353181434
-18:48:29.290 [main] INFO oracle.speed_profiles.Aggregation - ########################### SAMPLING_ID = 2, THRESHOLD = 5, Strategy = HalfAverageMergeStrategy ###########################
-18:48:29.347 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 1, groupCount = 2, source speedProfiles size = 12493, target speedProfiles size = 12304
-18:48:29.368 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 2, groupCount = 4, source speedProfiles size = 12304, target speedProfiles size = 12066
-18:48:29.393 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 3, groupCount = 6, source speedProfiles size = 12066, target speedProfiles size = 11890
-18:48:29.414 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 4, groupCount = 8, source speedProfiles size = 11890, target speedProfiles size = 11746
-18:48:29.441 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 5, groupCount = 10, source speedProfiles size = 11746, target speedProfiles size = 11639
-18:48:29.466 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 6, groupCount = 12, source speedProfiles size = 11639, target speedProfiles size = 11563
-18:48:29.494 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 7, groupCount = 14, source speedProfiles size = 11563, target speedProfiles size = 11486
-18:48:29.525 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 8, groupCount = 16, source speedProfiles size = 11486, target speedProfiles size = 11426
-18:48:29.559 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 9, groupCount = 18, source speedProfiles size = 11426, target speedProfiles size = 11371
-18:48:29.594 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 10, groupCount = 20, source speedProfiles size = 11371, target speedProfiles size = 11320
-18:48:29.636 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 11, groupCount = 22, source speedProfiles size = 11320, target speedProfiles size = 11277
-18:48:29.680 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 12, groupCount = 24, source speedProfiles size = 11277, target speedProfiles size = 11234
-18:48:29.728 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 13, groupCount = 26, source speedProfiles size = 11234, target speedProfiles size = 11202
-18:48:29.775 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 14, groupCount = 28, source speedProfiles size = 11202, target speedProfiles size = 11174
-18:48:29.825 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 15, groupCount = 30, source speedProfiles size = 11174, target speedProfiles size = 11151
-18:48:29.877 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 16, groupCount = 32, source speedProfiles size = 11151, target speedProfiles size = 11127
-18:48:29.942 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 17, groupCount = 34, source speedProfiles size = 11127, target speedProfiles size = 11108
-18:48:30.001 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 18, groupCount = 36, source speedProfiles size = 11108, target speedProfiles size = 11079
-18:48:30.063 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 19, groupCount = 38, source speedProfiles size = 11079, target speedProfiles size = 11051
-18:48:30.128 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 20, groupCount = 40, source speedProfiles size = 11051, target speedProfiles size = 11037
-18:48:30.200 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 21, groupCount = 42, source speedProfiles size = 11037, target speedProfiles size = 11020
-18:48:30.270 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 22, groupCount = 44, source speedProfiles size = 11020, target speedProfiles size = 10997
-18:48:30.344 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 23, groupCount = 46, source speedProfiles size = 10997, target speedProfiles size = 10980
-18:48:30.424 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 24, groupCount = 48, source speedProfiles size = 10980, target speedProfiles size = 10965
-18:48:30.505 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 25, groupCount = 50, source speedProfiles size = 10965, target speedProfiles size = 10949
-18:48:30.587 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 26, groupCount = 52, source speedProfiles size = 10949, target speedProfiles size = 10932
-18:48:30.669 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 27, groupCount = 54, source speedProfiles size = 10932, target speedProfiles size = 10918
-18:48:30.756 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 28, groupCount = 56, source speedProfiles size = 10918, target speedProfiles size = 10905
-18:48:30.845 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 29, groupCount = 58, source speedProfiles size = 10905, target speedProfiles size = 10881
-18:48:30.938 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 30, groupCount = 60, source speedProfiles size = 10881, target speedProfiles size = 10868
-18:48:31.027 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 31, groupCount = 62, source speedProfiles size = 10868, target speedProfiles size = 10852
-18:48:31.126 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 32, groupCount = 64, source speedProfiles size = 10852, target speedProfiles size = 10839
-18:48:31.228 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 33, groupCount = 66, source speedProfiles size = 10839, target speedProfiles size = 10826
-18:48:31.327 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 34, groupCount = 68, source speedProfiles size = 10826, target speedProfiles size = 10804
-18:48:31.431 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 35, groupCount = 70, source speedProfiles size = 10804, target speedProfiles size = 10788
-18:48:31.538 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 36, groupCount = 72, source speedProfiles size = 10788, target speedProfiles size = 10781
-18:48:31.644 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 37, groupCount = 74, source speedProfiles size = 10781, target speedProfiles size = 10772
-18:48:31.757 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 38, groupCount = 76, source speedProfiles size = 10772, target speedProfiles size = 10765
-18:48:31.870 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 39, groupCount = 78, source speedProfiles size = 10765, target speedProfiles size = 10757
-18:48:31.987 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 40, groupCount = 80, source speedProfiles size = 10757, target speedProfiles size = 10749
-18:48:32.105 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 41, groupCount = 82, source speedProfiles size = 10749, target speedProfiles size = 10742
-18:48:32.254 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 42, groupCount = 84, source speedProfiles size = 10742, target speedProfiles size = 10734
-18:48:32.410 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 43, groupCount = 86, source speedProfiles size = 10734, target speedProfiles size = 10724
-18:48:32.567 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 44, groupCount = 88, source speedProfiles size = 10724, target speedProfiles size = 10718
-18:48:32.714 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 45, groupCount = 90, source speedProfiles size = 10718, target speedProfiles size = 10711
-18:48:32.870 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 46, groupCount = 92, source speedProfiles size = 10711, target speedProfiles size = 10699
-18:48:33.034 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 47, groupCount = 94, source speedProfiles size = 10699, target speedProfiles size = 10692
-18:48:33.207 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 48, groupCount = 96, source speedProfiles size = 10692, target speedProfiles size = 10683
-18:48:33.368 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 49, groupCount = 98, source speedProfiles size = 10683, target speedProfiles size = 10678
-18:48:33.539 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 50, groupCount = 100, source speedProfiles size = 10678, target speedProfiles size = 10668
-18:48:33.701 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 51, groupCount = 102, source speedProfiles size = 10668, target speedProfiles size = 10658
-18:48:33.852 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 52, groupCount = 104, source speedProfiles size = 10658, target speedProfiles size = 10647
-18:48:34.003 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 53, groupCount = 106, source speedProfiles size = 10647, target speedProfiles size = 10639
-18:48:34.166 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 54, groupCount = 108, source speedProfiles size = 10639, target speedProfiles size = 10626
-18:48:34.324 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 55, groupCount = 110, source speedProfiles size = 10626, target speedProfiles size = 10616
-18:48:34.479 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 56, groupCount = 112, source speedProfiles size = 10616, target speedProfiles size = 10599
-18:48:34.634 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 57, groupCount = 114, source speedProfiles size = 10599, target speedProfiles size = 10588
-18:48:34.791 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 58, groupCount = 116, source speedProfiles size = 10588, target speedProfiles size = 10581
-18:48:34.954 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 59, groupCount = 118, source speedProfiles size = 10581, target speedProfiles size = 10572
-18:48:35.123 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 60, groupCount = 120, source speedProfiles size = 10572, target speedProfiles size = 10564
-18:48:35.286 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 61, groupCount = 122, source speedProfiles size = 10564, target speedProfiles size = 10553
-18:48:35.455 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 62, groupCount = 124, source speedProfiles size = 10553, target speedProfiles size = 10545
-18:48:35.636 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 63, groupCount = 126, source speedProfiles size = 10545, target speedProfiles size = 10538
-18:48:35.804 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 64, groupCount = 128, source speedProfiles size = 10538, target speedProfiles size = 10529
-18:48:35.978 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 65, groupCount = 130, source speedProfiles size = 10529, target speedProfiles size = 10523
-18:48:36.154 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 66, groupCount = 132, source speedProfiles size = 10523, target speedProfiles size = 10519
-18:48:36.335 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 67, groupCount = 134, source speedProfiles size = 10519, target speedProfiles size = 10514
-18:48:36.515 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 68, groupCount = 136, source speedProfiles size = 10514, target speedProfiles size = 10506
-18:48:36.698 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 69, groupCount = 138, source speedProfiles size = 10506, target speedProfiles size = 10501
-18:48:36.891 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 70, groupCount = 140, source speedProfiles size = 10501, target speedProfiles size = 10496
-18:48:37.107 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 71, groupCount = 142, source speedProfiles size = 10496, target speedProfiles size = 10482
-18:48:37.304 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 72, groupCount = 144, source speedProfiles size = 10482, target speedProfiles size = 10471
-18:48:37.503 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 73, groupCount = 146, source speedProfiles size = 10471, target speedProfiles size = 10456
-18:48:37.699 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 74, groupCount = 148, source speedProfiles size = 10456, target speedProfiles size = 10441
-18:48:37.898 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 75, groupCount = 150, source speedProfiles size = 10441, target speedProfiles size = 10435
-18:48:38.097 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 76, groupCount = 152, source speedProfiles size = 10435, target speedProfiles size = 10422
-18:48:38.300 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 77, groupCount = 154, source speedProfiles size = 10422, target speedProfiles size = 10416
-18:48:38.511 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 78, groupCount = 156, source speedProfiles size = 10416, target speedProfiles size = 10408
-18:48:38.718 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 79, groupCount = 158, source speedProfiles size = 10408, target speedProfiles size = 10404
-18:48:38.939 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 80, groupCount = 160, source speedProfiles size = 10404, target speedProfiles size = 10399
-18:48:39.150 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 81, groupCount = 162, source speedProfiles size = 10399, target speedProfiles size = 10388
-18:48:39.371 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 82, groupCount = 164, source speedProfiles size = 10388, target speedProfiles size = 10380
-18:48:39.593 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 83, groupCount = 166, source speedProfiles size = 10380, target speedProfiles size = 10365
-18:48:39.808 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 84, groupCount = 168, source speedProfiles size = 10365, target speedProfiles size = 10349
-18:48:40.033 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 85, groupCount = 170, source speedProfiles size = 10349, target speedProfiles size = 10336
-18:48:40.259 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 86, groupCount = 172, source speedProfiles size = 10336, target speedProfiles size = 10319
-18:48:40.487 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 87, groupCount = 174, source speedProfiles size = 10319, target speedProfiles size = 10308
-18:48:40.718 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 88, groupCount = 176, source speedProfiles size = 10308, target speedProfiles size = 10298
-18:48:40.969 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 89, groupCount = 178, source speedProfiles size = 10298, target speedProfiles size = 10282
-18:48:41.199 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 90, groupCount = 180, source speedProfiles size = 10282, target speedProfiles size = 10270
-18:48:41.434 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 91, groupCount = 182, source speedProfiles size = 10270, target speedProfiles size = 10254
-18:48:41.669 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 92, groupCount = 184, source speedProfiles size = 10254, target speedProfiles size = 10242
-18:48:41.909 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 93, groupCount = 186, source speedProfiles size = 10242, target speedProfiles size = 10233
-18:48:42.147 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 94, groupCount = 188, source speedProfiles size = 10233, target speedProfiles size = 10210
-18:48:42.390 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 95, groupCount = 190, source speedProfiles size = 10210, target speedProfiles size = 10193
-18:48:42.635 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 96, groupCount = 192, source speedProfiles size = 10193, target speedProfiles size = 10180
-18:48:42.880 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 97, groupCount = 194, source speedProfiles size = 10180, target speedProfiles size = 10167
-18:48:43.126 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 98, groupCount = 196, source speedProfiles size = 10167, target speedProfiles size = 10146
-18:48:43.384 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 99, groupCount = 198, source speedProfiles size = 10146, target speedProfiles size = 10124
-18:48:43.639 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 100, groupCount = 200, source speedProfiles size = 10124, target speedProfiles size = 10108
-18:48:43.888 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 101, groupCount = 202, source speedProfiles size = 10108, target speedProfiles size = 10095
-18:48:44.144 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 102, groupCount = 204, source speedProfiles size = 10095, target speedProfiles size = 10082
-18:48:44.401 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 103, groupCount = 206, source speedProfiles size = 10082, target speedProfiles size = 10067
-18:48:44.660 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 104, groupCount = 208, source speedProfiles size = 10067, target speedProfiles size = 10056
-18:48:44.922 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 105, groupCount = 210, source speedProfiles size = 10056, target speedProfiles size = 10046
-18:48:45.214 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 106, groupCount = 212, source speedProfiles size = 10046, target speedProfiles size = 10031
-18:48:45.477 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 107, groupCount = 214, source speedProfiles size = 10031, target speedProfiles size = 10019
-18:48:45.742 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 108, groupCount = 216, source speedProfiles size = 10019, target speedProfiles size = 10012
-18:48:46.020 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 109, groupCount = 218, source speedProfiles size = 10012, target speedProfiles size = 9996
-18:48:46.291 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 110, groupCount = 220, source speedProfiles size = 9996, target speedProfiles size = 9980
-18:48:46.576 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 111, groupCount = 222, source speedProfiles size = 9980, target speedProfiles size = 9953
-18:48:46.849 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 112, groupCount = 224, source speedProfiles size = 9953, target speedProfiles size = 9933
-18:48:47.125 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 113, groupCount = 226, source speedProfiles size = 9933, target speedProfiles size = 9911
-18:48:47.403 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 114, groupCount = 228, source speedProfiles size = 9911, target speedProfiles size = 9890
-18:48:47.682 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 115, groupCount = 230, source speedProfiles size = 9890, target speedProfiles size = 9869
-18:48:47.966 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 116, groupCount = 232, source speedProfiles size = 9869, target speedProfiles size = 9853
-18:48:48.261 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 117, groupCount = 234, source speedProfiles size = 9853, target speedProfiles size = 9833
-18:48:48.549 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 118, groupCount = 236, source speedProfiles size = 9833, target speedProfiles size = 9816
-18:48:48.836 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 119, groupCount = 238, source speedProfiles size = 9816, target speedProfiles size = 9793
-18:48:49.138 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 120, groupCount = 240, source speedProfiles size = 9793, target speedProfiles size = 9768
-18:48:49.457 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 121, groupCount = 242, source speedProfiles size = 9768, target speedProfiles size = 9743
-18:48:49.768 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 122, groupCount = 244, source speedProfiles size = 9743, target speedProfiles size = 9724
-18:48:50.080 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 123, groupCount = 246, source speedProfiles size = 9724, target speedProfiles size = 9709
-18:48:50.406 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 124, groupCount = 248, source speedProfiles size = 9709, target speedProfiles size = 9688
-18:48:50.711 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 125, groupCount = 250, source speedProfiles size = 9688, target speedProfiles size = 9668
-18:48:51.012 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 126, groupCount = 252, source speedProfiles size = 9668, target speedProfiles size = 9638
-18:48:51.313 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 127, groupCount = 254, source speedProfiles size = 9638, target speedProfiles size = 9614
-18:48:51.613 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 128, groupCount = 256, source speedProfiles size = 9614, target speedProfiles size = 9601
-18:48:51.917 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 129, groupCount = 258, source speedProfiles size = 9601, target speedProfiles size = 9582
-18:48:52.222 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 130, groupCount = 260, source speedProfiles size = 9582, target speedProfiles size = 9570
-18:48:52.529 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 131, groupCount = 262, source speedProfiles size = 9570, target speedProfiles size = 9541
-18:48:52.837 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 132, groupCount = 264, source speedProfiles size = 9541, target speedProfiles size = 9524
-18:48:53.150 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 133, groupCount = 266, source speedProfiles size = 9524, target speedProfiles size = 9510
-18:48:53.472 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 134, groupCount = 268, source speedProfiles size = 9510, target speedProfiles size = 9490
-18:48:53.785 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 135, groupCount = 270, source speedProfiles size = 9490, target speedProfiles size = 9475
-18:48:54.107 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 136, groupCount = 272, source speedProfiles size = 9475, target speedProfiles size = 9459
-18:48:54.426 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 137, groupCount = 274, source speedProfiles size = 9459, target speedProfiles size = 9446
-18:48:54.743 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 138, groupCount = 276, source speedProfiles size = 9446, target speedProfiles size = 9433
-18:48:55.085 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 139, groupCount = 278, source speedProfiles size = 9433, target speedProfiles size = 9427
-18:48:55.420 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 140, groupCount = 280, source speedProfiles size = 9427, target speedProfiles size = 9419
-18:48:55.747 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 141, groupCount = 282, source speedProfiles size = 9419, target speedProfiles size = 9415
-18:48:56.073 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 142, groupCount = 284, source speedProfiles size = 9415, target speedProfiles size = 9408
-18:48:56.405 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 143, groupCount = 286, source speedProfiles size = 9408, target speedProfiles size = 9401
-18:48:56.738 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 144, groupCount = 288, source speedProfiles size = 9401, target speedProfiles size = 9392
-18:48:57.077 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 145, groupCount = 290, source speedProfiles size = 9392, target speedProfiles size = 9383
-18:48:57.411 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 146, groupCount = 292, source speedProfiles size = 9383, target speedProfiles size = 9378
-18:48:57.748 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 147, groupCount = 294, source speedProfiles size = 9378, target speedProfiles size = 9370
-18:48:58.089 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 148, groupCount = 296, source speedProfiles size = 9370, target speedProfiles size = 9364
-18:48:58.435 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 149, groupCount = 298, source speedProfiles size = 9364, target speedProfiles size = 9361
-18:48:58.786 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 150, groupCount = 300, source speedProfiles size = 9361, target speedProfiles size = 9358
-18:48:59.138 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 151, groupCount = 302, source speedProfiles size = 9358, target speedProfiles size = 9353
-18:48:59.490 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 152, groupCount = 304, source speedProfiles size = 9353, target speedProfiles size = 9351
-18:48:59.835 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 153, groupCount = 306, source speedProfiles size = 9351, target speedProfiles size = 9346
-18:49:00.197 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 154, groupCount = 308, source speedProfiles size = 9346, target speedProfiles size = 9343
-18:49:00.552 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 155, groupCount = 310, source speedProfiles size = 9343, target speedProfiles size = 9342
-18:49:00.908 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 156, groupCount = 312, source speedProfiles size = 9342, target speedProfiles size = 9341
-18:49:01.266 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 157, groupCount = 314, source speedProfiles size = 9341, target speedProfiles size = 9340
-18:49:01.624 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 158, groupCount = 316, source speedProfiles size = 9340, target speedProfiles size = 9340
-18:49:01.624 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate size = 12493, aggregatedSpeedProfiles size = 9340
-18:49:06.632 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 262, threshold = 5
-18:49:11.973 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 8
-18:49:17.324 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 10
-18:49:17.327 [main] WARN oracle.speed_profiles.Aggregation - expected = 354671831, actual = 354671915
-18:49:17.662 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 11912, threshold = 5
-18:49:18.118 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 11110, threshold = 8
-18:49:18.603 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 9797, threshold = 10
-18:49:18.684 [main] WARN oracle.speed_profiles.Aggregation - expected = 353085329, actual = 353085376
-18:49:19.231 [main] DEBUG oracle.speed_profiles.Aggregation - dayDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM BETWEEN 2 and 11) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
-18:49:19.231 [main] DEBUG oracle.speed_profiles.Aggregation - nightDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM NOT BETWEEN 2 and 11) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
-18:49:19.280 [main] INFO oracle.speed_profiles.Aggregation - Day: [Min = -7, Max = 4, Avg = 0.257000]
-18:49:19.299 [main] INFO oracle.speed_profiles.Aggregation - Night: [Min = -6, Max = 2, Avg = 0.317500]
-18:49:19.303 [main] INFO oracle.speed_profiles.Aggregation - originalUsages = 118873554, mergedUsages = 353085376
-18:49:19.304 [main] INFO oracle.speed_profiles.Aggregation - ########################### SAMPLING_ID = 1, THRESHOLD = 10, Strategy = HalfAverageMergeStrategy ###########################
-18:49:19.358 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 1, groupCount = 2, source speedProfiles size = 12493, target speedProfiles size = 11834
-18:49:19.372 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 2, groupCount = 4, source speedProfiles size = 11834, target speedProfiles size = 10918
-18:49:19.387 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 3, groupCount = 6, source speedProfiles size = 10918, target speedProfiles size = 10161
-18:49:19.405 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 4, groupCount = 8, source speedProfiles size = 10161, target speedProfiles size = 9530
-18:49:19.440 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 5, groupCount = 10, source speedProfiles size = 9530, target speedProfiles size = 8970
-18:49:19.476 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 6, groupCount = 12, source speedProfiles size = 8970, target speedProfiles size = 8506
-18:49:19.501 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 7, groupCount = 14, source speedProfiles size = 8506, target speedProfiles size = 8101
-18:49:19.529 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 8, groupCount = 16, source speedProfiles size = 8101, target speedProfiles size = 7738
-18:49:19.558 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 9, groupCount = 18, source speedProfiles size = 7738, target speedProfiles size = 7424
-18:49:19.586 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 10, groupCount = 20, source speedProfiles size = 7424, target speedProfiles size = 7157
-18:49:19.616 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 11, groupCount = 22, source speedProfiles size = 7157, target speedProfiles size = 6902
-18:49:19.646 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 12, groupCount = 24, source speedProfiles size = 6902, target speedProfiles size = 6684
-18:49:19.682 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 13, groupCount = 26, source speedProfiles size = 6684, target speedProfiles size = 6475
-18:49:19.717 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 14, groupCount = 28, source speedProfiles size = 6475, target speedProfiles size = 6288
-18:49:19.753 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 15, groupCount = 30, source speedProfiles size = 6288, target speedProfiles size = 6113
-18:49:19.787 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 16, groupCount = 32, source speedProfiles size = 6113, target speedProfiles size = 5958
-18:49:19.821 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 17, groupCount = 34, source speedProfiles size = 5958, target speedProfiles size = 5810
-18:49:19.856 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 18, groupCount = 36, source speedProfiles size = 5810, target speedProfiles size = 5676
-18:49:19.895 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 19, groupCount = 38, source speedProfiles size = 5676, target speedProfiles size = 5568
-18:49:19.937 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 20, groupCount = 40, source speedProfiles size = 5568, target speedProfiles size = 5471
-18:49:19.976 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 21, groupCount = 42, source speedProfiles size = 5471, target speedProfiles size = 5361
-18:49:20.016 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 22, groupCount = 44, source speedProfiles size = 5361, target speedProfiles size = 5258
-18:49:20.058 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 23, groupCount = 46, source speedProfiles size = 5258, target speedProfiles size = 5175
-18:49:20.102 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 24, groupCount = 48, source speedProfiles size = 5175, target speedProfiles size = 5082
-18:49:20.146 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 25, groupCount = 50, source speedProfiles size = 5082, target speedProfiles size = 5023
-18:49:20.190 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 26, groupCount = 52, source speedProfiles size = 5023, target speedProfiles size = 4970
-18:49:20.236 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 27, groupCount = 54, source speedProfiles size = 4970, target speedProfiles size = 4920
-18:49:20.285 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 28, groupCount = 56, source speedProfiles size = 4920, target speedProfiles size = 4867
-18:49:20.333 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 29, groupCount = 58, source speedProfiles size = 4867, target speedProfiles size = 4822
-18:49:20.382 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 30, groupCount = 60, source speedProfiles size = 4822, target speedProfiles size = 4770
-18:49:20.432 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 31, groupCount = 62, source speedProfiles size = 4770, target speedProfiles size = 4724
-18:49:20.484 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 32, groupCount = 64, source speedProfiles size = 4724, target speedProfiles size = 4678
-18:49:20.536 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 33, groupCount = 66, source speedProfiles size = 4678, target speedProfiles size = 4626
-18:49:20.590 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 34, groupCount = 68, source speedProfiles size = 4626, target speedProfiles size = 4585
-18:49:20.643 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 35, groupCount = 70, source speedProfiles size = 4585, target speedProfiles size = 4553
-18:49:20.698 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 36, groupCount = 72, source speedProfiles size = 4553, target speedProfiles size = 4503
-18:49:20.758 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 37, groupCount = 74, source speedProfiles size = 4503, target speedProfiles size = 4456
-18:49:20.816 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 38, groupCount = 76, source speedProfiles size = 4456, target speedProfiles size = 4412
-18:49:20.870 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 39, groupCount = 78, source speedProfiles size = 4412, target speedProfiles size = 4359
-18:49:20.930 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 40, groupCount = 80, source speedProfiles size = 4359, target speedProfiles size = 4300
-18:49:20.987 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 41, groupCount = 82, source speedProfiles size = 4300, target speedProfiles size = 4243
-18:49:21.048 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 42, groupCount = 84, source speedProfiles size = 4243, target speedProfiles size = 4186
-18:49:21.109 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 43, groupCount = 86, source speedProfiles size = 4186, target speedProfiles size = 4112
-18:49:21.166 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 44, groupCount = 88, source speedProfiles size = 4112, target speedProfiles size = 4036
-18:49:21.225 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 45, groupCount = 90, source speedProfiles size = 4036, target speedProfiles size = 3947
-18:49:21.288 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 46, groupCount = 92, source speedProfiles size = 3947, target speedProfiles size = 3876
-18:49:21.345 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 47, groupCount = 94, source speedProfiles size = 3876, target speedProfiles size = 3794
-18:49:21.404 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 48, groupCount = 96, source speedProfiles size = 3794, target speedProfiles size = 3702
-18:49:21.465 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 49, groupCount = 98, source speedProfiles size = 3702, target speedProfiles size = 3615
-18:49:21.523 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 50, groupCount = 100, source speedProfiles size = 3615, target speedProfiles size = 3538
-18:49:21.581 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 51, groupCount = 102, source speedProfiles size = 3538, target speedProfiles size = 3453
-18:49:21.639 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 52, groupCount = 104, source speedProfiles size = 3453, target speedProfiles size = 3374
-18:49:21.699 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 53, groupCount = 106, source speedProfiles size = 3374, target speedProfiles size = 3293
-18:49:21.757 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 54, groupCount = 108, source speedProfiles size = 3293, target speedProfiles size = 3224
-18:49:21.812 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 55, groupCount = 110, source speedProfiles size = 3224, target speedProfiles size = 3165
-18:49:21.869 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 56, groupCount = 112, source speedProfiles size = 3165, target speedProfiles size = 3107
-18:49:21.928 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 57, groupCount = 114, source speedProfiles size = 3107, target speedProfiles size = 3057
-18:49:21.987 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 58, groupCount = 116, source speedProfiles size = 3057, target speedProfiles size = 3022
-18:49:22.045 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 59, groupCount = 118, source speedProfiles size = 3022, target speedProfiles size = 2984
-18:49:22.101 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 60, groupCount = 120, source speedProfiles size = 2984, target speedProfiles size = 2941
-18:49:22.163 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 61, groupCount = 122, source speedProfiles size = 2941, target speedProfiles size = 2909
-18:49:22.223 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 62, groupCount = 124, source speedProfiles size = 2909, target speedProfiles size = 2881
-18:49:22.282 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 63, groupCount = 126, source speedProfiles size = 2881, target speedProfiles size = 2862
-18:49:22.345 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 64, groupCount = 128, source speedProfiles size = 2862, target speedProfiles size = 2824
-18:49:22.407 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 65, groupCount = 130, source speedProfiles size = 2824, target speedProfiles size = 2794
-18:49:22.471 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 66, groupCount = 132, source speedProfiles size = 2794, target speedProfiles size = 2771
-18:49:22.531 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 67, groupCount = 134, source speedProfiles size = 2771, target speedProfiles size = 2746
-18:49:22.592 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 68, groupCount = 136, source speedProfiles size = 2746, target speedProfiles size = 2721
-18:49:22.654 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 69, groupCount = 138, source speedProfiles size = 2721, target speedProfiles size = 2694
-18:49:22.716 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 70, groupCount = 140, source speedProfiles size = 2694, target speedProfiles size = 2671
-18:49:22.776 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 71, groupCount = 142, source speedProfiles size = 2671, target speedProfiles size = 2655
-18:49:22.841 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 72, groupCount = 144, source speedProfiles size = 2655, target speedProfiles size = 2646
-18:49:22.908 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 73, groupCount = 146, source speedProfiles size = 2646, target speedProfiles size = 2629
-18:49:22.973 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 74, groupCount = 148, source speedProfiles size = 2629, target speedProfiles size = 2614
-18:49:23.036 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 75, groupCount = 150, source speedProfiles size = 2614, target speedProfiles size = 2601
-18:49:23.103 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 76, groupCount = 152, source speedProfiles size = 2601, target speedProfiles size = 2583
-18:49:23.172 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 77, groupCount = 154, source speedProfiles size = 2583, target speedProfiles size = 2568
-18:49:23.236 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 78, groupCount = 156, source speedProfiles size = 2568, target speedProfiles size = 2554
-18:49:23.303 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 79, groupCount = 158, source speedProfiles size = 2554, target speedProfiles size = 2536
-18:49:23.369 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 80, groupCount = 160, source speedProfiles size = 2536, target speedProfiles size = 2526
-18:49:23.438 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 81, groupCount = 162, source speedProfiles size = 2526, target speedProfiles size = 2518
-18:49:23.502 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 82, groupCount = 164, source speedProfiles size = 2518, target speedProfiles size = 2506
-18:49:23.570 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 83, groupCount = 166, source speedProfiles size = 2506, target speedProfiles size = 2491
-18:49:23.648 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 84, groupCount = 168, source speedProfiles size = 2491, target speedProfiles size = 2473
-18:49:23.722 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 85, groupCount = 170, source speedProfiles size = 2473, target speedProfiles size = 2459
-18:49:23.793 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 86, groupCount = 172, source speedProfiles size = 2459, target speedProfiles size = 2445
-18:49:23.863 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 87, groupCount = 174, source speedProfiles size = 2445, target speedProfiles size = 2437
-18:49:23.935 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 88, groupCount = 176, source speedProfiles size = 2437, target speedProfiles size = 2430
-18:49:24.008 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 89, groupCount = 178, source speedProfiles size = 2430, target speedProfiles size = 2421
-18:49:24.081 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 90, groupCount = 180, source speedProfiles size = 2421, target speedProfiles size = 2413
-18:49:24.151 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 91, groupCount = 182, source speedProfiles size = 2413, target speedProfiles size = 2405
-18:49:24.222 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 92, groupCount = 184, source speedProfiles size = 2405, target speedProfiles size = 2399
-18:49:24.293 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 93, groupCount = 186, source speedProfiles size = 2399, target speedProfiles size = 2391
-18:49:24.367 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 94, groupCount = 188, source speedProfiles size = 2391, target speedProfiles size = 2385
-18:49:24.437 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 95, groupCount = 190, source speedProfiles size = 2385, target speedProfiles size = 2375
-18:49:24.512 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 96, groupCount = 192, source speedProfiles size = 2375, target speedProfiles size = 2367
-18:49:24.587 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 97, groupCount = 194, source speedProfiles size = 2367, target speedProfiles size = 2359
-18:49:24.661 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 98, groupCount = 196, source speedProfiles size = 2359, target speedProfiles size = 2354
-18:49:24.736 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 99, groupCount = 198, source speedProfiles size = 2354, target speedProfiles size = 2350
-18:49:24.813 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 100, groupCount = 200, source speedProfiles size = 2350, target speedProfiles size = 2348
-18:49:24.891 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 101, groupCount = 202, source speedProfiles size = 2348, target speedProfiles size = 2344
-18:49:24.967 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 102, groupCount = 204, source speedProfiles size = 2344, target speedProfiles size = 2340
-18:49:25.045 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 103, groupCount = 206, source speedProfiles size = 2340, target speedProfiles size = 2337
-18:49:25.123 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 104, groupCount = 208, source speedProfiles size = 2337, target speedProfiles size = 2332
-18:49:25.202 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 105, groupCount = 210, source speedProfiles size = 2332, target speedProfiles size = 2329
-18:49:25.280 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 106, groupCount = 212, source speedProfiles size = 2329, target speedProfiles size = 2325
-18:49:25.359 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 107, groupCount = 214, source speedProfiles size = 2325, target speedProfiles size = 2320
-18:49:25.444 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 108, groupCount = 216, source speedProfiles size = 2320, target speedProfiles size = 2317
-18:49:25.522 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 109, groupCount = 218, source speedProfiles size = 2317, target speedProfiles size = 2314
-18:49:25.604 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 110, groupCount = 220, source speedProfiles size = 2314, target speedProfiles size = 2309
-18:49:25.687 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 111, groupCount = 222, source speedProfiles size = 2309, target speedProfiles size = 2305
-18:49:25.765 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 112, groupCount = 224, source speedProfiles size = 2305, target speedProfiles size = 2300
-18:49:25.848 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 113, groupCount = 226, source speedProfiles size = 2300, target speedProfiles size = 2298
-18:49:25.932 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 114, groupCount = 228, source speedProfiles size = 2298, target speedProfiles size = 2296
-18:49:26.016 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 115, groupCount = 230, source speedProfiles size = 2296, target speedProfiles size = 2291
-18:49:26.101 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 116, groupCount = 232, source speedProfiles size = 2291, target speedProfiles size = 2287
-18:49:26.183 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 117, groupCount = 234, source speedProfiles size = 2287, target speedProfiles size = 2282
-18:49:26.268 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 118, groupCount = 236, source speedProfiles size = 2282, target speedProfiles size = 2279
-18:49:26.355 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 119, groupCount = 238, source speedProfiles size = 2279, target speedProfiles size = 2276
-18:49:26.445 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 120, groupCount = 240, source speedProfiles size = 2276, target speedProfiles size = 2274
-18:49:26.529 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 121, groupCount = 242, source speedProfiles size = 2274, target speedProfiles size = 2272
-18:49:26.615 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 122, groupCount = 244, source speedProfiles size = 2272, target speedProfiles size = 2270
-18:49:26.705 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 123, groupCount = 246, source speedProfiles size = 2270, target speedProfiles size = 2268
-18:49:26.794 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 124, groupCount = 248, source speedProfiles size = 2268, target speedProfiles size = 2266
-18:49:26.884 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 125, groupCount = 250, source speedProfiles size = 2266, target speedProfiles size = 2264
-18:49:26.974 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 126, groupCount = 252, source speedProfiles size = 2264, target speedProfiles size = 2262
-18:49:27.063 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 127, groupCount = 254, source speedProfiles size = 2262, target speedProfiles size = 2261
-18:49:27.154 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 128, groupCount = 256, source speedProfiles size = 2261, target speedProfiles size = 2260
-18:49:27.245 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 129, groupCount = 258, source speedProfiles size = 2260, target speedProfiles size = 2258
-18:49:27.336 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 130, groupCount = 260, source speedProfiles size = 2258, target speedProfiles size = 2257
-18:49:27.425 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 131, groupCount = 262, source speedProfiles size = 2257, target speedProfiles size = 2257
-18:49:27.425 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate size = 12493, aggregatedSpeedProfiles size = 2257
-18:49:29.230 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 1944, threshold = 10
-18:49:30.606 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 11, threshold = 15
-18:49:31.828 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 20
-18:49:31.830 [main] WARN oracle.speed_profiles.Aggregation - expected = 354671850, actual = 355359067
-18:49:32.244 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 8076, threshold = 10
-18:49:32.670 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 2770, threshold = 15
-18:49:33.006 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 838, threshold = 20
-18:49:33.012 [main] WARN oracle.speed_profiles.Aggregation - expected = 354561270, actual = 355248458
-18:49:33.452 [main] DEBUG oracle.speed_profiles.Aggregation - dayDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM BETWEEN 3 and 21) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
-18:49:33.452 [main] DEBUG oracle.speed_profiles.Aggregation - nightDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM NOT BETWEEN 3 and 21) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
-18:49:33.501 [main] INFO oracle.speed_profiles.Aggregation - Day: [Min = -10, Max = 11, Avg = 1.729000]
-18:49:33.519 [main] INFO oracle.speed_profiles.Aggregation - Night: [Min = -21, Max = 15, Avg = 2.012500]
-18:49:33.523 [main] INFO oracle.speed_profiles.Aggregation - originalUsages = 35277543, mergedUsages = 355248458
-18:49:33.524 [main] INFO oracle.speed_profiles.Aggregation - ########################### SAMPLING_ID = 2, THRESHOLD = 10, Strategy = HalfAverageMergeStrategy ###########################
-18:49:33.571 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 1, groupCount = 2, source speedProfiles size = 12493, target speedProfiles size = 11940
-18:49:33.585 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 2, groupCount = 4, source speedProfiles size = 11940, target speedProfiles size = 11174
-18:49:33.601 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 3, groupCount = 6, source speedProfiles size = 11174, target speedProfiles size = 10526
-18:49:33.620 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 4, groupCount = 8, source speedProfiles size = 10526, target speedProfiles size = 9940
-18:49:33.641 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 5, groupCount = 10, source speedProfiles size = 9940, target speedProfiles size = 9445
-18:49:33.665 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 6, groupCount = 12, source speedProfiles size = 9445, target speedProfiles size = 9049
-18:49:33.696 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 7, groupCount = 14, source speedProfiles size = 9049, target speedProfiles size = 8687
-18:49:33.725 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 8, groupCount = 16, source speedProfiles size = 8687, target speedProfiles size = 8349
-18:49:33.755 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 9, groupCount = 18, source speedProfiles size = 8349, target speedProfiles size = 8059
-18:49:33.786 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 10, groupCount = 20, source speedProfiles size = 8059, target speedProfiles size = 7810
-18:49:33.815 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 11, groupCount = 22, source speedProfiles size = 7810, target speedProfiles size = 7542
-18:49:33.846 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 12, groupCount = 24, source speedProfiles size = 7542, target speedProfiles size = 7334
-18:49:33.880 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 13, groupCount = 26, source speedProfiles size = 7334, target speedProfiles size = 7140
-18:49:33.916 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 14, groupCount = 28, source speedProfiles size = 7140, target speedProfiles size = 6977
-18:49:33.954 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 15, groupCount = 30, source speedProfiles size = 6977, target speedProfiles size = 6821
-18:49:33.993 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 16, groupCount = 32, source speedProfiles size = 6821, target speedProfiles size = 6653
-18:49:34.036 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 17, groupCount = 34, source speedProfiles size = 6653, target speedProfiles size = 6515
-18:49:34.080 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 18, groupCount = 36, source speedProfiles size = 6515, target speedProfiles size = 6370
-18:49:34.130 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 19, groupCount = 38, source speedProfiles size = 6370, target speedProfiles size = 6251
-18:49:34.172 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 20, groupCount = 40, source speedProfiles size = 6251, target speedProfiles size = 6146
-18:49:34.219 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 21, groupCount = 42, source speedProfiles size = 6146, target speedProfiles size = 6049
-18:49:34.283 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 22, groupCount = 44, source speedProfiles size = 6049, target speedProfiles size = 5951
-18:49:34.330 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 23, groupCount = 46, source speedProfiles size = 5951, target speedProfiles size = 5874
-18:49:34.378 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 24, groupCount = 48, source speedProfiles size = 5874, target speedProfiles size = 5812
-18:49:34.425 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 25, groupCount = 50, source speedProfiles size = 5812, target speedProfiles size = 5755
-18:49:34.475 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 26, groupCount = 52, source speedProfiles size = 5755, target speedProfiles size = 5687
-18:49:34.523 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 27, groupCount = 54, source speedProfiles size = 5687, target speedProfiles size = 5630
-18:49:34.574 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 28, groupCount = 56, source speedProfiles size = 5630, target speedProfiles size = 5587
-18:49:34.624 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 29, groupCount = 58, source speedProfiles size = 5587, target speedProfiles size = 5533
-18:49:34.675 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 30, groupCount = 60, source speedProfiles size = 5533, target speedProfiles size = 5482
-18:49:34.727 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 31, groupCount = 62, source speedProfiles size = 5482, target speedProfiles size = 5435
-18:49:34.782 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 32, groupCount = 64, source speedProfiles size = 5435, target speedProfiles size = 5390
-18:49:34.838 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 33, groupCount = 66, source speedProfiles size = 5390, target speedProfiles size = 5341
-18:49:34.899 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 34, groupCount = 68, source speedProfiles size = 5341, target speedProfiles size = 5281
-18:49:34.956 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 35, groupCount = 70, source speedProfiles size = 5281, target speedProfiles size = 5230
-18:49:35.014 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 36, groupCount = 72, source speedProfiles size = 5230, target speedProfiles size = 5173
-18:49:35.073 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 37, groupCount = 74, source speedProfiles size = 5173, target speedProfiles size = 5131
-18:49:35.134 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 38, groupCount = 76, source speedProfiles size = 5131, target speedProfiles size = 5088
-18:49:35.193 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 39, groupCount = 78, source speedProfiles size = 5088, target speedProfiles size = 5057
-18:49:35.255 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 40, groupCount = 80, source speedProfiles size = 5057, target speedProfiles size = 5011
-18:49:35.320 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 41, groupCount = 82, source speedProfiles size = 5011, target speedProfiles size = 4949
-18:49:35.382 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 42, groupCount = 84, source speedProfiles size = 4949, target speedProfiles size = 4902
-18:49:35.445 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 43, groupCount = 86, source speedProfiles size = 4902, target speedProfiles size = 4844
-18:49:35.510 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 44, groupCount = 88, source speedProfiles size = 4844, target speedProfiles size = 4781
-18:49:35.575 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 45, groupCount = 90, source speedProfiles size = 4781, target speedProfiles size = 4721
-18:49:35.637 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 46, groupCount = 92, source speedProfiles size = 4721, target speedProfiles size = 4657
-18:49:35.701 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 47, groupCount = 94, source speedProfiles size = 4657, target speedProfiles size = 4607
-18:49:35.768 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 48, groupCount = 96, source speedProfiles size = 4607, target speedProfiles size = 4552
-18:49:35.836 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 49, groupCount = 98, source speedProfiles size = 4552, target speedProfiles size = 4477
-18:49:35.907 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 50, groupCount = 100, source speedProfiles size = 4477, target speedProfiles size = 4410
-18:49:35.984 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 51, groupCount = 102, source speedProfiles size = 4410, target speedProfiles size = 4336
-18:49:36.047 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 52, groupCount = 104, source speedProfiles size = 4336, target speedProfiles size = 4247
-18:49:36.117 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 53, groupCount = 106, source speedProfiles size = 4247, target speedProfiles size = 4171
-18:49:36.184 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 54, groupCount = 108, source speedProfiles size = 4171, target speedProfiles size = 4090
-18:49:36.249 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 55, groupCount = 110, source speedProfiles size = 4090, target speedProfiles size = 4020
-18:49:36.319 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 56, groupCount = 112, source speedProfiles size = 4020, target speedProfiles size = 3935
-18:49:36.383 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 57, groupCount = 114, source speedProfiles size = 3935, target speedProfiles size = 3854
-18:49:36.451 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 58, groupCount = 116, source speedProfiles size = 3854, target speedProfiles size = 3774
-18:49:36.518 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 59, groupCount = 118, source speedProfiles size = 3774, target speedProfiles size = 3692
-18:49:36.581 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 60, groupCount = 120, source speedProfiles size = 3692, target speedProfiles size = 3625
-18:49:36.643 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 61, groupCount = 122, source speedProfiles size = 3625, target speedProfiles size = 3543
-18:49:36.707 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 62, groupCount = 124, source speedProfiles size = 3543, target speedProfiles size = 3480
-18:49:36.772 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 63, groupCount = 126, source speedProfiles size = 3480, target speedProfiles size = 3418
-18:49:36.836 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 64, groupCount = 128, source speedProfiles size = 3418, target speedProfiles size = 3367
-18:49:36.900 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 65, groupCount = 130, source speedProfiles size = 3367, target speedProfiles size = 3339
-18:49:36.968 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 66, groupCount = 132, source speedProfiles size = 3339, target speedProfiles size = 3316
-18:49:37.033 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 67, groupCount = 134, source speedProfiles size = 3316, target speedProfiles size = 3290
-18:49:37.117 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 68, groupCount = 136, source speedProfiles size = 3290, target speedProfiles size = 3265
-18:49:37.196 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 69, groupCount = 138, source speedProfiles size = 3265, target speedProfiles size = 3234
-18:49:37.272 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 70, groupCount = 140, source speedProfiles size = 3234, target speedProfiles size = 3204
-18:49:37.343 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 71, groupCount = 142, source speedProfiles size = 3204, target speedProfiles size = 3179
-18:49:37.412 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 72, groupCount = 144, source speedProfiles size = 3179, target speedProfiles size = 3155
-18:49:37.480 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 73, groupCount = 146, source speedProfiles size = 3155, target speedProfiles size = 3119
-18:49:37.547 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 74, groupCount = 148, source speedProfiles size = 3119, target speedProfiles size = 3084
-18:49:37.612 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 75, groupCount = 150, source speedProfiles size = 3084, target speedProfiles size = 3044
-18:49:37.681 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 76, groupCount = 152, source speedProfiles size = 3044, target speedProfiles size = 3011
-18:49:37.747 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 77, groupCount = 154, source speedProfiles size = 3011, target speedProfiles size = 2976
-18:49:37.813 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 78, groupCount = 156, source speedProfiles size = 2976, target speedProfiles size = 2943
-18:49:37.884 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 79, groupCount = 158, source speedProfiles size = 2943, target speedProfiles size = 2915
-18:49:37.954 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 80, groupCount = 160, source speedProfiles size = 2915, target speedProfiles size = 2899
-18:49:38.021 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 81, groupCount = 162, source speedProfiles size = 2899, target speedProfiles size = 2881
-18:49:38.092 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 82, groupCount = 164, source speedProfiles size = 2881, target speedProfiles size = 2867
-18:49:38.164 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 83, groupCount = 166, source speedProfiles size = 2867, target speedProfiles size = 2855
-18:49:38.235 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 84, groupCount = 168, source speedProfiles size = 2855, target speedProfiles size = 2837
-18:49:38.303 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 85, groupCount = 170, source speedProfiles size = 2837, target speedProfiles size = 2818
-18:49:38.377 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 86, groupCount = 172, source speedProfiles size = 2818, target speedProfiles size = 2803
-18:49:38.448 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 87, groupCount = 174, source speedProfiles size = 2803, target speedProfiles size = 2790
-18:49:38.522 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 88, groupCount = 176, source speedProfiles size = 2790, target speedProfiles size = 2779
-18:49:38.597 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 89, groupCount = 178, source speedProfiles size = 2779, target speedProfiles size = 2771
-18:49:38.670 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 90, groupCount = 180, source speedProfiles size = 2771, target speedProfiles size = 2758
-18:49:38.744 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 91, groupCount = 182, source speedProfiles size = 2758, target speedProfiles size = 2748
-18:49:38.818 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 92, groupCount = 184, source speedProfiles size = 2748, target speedProfiles size = 2734
-18:49:38.889 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 93, groupCount = 186, source speedProfiles size = 2734, target speedProfiles size = 2718
-18:49:38.966 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 94, groupCount = 188, source speedProfiles size = 2718, target speedProfiles size = 2702
-18:49:39.038 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 95, groupCount = 190, source speedProfiles size = 2702, target speedProfiles size = 2693
-18:49:39.116 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 96, groupCount = 192, source speedProfiles size = 2693, target speedProfiles size = 2682
-18:49:39.192 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 97, groupCount = 194, source speedProfiles size = 2682, target speedProfiles size = 2675
-18:49:39.269 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 98, groupCount = 196, source speedProfiles size = 2675, target speedProfiles size = 2666
-18:49:39.348 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 99, groupCount = 198, source speedProfiles size = 2666, target speedProfiles size = 2655
-18:49:39.428 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 100, groupCount = 200, source speedProfiles size = 2655, target speedProfiles size = 2651
-18:49:39.508 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 101, groupCount = 202, source speedProfiles size = 2651, target speedProfiles size = 2646
-18:49:39.604 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 102, groupCount = 204, source speedProfiles size = 2646, target speedProfiles size = 2639
-18:49:39.684 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 103, groupCount = 206, source speedProfiles size = 2639, target speedProfiles size = 2633
-18:49:39.761 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 104, groupCount = 208, source speedProfiles size = 2633, target speedProfiles size = 2630
-18:49:39.841 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 105, groupCount = 210, source speedProfiles size = 2630, target speedProfiles size = 2625
-18:49:39.921 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 106, groupCount = 212, source speedProfiles size = 2625, target speedProfiles size = 2617
-18:49:40.004 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 107, groupCount = 214, source speedProfiles size = 2617, target speedProfiles size = 2611
-18:49:40.086 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 108, groupCount = 216, source speedProfiles size = 2611, target speedProfiles size = 2606
-18:49:40.176 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 109, groupCount = 218, source speedProfiles size = 2606, target speedProfiles size = 2601
-18:49:40.260 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 110, groupCount = 220, source speedProfiles size = 2601, target speedProfiles size = 2596
-18:49:40.357 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 111, groupCount = 222, source speedProfiles size = 2596, target speedProfiles size = 2589
-18:49:40.442 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 112, groupCount = 224, source speedProfiles size = 2589, target speedProfiles size = 2586
-18:49:40.525 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 113, groupCount = 226, source speedProfiles size = 2586, target speedProfiles size = 2580
-18:49:40.610 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 114, groupCount = 228, source speedProfiles size = 2580, target speedProfiles size = 2573
-18:49:40.697 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 115, groupCount = 230, source speedProfiles size = 2573, target speedProfiles size = 2571
-18:49:40.783 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 116, groupCount = 232, source speedProfiles size = 2571, target speedProfiles size = 2564
-18:49:40.867 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 117, groupCount = 234, source speedProfiles size = 2564, target speedProfiles size = 2561
-18:49:40.958 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 118, groupCount = 236, source speedProfiles size = 2561, target speedProfiles size = 2559
-18:49:41.046 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 119, groupCount = 238, source speedProfiles size = 2559, target speedProfiles size = 2556
-18:49:41.135 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 120, groupCount = 240, source speedProfiles size = 2556, target speedProfiles size = 2553
-18:49:41.222 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 121, groupCount = 242, source speedProfiles size = 2553, target speedProfiles size = 2551
-18:49:41.312 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 122, groupCount = 244, source speedProfiles size = 2551, target speedProfiles size = 2547
-18:49:41.402 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 123, groupCount = 246, source speedProfiles size = 2547, target speedProfiles size = 2541
-18:49:41.504 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 124, groupCount = 248, source speedProfiles size = 2541, target speedProfiles size = 2537
-18:49:41.594 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 125, groupCount = 250, source speedProfiles size = 2537, target speedProfiles size = 2536
-18:49:41.685 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 126, groupCount = 252, source speedProfiles size = 2536, target speedProfiles size = 2531
-18:49:41.776 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 127, groupCount = 254, source speedProfiles size = 2531, target speedProfiles size = 2527
-18:49:41.869 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 128, groupCount = 256, source speedProfiles size = 2527, target speedProfiles size = 2525
-18:49:41.961 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 129, groupCount = 258, source speedProfiles size = 2525, target speedProfiles size = 2521
-18:49:42.056 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 130, groupCount = 260, source speedProfiles size = 2521, target speedProfiles size = 2518
-18:49:42.147 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 131, groupCount = 262, source speedProfiles size = 2518, target speedProfiles size = 2515
-18:49:42.241 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 132, groupCount = 264, source speedProfiles size = 2515, target speedProfiles size = 2511
-18:49:42.337 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 133, groupCount = 266, source speedProfiles size = 2511, target speedProfiles size = 2506
-18:49:42.437 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 134, groupCount = 268, source speedProfiles size = 2506, target speedProfiles size = 2502
-18:49:42.538 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 135, groupCount = 270, source speedProfiles size = 2502, target speedProfiles size = 2501
-18:49:42.651 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 136, groupCount = 272, source speedProfiles size = 2501, target speedProfiles size = 2499
-18:49:42.751 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 137, groupCount = 274, source speedProfiles size = 2499, target speedProfiles size = 2499
-18:49:42.751 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate size = 12493, aggregatedSpeedProfiles size = 2499
-18:49:44.725 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 1987, threshold = 10
-18:49:46.206 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 7, threshold = 15
-18:49:47.513 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 20
-18:49:47.514 [main] WARN oracle.speed_profiles.Aggregation - expected = 354671850, actual = 355360080
-18:49:47.930 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 8572, threshold = 10
-18:49:48.355 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 3348, threshold = 15
-18:49:48.689 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 1106, threshold = 20
-18:49:48.697 [main] WARN oracle.speed_profiles.Aggregation - expected = 354532149, actual = 355220331
-18:49:49.102 [main] DEBUG oracle.speed_profiles.Aggregation - dayDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM BETWEEN 2 and 11) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
-18:49:49.102 [main] DEBUG oracle.speed_profiles.Aggregation - nightDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM NOT BETWEEN 2 and 11) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
-18:49:49.152 [main] INFO oracle.speed_profiles.Aggregation - Day: [Min = -11, Max = 10, Avg = 1.584000]
-18:49:49.171 [main] INFO oracle.speed_profiles.Aggregation - Night: [Min = -10, Max = 9, Avg = 1.710000]
-18:49:49.175 [main] INFO oracle.speed_profiles.Aggregation - originalUsages = 35792634, mergedUsages = 355220331
-18:49:49.176 [main] INFO oracle.speed_profiles.Aggregation - ########################### SAMPLING_ID = 1, THRESHOLD = 15, Strategy = HalfAverageMergeStrategy ###########################
-18:49:49.233 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 1, groupCount = 2, source speedProfiles size = 12493, target speedProfiles size = 11213
-18:49:49.245 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 2, groupCount = 4, source speedProfiles size = 11213, target speedProfiles size = 9624
-18:49:49.258 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 3, groupCount = 6, source speedProfiles size = 9624, target speedProfiles size = 8211
-18:49:49.273 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 4, groupCount = 8, source speedProfiles size = 8211, target speedProfiles size = 7076
-18:49:49.286 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 5, groupCount = 10, source speedProfiles size = 7076, target speedProfiles size = 6119
-18:49:49.299 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 6, groupCount = 12, source speedProfiles size = 6119, target speedProfiles size = 5328
-18:49:49.315 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 7, groupCount = 14, source speedProfiles size = 5328, target speedProfiles size = 4636
-18:49:49.330 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 8, groupCount = 16, source speedProfiles size = 4636, target speedProfiles size = 4087
-18:49:49.344 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 9, groupCount = 18, source speedProfiles size = 4087, target speedProfiles size = 3632
-18:49:49.358 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 10, groupCount = 20, source speedProfiles size = 3632, target speedProfiles size = 3259
-18:49:49.372 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 11, groupCount = 22, source speedProfiles size = 3259, target speedProfiles size = 2953
-18:49:49.386 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 12, groupCount = 24, source speedProfiles size = 2953, target speedProfiles size = 2696
-18:49:49.399 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 13, groupCount = 26, source speedProfiles size = 2696, target speedProfiles size = 2509
-18:49:49.414 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 14, groupCount = 28, source speedProfiles size = 2509, target speedProfiles size = 2351
-18:49:49.430 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 15, groupCount = 30, source speedProfiles size = 2351, target speedProfiles size = 2229
-18:49:49.442 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 16, groupCount = 32, source speedProfiles size = 2229, target speedProfiles size = 2118
-18:49:49.454 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 17, groupCount = 34, source speedProfiles size = 2118, target speedProfiles size = 2022
-18:49:49.467 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 18, groupCount = 36, source speedProfiles size = 2022, target speedProfiles size = 1925
-18:49:49.479 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 19, groupCount = 38, source speedProfiles size = 1925, target speedProfiles size = 1839
-18:49:49.492 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 20, groupCount = 40, source speedProfiles size = 1839, target speedProfiles size = 1736
-18:49:49.504 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 21, groupCount = 42, source speedProfiles size = 1736, target speedProfiles size = 1638
-18:49:49.516 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 22, groupCount = 44, source speedProfiles size = 1638, target speedProfiles size = 1538
-18:49:49.527 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 23, groupCount = 46, source speedProfiles size = 1538, target speedProfiles size = 1424
-18:49:49.541 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 24, groupCount = 48, source speedProfiles size = 1424, target speedProfiles size = 1327
-18:49:49.553 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 25, groupCount = 50, source speedProfiles size = 1327, target speedProfiles size = 1235
-18:49:49.564 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 26, groupCount = 52, source speedProfiles size = 1235, target speedProfiles size = 1168
-18:49:49.576 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 27, groupCount = 54, source speedProfiles size = 1168, target speedProfiles size = 1097
-18:49:49.587 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 28, groupCount = 56, source speedProfiles size = 1097, target speedProfiles size = 1047
-18:49:49.598 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 29, groupCount = 58, source speedProfiles size = 1047, target speedProfiles size = 995
-18:49:49.609 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 30, groupCount = 60, source speedProfiles size = 995, target speedProfiles size = 955
-18:49:49.620 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 31, groupCount = 62, source speedProfiles size = 955, target speedProfiles size = 920
-18:49:49.630 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 32, groupCount = 64, source speedProfiles size = 920, target speedProfiles size = 880
-18:49:49.639 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 33, groupCount = 66, source speedProfiles size = 880, target speedProfiles size = 848
-18:49:49.649 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 34, groupCount = 68, source speedProfiles size = 848, target speedProfiles size = 806
-18:49:49.658 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 35, groupCount = 70, source speedProfiles size = 806, target speedProfiles size = 778
-18:49:49.668 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 36, groupCount = 72, source speedProfiles size = 778, target speedProfiles size = 756
-18:49:49.677 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 37, groupCount = 74, source speedProfiles size = 756, target speedProfiles size = 733
-18:49:49.686 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 38, groupCount = 76, source speedProfiles size = 733, target speedProfiles size = 710
-18:49:49.695 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 39, groupCount = 78, source speedProfiles size = 710, target speedProfiles size = 692
-18:49:49.704 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 40, groupCount = 80, source speedProfiles size = 692, target speedProfiles size = 668
-18:49:49.716 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 41, groupCount = 82, source speedProfiles size = 668, target speedProfiles size = 652
-18:49:49.725 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 42, groupCount = 84, source speedProfiles size = 652, target speedProfiles size = 643
-18:49:49.736 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 43, groupCount = 86, source speedProfiles size = 643, target speedProfiles size = 636
-18:49:49.749 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 44, groupCount = 88, source speedProfiles size = 636, target speedProfiles size = 631
-18:49:49.760 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 45, groupCount = 90, source speedProfiles size = 631, target speedProfiles size = 623
-18:49:49.772 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 46, groupCount = 92, source speedProfiles size = 623, target speedProfiles size = 615
-18:49:49.787 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 47, groupCount = 94, source speedProfiles size = 615, target speedProfiles size = 608
-18:49:49.797 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 48, groupCount = 96, source speedProfiles size = 608, target speedProfiles size = 604
-18:49:49.808 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 49, groupCount = 98, source speedProfiles size = 604, target speedProfiles size = 598
-18:49:49.818 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 50, groupCount = 100, source speedProfiles size = 598, target speedProfiles size = 597
-18:49:49.828 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 51, groupCount = 102, source speedProfiles size = 597, target speedProfiles size = 595
-18:49:49.841 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 52, groupCount = 104, source speedProfiles size = 595, target speedProfiles size = 592
-18:49:49.852 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 53, groupCount = 106, source speedProfiles size = 592, target speedProfiles size = 588
-18:49:49.867 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 54, groupCount = 108, source speedProfiles size = 588, target speedProfiles size = 586
-18:49:49.879 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 55, groupCount = 110, source speedProfiles size = 586, target speedProfiles size = 584
-18:49:49.889 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 56, groupCount = 112, source speedProfiles size = 584, target speedProfiles size = 584
-18:49:49.889 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate size = 12493, aggregatedSpeedProfiles size = 584
-18:49:50.779 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 2423, threshold = 15
-18:49:51.632 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 3, threshold = 23
-18:49:52.361 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 30
-18:49:52.362 [main] WARN oracle.speed_profiles.Aggregation - expected = 354671850, actual = 355424724
-18:49:52.973 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 4368, threshold = 15
-18:49:53.696 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 154, threshold = 23
-18:49:54.365 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 4, threshold = 30
-18:49:54.365 [main] WARN oracle.speed_profiles.Aggregation - expected = 354670305, actual = 355423179
-18:49:54.775 [main] DEBUG oracle.speed_profiles.Aggregation - dayDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM BETWEEN 3 and 21) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
-18:49:54.775 [main] DEBUG oracle.speed_profiles.Aggregation - nightDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM NOT BETWEEN 3 and 21) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
-18:49:54.827 [main] INFO oracle.speed_profiles.Aggregation - Day: [Min = -12, Max = 18, Avg = 2.002000]
-18:49:54.846 [main] INFO oracle.speed_profiles.Aggregation - Night: [Min = -15, Max = 9, Avg = 2.262500]
-18:49:54.850 [main] INFO oracle.speed_profiles.Aggregation - originalUsages = 24173885, mergedUsages = 355423179
-18:49:54.851 [main] INFO oracle.speed_profiles.Aggregation - ########################### SAMPLING_ID = 2, THRESHOLD = 15, Strategy = HalfAverageMergeStrategy ###########################
-18:49:54.910 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 1, groupCount = 2, source speedProfiles size = 12493, target speedProfiles size = 11336
-18:49:54.924 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 2, groupCount = 4, source speedProfiles size = 11336, target speedProfiles size = 9870
-18:49:54.937 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 3, groupCount = 6, source speedProfiles size = 9870, target speedProfiles size = 8599
-18:49:54.952 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 4, groupCount = 8, source speedProfiles size = 8599, target speedProfiles size = 7470
-18:49:54.967 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 5, groupCount = 10, source speedProfiles size = 7470, target speedProfiles size = 6546
-18:49:54.983 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 6, groupCount = 12, source speedProfiles size = 6546, target speedProfiles size = 5724
-18:49:55.000 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 7, groupCount = 14, source speedProfiles size = 5724, target speedProfiles size = 5050
-18:49:55.015 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 8, groupCount = 16, source speedProfiles size = 5050, target speedProfiles size = 4484
-18:49:55.031 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 9, groupCount = 18, source speedProfiles size = 4484, target speedProfiles size = 4001
-18:49:55.047 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 10, groupCount = 20, source speedProfiles size = 4001, target speedProfiles size = 3622
-18:49:55.061 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 11, groupCount = 22, source speedProfiles size = 3622, target speedProfiles size = 3307
-18:49:55.077 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 12, groupCount = 24, source speedProfiles size = 3307, target speedProfiles size = 3050
-18:49:55.092 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 13, groupCount = 26, source speedProfiles size = 3050, target speedProfiles size = 2815
-18:49:55.110 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 14, groupCount = 28, source speedProfiles size = 2815, target speedProfiles size = 2650
-18:49:55.126 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 15, groupCount = 30, source speedProfiles size = 2650, target speedProfiles size = 2513
-18:49:55.143 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 16, groupCount = 32, source speedProfiles size = 2513, target speedProfiles size = 2387
-18:49:55.156 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 17, groupCount = 34, source speedProfiles size = 2387, target speedProfiles size = 2268
-18:49:55.169 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 18, groupCount = 36, source speedProfiles size = 2268, target speedProfiles size = 2165
-18:49:55.183 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 19, groupCount = 38, source speedProfiles size = 2165, target speedProfiles size = 2074
-18:49:55.199 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 20, groupCount = 40, source speedProfiles size = 2074, target speedProfiles size = 1984
-18:49:55.215 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 21, groupCount = 42, source speedProfiles size = 1984, target speedProfiles size = 1881
-18:49:55.230 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 22, groupCount = 44, source speedProfiles size = 1881, target speedProfiles size = 1789
-18:49:55.244 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 23, groupCount = 46, source speedProfiles size = 1789, target speedProfiles size = 1693
-18:49:55.258 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 24, groupCount = 48, source speedProfiles size = 1693, target speedProfiles size = 1596
-18:49:55.272 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 25, groupCount = 50, source speedProfiles size = 1596, target speedProfiles size = 1505
-18:49:55.286 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 26, groupCount = 52, source speedProfiles size = 1505, target speedProfiles size = 1414
-18:49:55.298 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 27, groupCount = 54, source speedProfiles size = 1414, target speedProfiles size = 1315
-18:49:55.309 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 28, groupCount = 56, source speedProfiles size = 1315, target speedProfiles size = 1240
-18:49:55.321 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 29, groupCount = 58, source speedProfiles size = 1240, target speedProfiles size = 1177
-18:49:55.332 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 30, groupCount = 60, source speedProfiles size = 1177, target speedProfiles size = 1117
-18:49:55.344 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 31, groupCount = 62, source speedProfiles size = 1117, target speedProfiles size = 1062
-18:49:55.354 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 32, groupCount = 64, source speedProfiles size = 1062, target speedProfiles size = 1013
-18:49:55.367 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 33, groupCount = 66, source speedProfiles size = 1013, target speedProfiles size = 971
-18:49:55.378 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 34, groupCount = 68, source speedProfiles size = 971, target speedProfiles size = 921
-18:49:55.389 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 35, groupCount = 70, source speedProfiles size = 921, target speedProfiles size = 883
-18:49:55.400 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 36, groupCount = 72, source speedProfiles size = 883, target speedProfiles size = 847
-18:49:55.414 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 37, groupCount = 74, source speedProfiles size = 847, target speedProfiles size = 818
-18:49:55.425 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 38, groupCount = 76, source speedProfiles size = 818, target speedProfiles size = 789
-18:49:55.436 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 39, groupCount = 78, source speedProfiles size = 789, target speedProfiles size = 765
-18:49:55.448 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 40, groupCount = 80, source speedProfiles size = 765, target speedProfiles size = 747
-18:49:55.458 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 41, groupCount = 82, source speedProfiles size = 747, target speedProfiles size = 729
-18:49:55.470 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 42, groupCount = 84, source speedProfiles size = 729, target speedProfiles size = 715
-18:49:55.480 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 43, groupCount = 86, source speedProfiles size = 715, target speedProfiles size = 710
-18:49:55.492 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 44, groupCount = 88, source speedProfiles size = 710, target speedProfiles size = 700
-18:49:55.502 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 45, groupCount = 90, source speedProfiles size = 700, target speedProfiles size = 689
-18:49:55.513 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 46, groupCount = 92, source speedProfiles size = 689, target speedProfiles size = 680
-18:49:55.524 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 47, groupCount = 94, source speedProfiles size = 680, target speedProfiles size = 673
-18:49:55.535 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 48, groupCount = 96, source speedProfiles size = 673, target speedProfiles size = 669
-18:49:55.545 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 49, groupCount = 98, source speedProfiles size = 669, target speedProfiles size = 664
-18:49:55.557 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 50, groupCount = 100, source speedProfiles size = 664, target speedProfiles size = 660
-18:49:55.568 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 51, groupCount = 102, source speedProfiles size = 660, target speedProfiles size = 658
-18:49:55.578 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 52, groupCount = 104, source speedProfiles size = 658, target speedProfiles size = 657
-18:49:55.589 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 53, groupCount = 106, source speedProfiles size = 657, target speedProfiles size = 656
-18:49:55.600 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 54, groupCount = 108, source speedProfiles size = 656, target speedProfiles size = 651
-18:49:55.611 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 55, groupCount = 110, source speedProfiles size = 651, target speedProfiles size = 647
-18:49:55.624 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 56, groupCount = 112, source speedProfiles size = 647, target speedProfiles size = 646
-18:49:55.638 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 57, groupCount = 114, source speedProfiles size = 646, target speedProfiles size = 645
-18:49:55.649 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 58, groupCount = 116, source speedProfiles size = 645, target speedProfiles size = 644
-18:49:55.661 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 59, groupCount = 118, source speedProfiles size = 644, target speedProfiles size = 643
-18:49:55.673 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 60, groupCount = 120, source speedProfiles size = 643, target speedProfiles size = 643
-18:49:55.673 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate size = 12493, aggregatedSpeedProfiles size = 643
-18:49:56.555 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 2417, threshold = 15
-18:49:57.452 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 6, threshold = 23
-18:49:58.329 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 30
-18:49:58.330 [main] WARN oracle.speed_profiles.Aggregation - expected = 354671847, actual = 355407007
-18:49:58.840 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 4215, threshold = 15
-18:49:59.615 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 194, threshold = 23
-18:50:00.448 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 12, threshold = 30
-18:50:00.449 [main] WARN oracle.speed_profiles.Aggregation - expected = 354669773, actual = 355404933
-18:50:00.851 [main] DEBUG oracle.speed_profiles.Aggregation - dayDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM BETWEEN 2 and 11) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
-18:50:00.851 [main] DEBUG oracle.speed_profiles.Aggregation - nightDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM NOT BETWEEN 2 and 11) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
-18:50:00.898 [main] INFO oracle.speed_profiles.Aggregation - Day: [Min = -17, Max = 18, Avg = 2.272500]
-18:50:00.919 [main] INFO oracle.speed_profiles.Aggregation - Night: [Min = -13, Max = 19, Avg = 2.232500]
-18:50:00.923 [main] INFO oracle.speed_profiles.Aggregation - originalUsages = 26619729, mergedUsages = 355404933
-18:50:00.924 [main] INFO oracle.speed_profiles.Aggregation - ########################### SAMPLING_ID = 1, THRESHOLD = 20, Strategy = HalfAverageMergeStrategy ###########################
-18:50:00.978 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 1, groupCount = 2, source speedProfiles size = 12493, target speedProfiles size = 10414
-18:50:00.990 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 2, groupCount = 4, source speedProfiles size = 10414, target speedProfiles size = 8155
-18:50:01.002 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 3, groupCount = 6, source speedProfiles size = 8155, target speedProfiles size = 6298
-18:50:01.011 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 4, groupCount = 8, source speedProfiles size = 6298, target speedProfiles size = 4864
-18:50:01.021 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 5, groupCount = 10, source speedProfiles size = 4864, target speedProfiles size = 3720
-18:50:01.030 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 6, groupCount = 12, source speedProfiles size = 3720, target speedProfiles size = 2879
-18:50:01.037 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 7, groupCount = 14, source speedProfiles size = 2879, target speedProfiles size = 2262
-18:50:01.043 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 8, groupCount = 16, source speedProfiles size = 2262, target speedProfiles size = 1815
-18:50:01.049 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 9, groupCount = 18, source speedProfiles size = 1815, target speedProfiles size = 1473
-18:50:01.055 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 10, groupCount = 20, source speedProfiles size = 1473, target speedProfiles size = 1205
-18:50:01.060 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 11, groupCount = 22, source speedProfiles size = 1205, target speedProfiles size = 1001
-18:50:01.066 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 12, groupCount = 24, source speedProfiles size = 1001, target speedProfiles size = 842
-18:50:01.070 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 13, groupCount = 26, source speedProfiles size = 842, target speedProfiles size = 699
-18:50:01.073 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 14, groupCount = 28, source speedProfiles size = 699, target speedProfiles size = 590
-18:50:01.077 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 15, groupCount = 30, source speedProfiles size = 590, target speedProfiles size = 506
-18:50:01.081 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 16, groupCount = 32, source speedProfiles size = 506, target speedProfiles size = 432
-18:50:01.085 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 17, groupCount = 34, source speedProfiles size = 432, target speedProfiles size = 381
-18:50:01.087 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 18, groupCount = 36, source speedProfiles size = 381, target speedProfiles size = 335
-18:50:01.090 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 19, groupCount = 38, source speedProfiles size = 335, target speedProfiles size = 296
-18:50:01.091 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 20, groupCount = 40, source speedProfiles size = 296, target speedProfiles size = 268
-18:50:01.093 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 21, groupCount = 42, source speedProfiles size = 268, target speedProfiles size = 246
-18:50:01.099 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 22, groupCount = 44, source speedProfiles size = 246, target speedProfiles size = 229
-18:50:01.101 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 23, groupCount = 46, source speedProfiles size = 229, target speedProfiles size = 217
-18:50:01.102 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 24, groupCount = 48, source speedProfiles size = 217, target speedProfiles size = 211
-18:50:01.104 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 25, groupCount = 50, source speedProfiles size = 211, target speedProfiles size = 205
-18:50:01.106 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 26, groupCount = 52, source speedProfiles size = 205, target speedProfiles size = 200
-18:50:01.106 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate size = 12493, aggregatedSpeedProfiles size = 200
-18:50:02.354 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 2868, threshold = 20
-18:50:04.233 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 46, threshold = 30
-18:50:07.184 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 40
-18:50:07.184 [main] WARN oracle.speed_profiles.Aggregation - expected = 354672326, actual = 354673170
-18:50:07.614 [main] DEBUG oracle.speed_profiles.Aggregation - dayDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM BETWEEN 3 and 21) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
-18:50:07.615 [main] DEBUG oracle.speed_profiles.Aggregation - nightDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM NOT BETWEEN 3 and 21) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
-18:50:07.661 [main] INFO oracle.speed_profiles.Aggregation - Day: [Min = -15, Max = 19, Avg = 1.451000]
-18:50:07.681 [main] INFO oracle.speed_profiles.Aggregation - Night: [Min = -15, Max = 12, Avg = 1.402500]
-18:50:07.685 [main] INFO oracle.speed_profiles.Aggregation - originalUsages = 22103142, mergedUsages = 354673170
-18:50:07.685 [main] INFO oracle.speed_profiles.Aggregation - ########################### SAMPLING_ID = 2, THRESHOLD = 20, Strategy = HalfAverageMergeStrategy ###########################
-18:50:07.738 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 1, groupCount = 2, source speedProfiles size = 12493, target speedProfiles size = 10568
-18:50:07.754 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 2, groupCount = 4, source speedProfiles size = 10568, target speedProfiles size = 8427
-18:50:07.768 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 3, groupCount = 6, source speedProfiles size = 8427, target speedProfiles size = 6658
-18:50:07.778 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 4, groupCount = 8, source speedProfiles size = 6658, target speedProfiles size = 5185
-18:50:07.788 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 5, groupCount = 10, source speedProfiles size = 5185, target speedProfiles size = 4034
-18:50:07.798 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 6, groupCount = 12, source speedProfiles size = 4034, target speedProfiles size = 3167
-18:50:07.805 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 7, groupCount = 14, source speedProfiles size = 3167, target speedProfiles size = 2504
-18:50:07.811 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 8, groupCount = 16, source speedProfiles size = 2504, target speedProfiles size = 2003
-18:50:07.818 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 9, groupCount = 18, source speedProfiles size = 2003, target speedProfiles size = 1633
-18:50:07.825 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 10, groupCount = 20, source speedProfiles size = 1633, target speedProfiles size = 1360
-18:50:07.831 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 11, groupCount = 22, source speedProfiles size = 1360, target speedProfiles size = 1159
-18:50:07.836 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 12, groupCount = 24, source speedProfiles size = 1159, target speedProfiles size = 984
-18:50:07.840 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 13, groupCount = 26, source speedProfiles size = 984, target speedProfiles size = 851
-18:50:07.845 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 14, groupCount = 28, source speedProfiles size = 851, target speedProfiles size = 735
-18:50:07.849 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 15, groupCount = 30, source speedProfiles size = 735, target speedProfiles size = 643
-18:50:07.853 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 16, groupCount = 32, source speedProfiles size = 643, target speedProfiles size = 563
-18:50:07.857 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 17, groupCount = 34, source speedProfiles size = 563, target speedProfiles size = 493
-18:50:07.860 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 18, groupCount = 36, source speedProfiles size = 493, target speedProfiles size = 434
-18:50:07.863 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 19, groupCount = 38, source speedProfiles size = 434, target speedProfiles size = 387
-18:50:07.866 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 20, groupCount = 40, source speedProfiles size = 387, target speedProfiles size = 349
-18:50:07.872 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 21, groupCount = 42, source speedProfiles size = 349, target speedProfiles size = 318
-18:50:07.875 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 22, groupCount = 44, source speedProfiles size = 318, target speedProfiles size = 294
-18:50:07.877 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 23, groupCount = 46, source speedProfiles size = 294, target speedProfiles size = 272
-18:50:07.879 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 24, groupCount = 48, source speedProfiles size = 272, target speedProfiles size = 248
-18:50:07.881 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 25, groupCount = 50, source speedProfiles size = 248, target speedProfiles size = 237
-18:50:07.883 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 26, groupCount = 52, source speedProfiles size = 237, target speedProfiles size = 227
-18:50:07.885 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 27, groupCount = 54, source speedProfiles size = 227, target speedProfiles size = 218
-18:50:07.887 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 28, groupCount = 56, source speedProfiles size = 218, target speedProfiles size = 211
-18:50:07.889 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 29, groupCount = 58, source speedProfiles size = 211, target speedProfiles size = 204
-18:50:07.891 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 30, groupCount = 60, source speedProfiles size = 204, target speedProfiles size = 201
-18:50:07.893 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 31, groupCount = 62, source speedProfiles size = 201, target speedProfiles size = 200
-18:50:07.893 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate size = 12493, aggregatedSpeedProfiles size = 200
-18:50:09.036 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 2963, threshold = 20
-18:50:10.570 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 82, threshold = 30
-18:50:12.500 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 40
-18:50:12.500 [main] WARN oracle.speed_profiles.Aggregation - expected = 354658842, actual = 354659293
-18:50:12.884 [main] DEBUG oracle.speed_profiles.Aggregation - dayDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM BETWEEN 2 and 11) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
-18:50:12.884 [main] DEBUG oracle.speed_profiles.Aggregation - nightDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM NOT BETWEEN 2 and 11) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
-18:50:12.931 [main] INFO oracle.speed_profiles.Aggregation - Day: [Min = -22, Max = 15, Avg = 1.465000]
-18:50:12.950 [main] INFO oracle.speed_profiles.Aggregation - Night: [Min = -14, Max = 9, Avg = 1.307500]
-18:50:12.954 [main] INFO oracle.speed_profiles.Aggregation - originalUsages = 21355956, mergedUsages = 354659293
-18:50:12.955 [main] INFO oracle.speed_profiles.Aggregation - ########################### SAMPLING_ID = 1, THRESHOLD = 25, Strategy = HalfAverageMergeStrategy ###########################
-18:50:13.010 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 1, groupCount = 2, source speedProfiles size = 12493, target speedProfiles size = 9500
-18:50:13.020 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 2, groupCount = 4, source speedProfiles size = 9500, target speedProfiles size = 6871
-18:50:13.029 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 3, groupCount = 6, source speedProfiles size = 6871, target speedProfiles size = 4843
-18:50:13.036 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 4, groupCount = 8, source speedProfiles size = 4843, target speedProfiles size = 3349
-18:50:13.042 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 5, groupCount = 10, source speedProfiles size = 3349, target speedProfiles size = 2300
-18:50:13.047 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 6, groupCount = 12, source speedProfiles size = 2300, target speedProfiles size = 1577
-18:50:13.050 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 7, groupCount = 14, source speedProfiles size = 1577, target speedProfiles size = 1106
-18:50:13.053 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 8, groupCount = 16, source speedProfiles size = 1106, target speedProfiles size = 770
-18:50:13.057 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 9, groupCount = 18, source speedProfiles size = 770, target speedProfiles size = 534
-18:50:13.059 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 10, groupCount = 20, source speedProfiles size = 534, target speedProfiles size = 379
-18:50:13.061 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 11, groupCount = 22, source speedProfiles size = 379, target speedProfiles size = 276
-18:50:13.063 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 12, groupCount = 24, source speedProfiles size = 276, target speedProfiles size = 209
-18:50:13.065 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 13, groupCount = 26, source speedProfiles size = 209, target speedProfiles size = 156
-18:50:13.065 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate size = 12493, aggregatedSpeedProfiles size = 156
-18:50:14.068 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 408, threshold = 25
-18:50:15.570 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 38
-18:50:17.553 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 50
-18:50:17.553 [main] WARN oracle.speed_profiles.Aggregation - expected = 354671820, actual = 356175026
-18:50:17.947 [main] DEBUG oracle.speed_profiles.Aggregation - dayDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM BETWEEN 3 and 21) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
-18:50:17.947 [main] DEBUG oracle.speed_profiles.Aggregation - nightDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM NOT BETWEEN 3 and 21) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
-18:50:17.992 [main] INFO oracle.speed_profiles.Aggregation - Day: [Min = -17, Max = 17, Avg = 1.910256]
-18:50:18.010 [main] INFO oracle.speed_profiles.Aggregation - Night: [Min = -36, Max = 7, Avg = 1.977564]
-18:50:18.014 [main] INFO oracle.speed_profiles.Aggregation - originalUsages = 64389238, mergedUsages = 356175026
-18:50:18.015 [main] INFO oracle.speed_profiles.Aggregation - ########################### SAMPLING_ID = 2, THRESHOLD = 25, Strategy = HalfAverageMergeStrategy ###########################
-18:50:18.063 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 1, groupCount = 2, source speedProfiles size = 12493, target speedProfiles size = 9696
-18:50:18.074 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 2, groupCount = 4, source speedProfiles size = 9696, target speedProfiles size = 7086
-18:50:18.082 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 3, groupCount = 6, source speedProfiles size = 7086, target speedProfiles size = 5075
-18:50:18.091 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 4, groupCount = 8, source speedProfiles size = 5075, target speedProfiles size = 3586
-18:50:18.097 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 5, groupCount = 10, source speedProfiles size = 3586, target speedProfiles size = 2503
-18:50:18.102 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 6, groupCount = 12, source speedProfiles size = 2503, target speedProfiles size = 1736
-18:50:18.106 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 7, groupCount = 14, source speedProfiles size = 1736, target speedProfiles size = 1212
-18:50:18.110 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 8, groupCount = 16, source speedProfiles size = 1212, target speedProfiles size = 860
-18:50:18.113 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 9, groupCount = 18, source speedProfiles size = 860, target speedProfiles size = 608
-18:50:18.116 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 10, groupCount = 20, source speedProfiles size = 608, target speedProfiles size = 436
-18:50:18.118 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 11, groupCount = 22, source speedProfiles size = 436, target speedProfiles size = 308
-18:50:18.120 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 12, groupCount = 24, source speedProfiles size = 308, target speedProfiles size = 230
-18:50:18.122 [main] DEBUG oracle.speed_profiles.Aggregation - Iteration = 13, groupCount = 26, source speedProfiles size = 230, target speedProfiles size = 177
-18:50:18.122 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate size = 12493, aggregatedSpeedProfiles size = 177
-18:50:18.991 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 457, threshold = 25
-18:50:20.276 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 38
-18:50:22.002 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 50
-18:50:22.002 [main] WARN oracle.speed_profiles.Aggregation - expected = 354690173, actual = 354880164
-18:50:22.404 [main] DEBUG oracle.speed_profiles.Aggregation - dayDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM BETWEEN 2 and 11) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
-18:50:22.404 [main] DEBUG oracle.speed_profiles.Aggregation - nightDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM NOT BETWEEN 2 and 11) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
-18:50:22.455 [main] INFO oracle.speed_profiles.Aggregation - Day: [Min = -17, Max = 20, Avg = 1.598870]
-18:50:22.477 [main] INFO oracle.speed_profiles.Aggregation - Night: [Min = -21, Max = 12, Avg = 1.364407]
-18:50:22.481 [main] INFO oracle.speed_profiles.Aggregation - originalUsages = 69794211, mergedUsages = 354880164
+12:51:04.480 [main] INFO oracle.speed_profiles.Aggregation - ########################### SAMPLING_ID = 1, THRESHOLD = 5, Strategy = HalfAverageMergeStrategy ###########################
+12:51:04.727 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate days range: [(2,21)]
+12:51:57.998 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate size = 12493, aggregatedSpeedProfiles size = 10162
+12:51:58.001 [main] INFO oracle.speed_profiles.Aggregation - aggregatedSpeedProfiles days range: [(2,21)]
+12:52:04.790 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 173, threshold = 5
+12:52:13.420 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 8
+12:52:21.963 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 10
+12:52:21.980 [main] WARN oracle.speed_profiles.Aggregation - expected = 354671850, actual = 354671850
+12:52:22.376 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 11939, threshold = 5
+12:52:22.997 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 11362, threshold = 8
+12:52:23.574 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 10516, threshold = 10
+12:52:23.648 [main] WARN oracle.speed_profiles.Aggregation - expected = 352964814, actual = 352964814
+12:52:24.778 [main] DEBUG oracle.speed_profiles.Aggregation - dayDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM BETWEEN 3 and 22) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
+12:52:24.778 [main] DEBUG oracle.speed_profiles.Aggregation - nightDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM NOT BETWEEN 3 and 22) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
+12:52:24.878 [main] INFO oracle.speed_profiles.Aggregation - Day: [Min = -5, Max = 4, Avg = 0.206250]
+12:52:24.932 [main] INFO oracle.speed_profiles.Aggregation - Night: [Min = -11, Max = 3, Avg = 0.348750]
+12:52:24.935 [main] INFO oracle.speed_profiles.Aggregation - originalUsages = 135694553, mergedUsages = 352964814
+12:52:24.937 [main] INFO oracle.speed_profiles.Aggregation - ########################### SAMPLING_ID = 2, THRESHOLD = 5, Strategy = HalfAverageMergeStrategy ###########################
+12:52:24.957 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate days range: [(2,21)]
+12:53:18.369 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate size = 12493, aggregatedSpeedProfiles size = 10162
+12:53:18.370 [main] INFO oracle.speed_profiles.Aggregation - aggregatedSpeedProfiles days range: [(2,21)]
+12:53:25.389 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 173, threshold = 5
+12:53:33.712 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 8
+12:53:42.238 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 10
+12:53:42.241 [main] WARN oracle.speed_profiles.Aggregation - expected = 354671850, actual = 354671850
+12:53:42.637 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 11939, threshold = 5
+12:53:43.198 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 11362, threshold = 8
+12:53:43.794 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 10516, threshold = 10
+12:53:43.868 [main] WARN oracle.speed_profiles.Aggregation - expected = 352964814, actual = 352964814
+12:53:44.840 [main] DEBUG oracle.speed_profiles.Aggregation - dayDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM BETWEEN 3 and 22) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
+12:53:44.840 [main] DEBUG oracle.speed_profiles.Aggregation - nightDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM NOT BETWEEN 3 and 22) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
+12:53:44.949 [main] INFO oracle.speed_profiles.Aggregation - Day: [Min = -5, Max = 4, Avg = 0.206250]
+12:53:44.990 [main] INFO oracle.speed_profiles.Aggregation - Night: [Min = -11, Max = 3, Avg = 0.348750]
+12:53:44.994 [main] INFO oracle.speed_profiles.Aggregation - originalUsages = 135694553, mergedUsages = 352964814
+12:53:44.995 [main] INFO oracle.speed_profiles.Aggregation - ########################### SAMPLING_ID = 1, THRESHOLD = 10, Strategy = HalfAverageMergeStrategy ###########################
+12:53:45.069 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate days range: [(2,21)]
+12:54:14.780 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate size = 12493, aggregatedSpeedProfiles size = 3843
+12:54:14.780 [main] INFO oracle.speed_profiles.Aggregation - aggregatedSpeedProfiles days range: [(2,21)]
+12:54:18.702 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 1476, threshold = 10
+12:54:22.001 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 4, threshold = 15
+12:54:25.037 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 20
+12:54:25.040 [main] WARN oracle.speed_profiles.Aggregation - expected = 354671850, actual = 358124443
+12:54:25.563 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 9650, threshold = 10
+12:54:26.140 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 5108, threshold = 15
+12:54:26.620 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 2121, threshold = 20
+12:54:26.636 [main] WARN oracle.speed_profiles.Aggregation - expected = 354361865, actual = 357814110
+12:54:27.322 [main] DEBUG oracle.speed_profiles.Aggregation - dayDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM BETWEEN 3 and 22) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
+12:54:27.322 [main] DEBUG oracle.speed_profiles.Aggregation - nightDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM NOT BETWEEN 3 and 22) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
+12:54:27.422 [main] INFO oracle.speed_profiles.Aggregation - Day: [Min = -9, Max = 10, Avg = 1.275000]
+12:54:27.461 [main] INFO oracle.speed_profiles.Aggregation - Night: [Min = -10, Max = 10, Avg = 1.520000]
+12:54:27.465 [main] INFO oracle.speed_profiles.Aggregation - originalUsages = 35757033, mergedUsages = 357814110
+12:54:27.466 [main] INFO oracle.speed_profiles.Aggregation - ########################### SAMPLING_ID = 2, THRESHOLD = 10, Strategy = HalfAverageMergeStrategy ###########################
+12:54:27.479 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate days range: [(2,21)]
+12:54:57.188 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate size = 12493, aggregatedSpeedProfiles size = 3843
+12:54:57.188 [main] INFO oracle.speed_profiles.Aggregation - aggregatedSpeedProfiles days range: [(2,21)]
+12:55:00.963 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 1476, threshold = 10
+12:55:04.116 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 4, threshold = 15
+12:55:07.022 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 20
+12:55:07.029 [main] WARN oracle.speed_profiles.Aggregation - expected = 354671850, actual = 716248886
+12:55:07.587 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 9650, threshold = 10
+12:55:08.148 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 5108, threshold = 15
+12:55:08.622 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 2121, threshold = 20
+12:55:08.638 [main] WARN oracle.speed_profiles.Aggregation - expected = 354361865, actual = 715628220
+12:55:09.286 [main] DEBUG oracle.speed_profiles.Aggregation - dayDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM BETWEEN 3 and 22) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
+12:55:09.286 [main] DEBUG oracle.speed_profiles.Aggregation - nightDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM NOT BETWEEN 3 and 22) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
+12:55:09.397 [main] INFO oracle.speed_profiles.Aggregation - Day: [Min = -9, Max = 10, Avg = 1.275000]
+12:55:09.439 [main] INFO oracle.speed_profiles.Aggregation - Night: [Min = -10, Max = 10, Avg = 1.520000]
+12:55:09.443 [main] INFO oracle.speed_profiles.Aggregation - originalUsages = 35757033, mergedUsages = 715628220
+12:55:09.445 [main] INFO oracle.speed_profiles.Aggregation - ########################### SAMPLING_ID = 1, THRESHOLD = 15, Strategy = HalfAverageMergeStrategy ###########################
+12:55:09.540 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate days range: [(2,21)]
+12:55:13.990 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate size = 12493, aggregatedSpeedProfiles size = 1252
+12:55:13.990 [main] INFO oracle.speed_profiles.Aggregation - aggregatedSpeedProfiles days range: [(2,21)]
+12:55:15.768 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 2175, threshold = 15
+12:55:16.978 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 11, threshold = 23
+12:55:17.950 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 30
+12:55:17.951 [main] WARN oracle.speed_profiles.Aggregation - expected = 354671850, actual = 355937720
+12:55:18.544 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 5408, threshold = 15
+12:55:19.117 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 625, threshold = 23
+12:55:19.584 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 78, threshold = 30
+12:55:19.585 [main] WARN oracle.speed_profiles.Aggregation - expected = 354661662, actual = 355927532
+12:55:20.230 [main] DEBUG oracle.speed_profiles.Aggregation - dayDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM BETWEEN 3 and 22) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
+12:55:20.230 [main] DEBUG oracle.speed_profiles.Aggregation - nightDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM NOT BETWEEN 3 and 22) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
+12:55:20.339 [main] INFO oracle.speed_profiles.Aggregation - Day: [Min = -14, Max = 22, Avg = 2.346250]
+12:55:20.377 [main] INFO oracle.speed_profiles.Aggregation - Night: [Min = -14, Max = 12, Avg = 2.683750]
+12:55:20.380 [main] INFO oracle.speed_profiles.Aggregation - originalUsages = 25322163, mergedUsages = 355927532
+12:55:20.381 [main] INFO oracle.speed_profiles.Aggregation - ########################### SAMPLING_ID = 2, THRESHOLD = 15, Strategy = HalfAverageMergeStrategy ###########################
+12:55:20.393 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate days range: [(2,21)]
+12:55:24.711 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate size = 12493, aggregatedSpeedProfiles size = 1252
+12:55:24.715 [main] INFO oracle.speed_profiles.Aggregation - aggregatedSpeedProfiles days range: [(2,21)]
+12:55:26.411 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 2175, threshold = 15
+12:55:27.661 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 11, threshold = 23
+12:55:28.669 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 30
+12:55:28.672 [main] WARN oracle.speed_profiles.Aggregation - expected = 354671850, actual = 1067813160
+12:55:29.252 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 5408, threshold = 15
+12:55:29.826 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 625, threshold = 23
+12:55:30.487 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 78, threshold = 30
+12:55:30.488 [main] WARN oracle.speed_profiles.Aggregation - expected = 354661662, actual = 1067782596
+12:55:31.641 [main] DEBUG oracle.speed_profiles.Aggregation - dayDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM BETWEEN 3 and 22) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
+12:55:31.641 [main] DEBUG oracle.speed_profiles.Aggregation - nightDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM NOT BETWEEN 3 and 22) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
+12:55:31.754 [main] INFO oracle.speed_profiles.Aggregation - Day: [Min = -14, Max = 22, Avg = 2.346250]
+12:55:31.810 [main] INFO oracle.speed_profiles.Aggregation - Night: [Min = -14, Max = 12, Avg = 2.683750]
+12:55:31.815 [main] INFO oracle.speed_profiles.Aggregation - originalUsages = 25322163, mergedUsages = 1067782596
+12:55:31.816 [main] INFO oracle.speed_profiles.Aggregation - ########################### SAMPLING_ID = 1, THRESHOLD = 20, Strategy = HalfAverageMergeStrategy ###########################
+12:55:31.899 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate days range: [(2,21)]
+12:55:32.665 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate size = 12493, aggregatedSpeedProfiles size = 453
+12:55:32.665 [main] INFO oracle.speed_profiles.Aggregation - aggregatedSpeedProfiles days range: [(2,21)]
+12:55:34.018 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 1896, threshold = 20
+12:55:35.697 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 14, threshold = 30
+12:55:37.181 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 40
+12:55:37.181 [main] WARN oracle.speed_profiles.Aggregation - expected = 354671850, actual = 354701910
+12:55:38.239 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 2683, threshold = 20
+12:55:39.883 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 68, threshold = 30
+12:55:41.796 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 2, threshold = 40
+12:55:41.797 [main] WARN oracle.speed_profiles.Aggregation - expected = 354671368, actual = 354701428
+12:55:42.480 [main] DEBUG oracle.speed_profiles.Aggregation - dayDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM BETWEEN 3 and 22) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
+12:55:42.480 [main] DEBUG oracle.speed_profiles.Aggregation - nightDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM NOT BETWEEN 3 and 22) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
+12:55:42.614 [main] INFO oracle.speed_profiles.Aggregation - Day: [Min = -23, Max = 18, Avg = 2.160000]
+12:55:42.656 [main] INFO oracle.speed_profiles.Aggregation - Night: [Min = -16, Max = 26, Avg = 2.222500]
+12:55:42.659 [main] INFO oracle.speed_profiles.Aggregation - originalUsages = 21184045, mergedUsages = 354701428
+12:55:42.660 [main] INFO oracle.speed_profiles.Aggregation - ########################### SAMPLING_ID = 2, THRESHOLD = 20, Strategy = HalfAverageMergeStrategy ###########################
+12:55:42.672 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate days range: [(2,21)]
+12:55:43.403 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate size = 12493, aggregatedSpeedProfiles size = 453
+12:55:43.403 [main] INFO oracle.speed_profiles.Aggregation - aggregatedSpeedProfiles days range: [(2,21)]
+12:55:44.717 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 1896, threshold = 20
+12:55:46.488 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 14, threshold = 30
+12:55:48.037 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 40
+12:55:48.038 [main] WARN oracle.speed_profiles.Aggregation - expected = 354671850, actual = 1418807640
+12:55:49.109 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 2683, threshold = 20
+12:55:50.836 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 68, threshold = 30
+12:55:52.825 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 2, threshold = 40
+12:55:52.825 [main] WARN oracle.speed_profiles.Aggregation - expected = 354671368, actual = 1418805712
+12:55:53.496 [main] DEBUG oracle.speed_profiles.Aggregation - dayDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM BETWEEN 3 and 22) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
+12:55:53.496 [main] DEBUG oracle.speed_profiles.Aggregation - nightDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM NOT BETWEEN 3 and 22) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
+12:55:53.598 [main] INFO oracle.speed_profiles.Aggregation - Day: [Min = -23, Max = 18, Avg = 2.160000]
+12:55:53.636 [main] INFO oracle.speed_profiles.Aggregation - Night: [Min = -16, Max = 26, Avg = 2.222500]
+12:55:53.640 [main] INFO oracle.speed_profiles.Aggregation - originalUsages = 21184045, mergedUsages = 1418805712
+12:55:53.641 [main] INFO oracle.speed_profiles.Aggregation - ########################### SAMPLING_ID = 1, THRESHOLD = 25, Strategy = HalfAverageMergeStrategy ###########################
+12:55:53.715 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate days range: [(2,21)]
+12:55:53.900 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate size = 12493, aggregatedSpeedProfiles size = 190
+12:55:53.900 [main] INFO oracle.speed_profiles.Aggregation - aggregatedSpeedProfiles days range: [(2,21)]
+12:55:55.853 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 2064, threshold = 25
+12:55:58.508 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 38
+12:56:00.662 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 50
+12:56:00.664 [main] WARN oracle.speed_profiles.Aggregation - expected = 354672225, actual = 354707412
+12:56:02.089 [main] DEBUG oracle.speed_profiles.Aggregation - dayDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM BETWEEN 3 and 22) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
+12:56:02.089 [main] DEBUG oracle.speed_profiles.Aggregation - nightDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM NOT BETWEEN 3 and 22) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
+12:56:02.429 [main] INFO oracle.speed_profiles.Aggregation - Day: [Min = -32, Max = 22, Avg = 1.630526]
+12:56:02.507 [main] INFO oracle.speed_profiles.Aggregation - Night: [Min = -21, Max = 17, Avg = 1.585526]
+12:56:02.515 [main] INFO oracle.speed_profiles.Aggregation - originalUsages = 16056127, mergedUsages = 354707412
+12:56:02.516 [main] INFO oracle.speed_profiles.Aggregation - ########################### SAMPLING_ID = 2, THRESHOLD = 25, Strategy = HalfAverageMergeStrategy ###########################
+12:56:02.537 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate days range: [(2,21)]
+12:56:02.791 [main] INFO oracle.speed_profiles.Aggregation - profilesToAggregate size = 12493, aggregatedSpeedProfiles size = 190
+12:56:02.791 [main] INFO oracle.speed_profiles.Aggregation - aggregatedSpeedProfiles days range: [(2,21)]
+12:56:05.534 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 2064, threshold = 25
+12:56:08.259 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 38
+12:56:10.272 [main] WARN oracle.speed_profiles.Aggregation - Not merged profiles = 0, threshold = 50
+12:56:10.273 [main] WARN oracle.speed_profiles.Aggregation - expected = 354672225, actual = 1773537060
+12:56:10.909 [main] DEBUG oracle.speed_profiles.Aggregation - dayDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM BETWEEN 3 and 22) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
+12:56:10.909 [main] DEBUG oracle.speed_profiles.Aggregation - nightDeviationQuery = with t as ( SELECT m.PATTERN_ID, m.SEQ_NUM, m.START_TIME, m.END_TIME, m.SPEED_KPH,  o.SPEED_KPH, (o.SPEED_KPH - m.SPEED_KPH) as diff FROM main.NTTP_SPEED_PATTERN m JOIN calibrated.NTTP_SPEED_PATTERN o on o.PATTERN_ID = m.PATTERN_ID and o.SEQ_NUM = m.SEQ_NUM WHERE o.SEQ_NUM NOT BETWEEN 3 and 22) SELECT min(diff) as min, max(diff) as max, avg(abs(diff)) as avg from t
+12:56:11.007 [main] INFO oracle.speed_profiles.Aggregation - Day: [Min = -32, Max = 22, Avg = 1.630526]
+12:56:11.047 [main] INFO oracle.speed_profiles.Aggregation - Night: [Min = -21, Max = 17, Avg = 1.585526]
+12:56:11.050 [main] INFO oracle.speed_profiles.Aggregation - originalUsages = 16056127, mergedUsages = 1773537060

@@ -38,8 +38,8 @@ import java.util.stream.Collectors;
 // TODO: rounding while calibration
 public class Aggregation {
     private static final Logger LOGGER = LoggerFactory.getLogger(Aggregation.class);
-        public static final Map<Integer, Integer> AGGREGATION_DEPTH = ImmutableMap.of(1, 4, 2, 1);
-//    public static final Map<Integer, Integer> AGGREGATION_DEPTH = ImmutableMap.of(1, 8, 2, 2, 4, 1);
+//        public static final Map<Integer, Integer> AGGREGATION_DEPTH = ImmutableMap.of(1, 4, 2, 1);
+    public static final Map<Integer, Integer> AGGREGATION_DEPTH = ImmutableMap.of(1, 8, 2, 2, 4, 1);
     private static final Set<String> MARKETS = Sets.newHashSet("eu", "nar", "mrm");
    /* private static final Comparator<SpeedProfile> SPEED_PROFILE_COMPARATOR = Comparator.comparingInt(SpeedProfile::getAverageSpeed)
             .thenComparing(SpeedProfile::getAverageDaySpeed)
@@ -174,8 +174,10 @@ public class Aggregation {
         String dayDeviationCondition = "o.SEQ_NUM BETWEEN %d and %d";
         String nightDeviationCondition = "o.SEQ_NUM NOT BETWEEN %d and %d";
 
-        String dayDeviationQuery = String.format(deviationQuery, String.format(dayDeviationCondition, profile.getStartDayIndex() + 1, profile.getEndDayIndex()));
-        String nightDeviationQuery = String.format(deviationQuery, String.format(nightDeviationCondition, profile.getStartDayIndex() + 1, profile.getEndDayIndex()));
+        int startDaySeqNum = profile.getStartDayIndex() + 1;
+        int endDaySeqNum = profile.getEndDayIndex() + 1;
+        String dayDeviationQuery = String.format(deviationQuery, String.format(dayDeviationCondition, startDaySeqNum, endDaySeqNum));
+        String nightDeviationQuery = String.format(deviationQuery, String.format(nightDeviationCondition, startDaySeqNum, endDaySeqNum));
         LOGGER.debug("dayDeviationQuery = " + dayDeviationQuery);
         LOGGER.debug("nightDeviationQuery = " + nightDeviationQuery);
 
@@ -353,13 +355,13 @@ public class Aggregation {
         Map<Integer, List<SpeedProfile>> speedProfilesPerSamplingId = DataProvider.extractSpeedProfiles(market);
         Map<Integer, Map<Integer, Integer>> speedProfilesUsagePerSampleId = DataProvider.getSpeedProfilesUsage(market);
 
-        for (int i = 1; i <=5; i++)
+        for (int i = 4; i <=4; i++)
         {
             int threshold = MergeStrategy.DEFAULT_THRESHOLD * i;
             speedProfilesPerSamplingId.forEach((samplingId, speedProfiles) ->
             {
-//                MergeStrategy strategy = new HalfAverageMergeStrategy();
-                MergeStrategy strategy = new HalfAverageRangeMergeStrategy();
+                MergeStrategy strategy = new HalfAverageMergeStrategy();
+//                MergeStrategy strategy = new HalfAverageRangeMergeStrategy();
                 strategy.setThreshold(threshold);
                 LOGGER.info(String.format("########################### SAMPLING_ID = %d, THRESHOLD = %d, Strategy = %s ###########################",
                         samplingId, threshold, strategy.getClass().getSimpleName()));
@@ -372,9 +374,21 @@ public class Aggregation {
                         .peek(p -> p.addUsages(speedProfilesUsage.getOrDefault(p.getPatternId(), 0)))
                         .sorted(SPEED_PROFILE_COMPARATOR)
                         .collect(Collectors.toList());
+
+                Set<Pair<Integer, Integer>> dayRanges = profilesToAggregate.stream()
+                        .map(p -> Pair.of(p.getStartDayIndex(), p.getEndDayIndex()))
+                        .collect(Collectors.toSet());
+                LOGGER.info("profilesToAggregate days range: " + dayRanges);
+
                 List<? extends SpeedProfile> aggregatedSpeedProfiles = aggregation.aggregateProfiles(profilesToAggregate, 0);
                 LOGGER.info(String.format("profilesToAggregate size = %d, aggregatedSpeedProfiles size = %d",
                         profilesToAggregate.size(), aggregatedSpeedProfiles.size()));
+
+                dayRanges = aggregatedSpeedProfiles.stream()
+                        .map(p -> Pair.of(p.getStartDayIndex(), p.getEndDayIndex()))
+                        .collect(Collectors.toSet());
+                LOGGER.info("aggregatedSpeedProfiles days range: " + dayRanges);
+
                 // verification - all
                 aggregation.checkAggregation(aggregatedSpeedProfiles, profilesToAggregate);
                 strategy.setThreshold((int)Math.round(threshold * 1.5));
