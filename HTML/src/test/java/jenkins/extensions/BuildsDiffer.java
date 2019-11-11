@@ -143,7 +143,14 @@ public class BuildsDiffer {
         Path inputFolder = Paths.get(settings.getDbOutputDir(),
                 "connections", settings.getJobName(), settings.getDvn(), BUILD_START_DATE.format(new Date(upstreamBuild.getTimestamp())));
         Path buildPath = inputFolder.resolve(settings.getJobName() + "-" + settings.getBuildNumber() + ".sq3");
-        appendBuildsToTrend(buildPath);
+        if (Files.exists(outputFilePath))
+        {
+            appendBuildsToTrend(buildPath);
+        }
+        else
+        {
+            createTrend(buildPath);
+        }
     }
 
     private void appendBuildsToTrend(Path... buildPaths) {
