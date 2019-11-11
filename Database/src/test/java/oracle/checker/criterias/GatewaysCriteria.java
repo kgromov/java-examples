@@ -55,5 +55,31 @@ public enum GatewaysCriteria implements ICriteria {
                             "join RDF_ADMIN_ATTRIBUTE a on a.ADMIN_PLACE_ID = h.ADMIN_PLACE_ID\n" +
                             "where a.ADMIN_WIDE_REGULATIONS = 1";
                 }
+            },
+    REAL_LINKS_WITHOUT_GATEWAY_ON_BORDER
+            {
+                @Override
+                public String getIdentity(ResultSet resultSet) throws SQLException {
+                    return String.format("NODE_ID = %d, LINK_ID = %d", resultSet.getInt(1), resultSet.getInt(2));
+                }
+
+                @Override
+                public String getQuery() {
+                    return "select bn.NODE_ID, rl.LINK_ID\n" +
+                            "    from SC_BORDER_NODE bn\n" +
+                            "    join RDF_LINK rl on rl.REF_NODE_ID = bn.NODE_ID\n" +
+                            "    join RDF_NAV_LINK rnl on rl.LINK_ID = rnl.LINK_ID\n" +
+                            "    left join STUB_LINK_LOCAL sll on sll.LINK_ID = rl.LINK_ID\n" +
+                            "    left join SC_BORDER_LINK bl on bl.LINK_ID = rl.LINK_ID\n" +
+                            "    where sll.LINK_ID is null and bl.LINK_ID is null\n" +
+                            "    union\n" +
+                            "    select bn.NODE_ID, rl.LINK_ID\n" +
+                            "    from SC_BORDER_NODE bn\n" +
+                            "    join RDF_LINK rl on rl.NONREF_NODE_ID = bn.NODE_ID\n" +
+                            "    join RDF_NAV_LINK rnl on rl.LINK_ID = rnl.LINK_ID\n" +
+                            "    left join STUB_LINK_LOCAL sll on sll.LINK_ID = rl.LINK_ID\n" +
+                            "    left join SC_BORDER_LINK bl on bl.LINK_ID = rl.LINK_ID\n" +
+                            "    where sll.LINK_ID is null and bl.LINK_ID is null";
+                }
             }
 }
