@@ -69,7 +69,7 @@ public class JenkinsClientTest {
        // convert to sq3
         Convertor.convertToSqLite(jobInfo);
         // append to build time trend
-//        new BuildsDiffer().appendToTrend(jobInfo);
+        new BuildsDiffer().appendToTrend(jobInfo);
     }
 
    /* @Test
