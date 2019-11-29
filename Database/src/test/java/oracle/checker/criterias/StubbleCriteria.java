@@ -41,12 +41,12 @@ public enum StubbleCriteria implements ICriteria {
                             resultSet.getInt(1), resultSet.getString(2), resultSet.getInt(3), resultSet.getInt(4));
                 }
             },
-    STUB_POI_AIRPORT
+    STUB_POI_AIRPORT_BY_CAT_ID
             {
 
                 @Override
                 public String getQuery() {
-                    return "select distinct l.LINK_ID\n" +
+                    return "select distinct l.LINK_ID, p.POI_ID\n" +
                             "from RDF_LOCATION l\n" +
                             "join STUB_LINK sl on l.LINK_ID = sl.LINK_ID\n" +
                             "join RDF_POI_ADDRESS pa on pa.LOCATION_ID = l.LOCATION_ID\n" +
@@ -55,16 +55,40 @@ public enum StubbleCriteria implements ICriteria {
                 }
             },
 
-    STUB_LOCAL_POI_AIRPORT
+    STUB_LOCAL_POI_AIRPORT_BY_CAT_ID
             {
                 @Override
                 public String getQuery() {
-                    return "select distinct l.LINK_ID\n" +
+                    return "select distinct l.LINK_ID, p.POI_ID\n" +
                             "from RDF_LOCATION l\n" +
                             "join STUB_LINK_LOCAL sl on l.LINK_ID = sl.LINK_ID\n" +
                             "join RDF_POI_ADDRESS pa on pa.LOCATION_ID = l.LOCATION_ID\n" +
                             "join RDF_POI p on p.POI_ID = pa.POI_ID\n" +
                             "where p.CAT_ID = 4581";
+                }
+            },
+    STUB_POI_AIRPORT
+            {
+
+                @Override
+                public String getQuery() {
+                    return "select distinct l.LINK_ID, p.POI_ID\n" +
+                            "from RDF_LOCATION l\n" +
+                            "join STUB_LINK sl on l.LINK_ID = sl.LINK_ID\n" +
+                            "join RDF_POI_ADDRESS pa on pa.LOCATION_ID = l.LOCATION_ID\n" +
+                            "join RDF_POI_AIRPORT p on p.POI_ID = pa.POI_ID" ;
+                }
+            },
+
+    STUB_LOCAL_POI_AIRPORT
+            {
+                @Override
+                public String getQuery() {
+                    return "select distinct l.LINK_ID, p.POI_ID\n" +
+                            "from RDF_LOCATION l\n" +
+                            "join STUB_LINK_LOCAL sl on l.LINK_ID = sl.LINK_ID\n" +
+                            "join RDF_POI_ADDRESS pa on pa.LOCATION_ID = l.LOCATION_ID\n" +
+                            "join RDF_POI_AIRPORT p on p.POI_ID = pa.POI_ID" ;
                 }
             },
     STUB_POI_ADDRESS

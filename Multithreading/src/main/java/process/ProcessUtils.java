@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
+import java.lang.ref.WeakReference;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -52,6 +53,17 @@ public class ProcessUtils {
         String s;
         while ((s = stdInput.readLine()) != null) {
             System.out.println(s);
+        }
+    }
+
+    private static void gc()
+    {
+        Object obj = new Object();
+        WeakReference ref = new WeakReference<>(obj);
+        obj = null;
+        while (ref.get() != null)
+        {
+            System.gc();
         }
     }
 }

@@ -3,11 +3,11 @@ package oracle.checker.consumers;
 import com.google.common.collect.Sets;
 import oracle.checker.criterias.ICriteria;
 import oracle.checker.criterias.StubbleCriteria;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -18,10 +18,10 @@ public class PoiStubCriteriaConsumer implements ICriteriaConsumer {
     private Map<String, Set<String>> stubPOIs = new TreeMap<>();
     private Map<String, Set<Integer>> stubPoiCategories = new TreeMap<>();
 
-    private Map<Integer, Set<String>> localPoiPerRegion = new TreeMap<>();
-    private Map<Integer, Set<String>> stubPoiPerRegion = new TreeMap<>();
-    private Set<Integer> localLinks = new HashSet<>();
-    private Set<Integer> stubLinks = new HashSet<>();
+    private Map<Pair<Integer, Integer>, Set<String>> localPoiPerRegion = new TreeMap<>();
+    private Map<Pair<Integer, Integer>, Set<String>> stubPoiPerRegion = new TreeMap<>();
+    private Set<Pair<Integer, Integer>> localLinks = new HashSet<>();
+    private Set<Pair<Integer, Integer>> stubLinks = new HashSet<>();
 
     @Override
     public void processDbUser(String dbUser, String dbServerURL) {
@@ -44,8 +44,9 @@ public class PoiStubCriteriaConsumer implements ICriteriaConsumer {
         try (ResultSet resultSet = connection.createStatement().executeQuery(stubPoi.getQuery(dbUser))) {
             while (resultSet.next()) {
                 int linkId = resultSet.getInt(1);
-                stubPoiPerRegion.computeIfAbsent(linkId, regions -> new TreeSet<>()).add(dbUser);
-                stubLinks.add(linkId);
+                int poiId = resultSet.getInt(2);
+                stubPoiPerRegion.computeIfAbsent(Pair.of(linkId, poiId), regions -> new TreeSet<>()).add(dbUser);
+                stubLinks.add(Pair.of(linkId, poiId));
             }
         } catch (SQLException e) {
             System.err.println(String.format("Unable to process dbUser = %s, dbServerURL = %s, query = %s. Cause:%n%s",
@@ -56,8 +57,9 @@ public class PoiStubCriteriaConsumer implements ICriteriaConsumer {
         try (ResultSet resultSet = connection.createStatement().executeQuery(localPoi.getQuery(dbUser))) {
             while (resultSet.next()) {
                 int linkId = resultSet.getInt(1);
-                localPoiPerRegion.computeIfAbsent(linkId, regions -> new TreeSet<>()).add(dbUser);
-                localLinks.add(linkId);
+                int poiId = resultSet.getInt(2);
+                localPoiPerRegion.computeIfAbsent(Pair.of(linkId, poiId), regions -> new TreeSet<>()).add(dbUser);
+                localLinks.add(Pair.of(linkId, poiId));
             }
         } catch (SQLException e) {
             System.err.println(String.format("Unable to process dbUser = %s, dbServerURL = %s, query = %s. Cause:%n%s",
@@ -74,6 +76,14 @@ public class PoiStubCriteriaConsumer implements ICriteriaConsumer {
     {
         System.out.println("STUB_POI_LINKS:\n"+ stubPoiPerRegion);
         System.out.println("STUB_POI_LOCAL_LINKS:\n"+ localPoiPerRegion);
+    }
+
+    public void printDuplicatedPOI()
+    {
+        Sets.intersection(stubLinks, localLinks).forEach(pair ->
+                System.out.println(String.format("LINK_ID = %d, POI_ID = %d, STUB_REGIONS = %s, REAL_REGIONS = %s",
+                        pair.getLeft(), pair.getRight(), stubPoiPerRegion.get(pair), localPoiPerRegion.get(pair)))
+        );
     }
 
     public void printOddPoi()

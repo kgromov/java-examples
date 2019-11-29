@@ -1,6 +1,7 @@
 package oracle.checker;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Sets;
 import oracle.checker.consumers.BasicCriteriaConsumer;
 import oracle.checker.consumers.GatewaysCounterpartCriteriaConsumer;
 import oracle.checker.consumers.PoiStubCriteriaConsumer;
@@ -13,10 +14,13 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -32,15 +36,19 @@ public class RdfDataChecker {
     // TODO: put to build_config.properties or split by different files
     private static final Map<String, String> MARKET_TO_DVN = ImmutableMap.<String, String>builder()
             .put("eu", "191G0")
-            .put("nar", "19122")
-            .put("mrm", "191E3")
+          /*  .put("nar", "19122")
+            .put("mrm", "191E3")*/
             .build();
+    private static final  Set<Integer> DEFAULT_PROCESSED_SERVER_INDEXES = IntStream.rangeClosed(1, 8).boxed().collect(Collectors.toSet());
 
-    private static void processTraversingUsers() {
+    private static void processTraversingUsers(Set<String> targetUsers, int ... processedServerIndexes) {
         MARKET_TO_DVN.forEach((market, dvn) ->
         {
             LOGGER.info(String.format("################## market = %s, dvn = %s ##################", market, dvn));
-            Set<Integer> processedServers = IntStream.rangeClosed(1, 8).boxed().collect(Collectors.toSet());
+            Set<Integer> processedServers = processedServerIndexes.length == 0
+                    ? DEFAULT_PROCESSED_SERVER_INDEXES
+                    : Arrays.stream(processedServerIndexes).boxed().collect(Collectors.toSet());
+            Predicate<String> isUseSpecificUsers = !targetUsers.isEmpty() ? targetUsers::contains : condition -> true;
             TxtUsersReader reader = new TxtUsersReader(market, dvn);
             Set<String> allUsers = reader.getCdcUsers();
 //                Set<String> allUsers = reader.getSampleCdcUserWithDVN(dvn);
@@ -48,7 +56,8 @@ public class RdfDataChecker {
 //            SpeedProfilesCriteriaConsumer consumer = new SpeedProfilesCriteriaConsumer(market, dvn);
 //            PoiStubCriteriaConsumer consumer = new PoiStubCriteriaConsumer();
             BasicCriteriaConsumer consumer = new BasicCriteriaConsumer(GatewaysCriteria.REAL_LINKS_WITHOUT_GATEWAY_ON_BORDER);
-            allUsers.stream().filter(iterateUsers::contains).forEach(cdcUser ->
+//            GatewaysCounterpartCriteriaConsumer consumer = new GatewaysCounterpartCriteriaConsumer(market);
+            allUsers.stream().filter(isUseSpecificUsers).filter(iterateUsers::contains).forEach(cdcUser ->
             {
                 for (int i : processedServers) {
                     String dbServerUrl = String.format(DB_SERVER_URL, market, dvn, i)
@@ -65,7 +74,7 @@ public class RdfDataChecker {
                         dbServerUsers = reader.withoutSampleUsers(dbServerUsers);
                         LOGGER.debug("Collected CDCA users: " + dbServerUsers);
                         // users
-                        dbServerUsers.forEach(userName ->
+                        dbServerUsers.stream().filter(isUseSpecificUsers).forEach(userName ->
                         {
                             // Basic: e.g. POI -> new BasicCriteriaConsumer({StubbleCriteria.STUB_POI, StubbleCriteria.STUB_LOCAL_POI})
                             //                      .processDbUser(connection, userName, dbServerUrl);
@@ -88,25 +97,31 @@ public class RdfDataChecker {
                 }
             });
             LOGGER.debug("Remaining users: " + iterateUsers);
+//            consumer.printGatewaysForRegion(market, "CDCA_GBR_E2_E6_191G0", Sets.newHashSet(341408, 341603, 398018));
             // speed profiles
               /*  consumer.printSpeedProfiles();
                 consumer.exportToSq3();*/
 //            consumer.exportProfilesUsage();
             // poi
-           /* consumer.printAll();
+           /*consumer.printDuplicatedPOI();
+            consumer.printAll();
             consumer.printOddPoi();*/
            // counterparts
 //           consumer.printGatewaysForRegion();
         });
     }
 
-    private static void processWithDefaultUser() {
+    private static void processWithDefaultUser(Set<String> targetUsers, int ... processedServerIndexes) {
         MARKET_TO_DVN.forEach((market, dvn) ->
         {
             LOGGER.info(String.format("################## market = %s, dvn = %s ##################", market, dvn));
             TxtUsersReader reader = new TxtUsersReader(market, dvn);
             SpeedProfilesCriteriaConsumer consumer = new SpeedProfilesCriteriaConsumer(market, dvn);
-            for (int i = 1; i <= 8; i++) {
+            Set<Integer> processedIndexes = processedServerIndexes.length == 0
+                    ? DEFAULT_PROCESSED_SERVER_INDEXES
+                    : Arrays.stream(processedServerIndexes).boxed().collect(Collectors.toSet());
+            Predicate<String> isUseSpecificUsers = !targetUsers.isEmpty() ? targetUsers::contains : condition -> true;
+            for (int i : processedIndexes) {
                 String dbServerUrl = String.format(DB_SERVER_URL, market, dvn, i)
                         // exceptional case
                         .replaceAll("_", "-");
@@ -121,7 +136,7 @@ public class RdfDataChecker {
                     dbServerUsers = reader.withoutSampleUsers(dbServerUsers);
                     LOGGER.debug("Collected CDCA users: " + dbServerUsers);
                     // users
-                    dbServerUsers.forEach(userName ->
+                    dbServerUsers.stream().filter(isUseSpecificUsers).forEach(userName ->
                     {
                         // Basic: e.g. POI -> new BasicCriteriaConsumer({StubbleCriteria.STUB_POI, StubbleCriteria.STUB_LOCAL_POI})
                         //                      .processDbUser(connection, userName, dbServerUrl);
@@ -147,7 +162,13 @@ public class RdfDataChecker {
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             DriverManager.setLoginTimeout(60);
-            processTraversingUsers();
+            Set<String> targetUsers = Sets.newHashSet("CDCA_GBR_E4_E7_191G0",
+                    "CDCA_GBR_E3_CE_191G0",
+                    "CDCA_GBR_E2_E6_191G0",
+                    "CDCA_GBR_E1_191G0",
+                    "CDCA_GBR_E2_CEEA_191G0",
+                    "CDCA_GBR_E2_SOWE_191G0");
+            processTraversingUsers(Collections.emptySet() );
 //          processWithDefaultUser();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
