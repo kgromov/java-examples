@@ -1,5 +1,6 @@
 package oracle.checker.consumers;
 
+import oracle.checker.QueryTimeouter;
 import oracle.checker.gateways.GatewayFeatureType;
 
 import java.sql.Connection;
@@ -30,18 +31,17 @@ public class GatewaysCounterpartCriteriaConsumer implements ICriteriaConsumer {
     }
 
     @Override
-    public void processDbUser(String dbUser, String dbServerURL) {
+    public void processDbUser(String dbUser, String dbServerURL) throws Exception {
         try (Connection connection = DriverManager.getConnection(dbServerURL, dbUser, "password")) {
             processDbUser(connection, dbUser, dbServerURL);
-        } catch (SQLException e) {
-            System.out.println(String.format("Unable to process dbUser = %s, dbServerURL = %s. Cause:%n%s", dbUser, dbServerURL, e));
         }
     }
 
     @Override
-    public void processDbUser(Connection connection, String dbUser, String dbServerURL) {
+    public void processDbUser(Connection connection, String dbUser, String dbServerURL) throws Exception {
         for (GatewayFeatureType gatewayType : GatewayFeatureType.values()) {
-            try (ResultSet resultSet = connection.createStatement().executeQuery(gatewayType.getQuery(dbUser))) {
+//            try (ResultSet resultSet = connection.createStatement().executeQuery(gatewayType.getQuery(dbUser))) {
+            try (ResultSet resultSet = QueryTimeouter.getResultSet(connection, gatewayType.getQuery(dbUser))) {
                 resultSet.setFetchSize(DEFAULT_FETCH_SIZE);
                 while (resultSet.next()) {
                     int gatewayId = resultSet.getInt(1);
@@ -51,9 +51,6 @@ public class GatewaysCounterpartCriteriaConsumer implements ICriteriaConsumer {
 
                     gatewayIdToRegions.computeIfAbsent(gatewayId, value -> new HashSet<>()).add(dbUser);
                 }
-            } catch (SQLException e) {
-                System.err.println(String.format("Unable to process dbUser = %s, dbServerURL = %s, query = %s. Cause:%n%s",
-                        dbUser, dbServerURL, gatewayType.getQuery(dbUser), e));
             }
         }
     }

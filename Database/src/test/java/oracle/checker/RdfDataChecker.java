@@ -2,11 +2,8 @@ package oracle.checker;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
-import oracle.checker.consumers.BasicCriteriaConsumer;
 import oracle.checker.consumers.GatewaysCounterpartCriteriaConsumer;
-import oracle.checker.consumers.PoiStubCriteriaConsumer;
 import oracle.checker.consumers.SpeedProfilesCriteriaConsumer;
-import oracle.checker.criterias.GatewaysCriteria;
 import oracle.checker.readers.TxtUsersReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +17,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -35,9 +33,9 @@ public class RdfDataChecker {
     private static final String DB_SERVER_URL = "jdbc:oracle:thin:@akela-%s-%s-0%d.civof2bffmif.us-east-1.rds.amazonaws.com:1521:orcl";
     // TODO: put to build_config.properties or split by different files
     private static final Map<String, String> MARKET_TO_DVN = ImmutableMap.<String, String>builder()
-            .put("eu", "191G0")
-          /*  .put("nar", "19122")
-            .put("mrm", "191E3")*/
+//            .put("eu", "191G0")
+//           .put("nar", "19122")
+            .put("mrm", "191E3")
             .build();
     private static final  Set<Integer> DEFAULT_PROCESSED_SERVER_INDEXES = IntStream.rangeClosed(1, 8).boxed().collect(Collectors.toSet());
 
@@ -55,8 +53,8 @@ public class RdfDataChecker {
             Set<String> iterateUsers = new HashSet<>(allUsers);
 //            SpeedProfilesCriteriaConsumer consumer = new SpeedProfilesCriteriaConsumer(market, dvn);
 //            PoiStubCriteriaConsumer consumer = new PoiStubCriteriaConsumer();
-            BasicCriteriaConsumer consumer = new BasicCriteriaConsumer(GatewaysCriteria.REAL_LINKS_WITHOUT_GATEWAY_ON_BORDER);
-//            GatewaysCounterpartCriteriaConsumer consumer = new GatewaysCounterpartCriteriaConsumer(market);
+//            BasicCriteriaConsumer consumer = new BasicCriteriaConsumer(GatewaysCriteria.REAL_LINKS_WITHOUT_GATEWAY_ON_BORDER);
+            GatewaysCounterpartCriteriaConsumer consumer = new GatewaysCounterpartCriteriaConsumer(market);
             allUsers.stream().filter(isUseSpecificUsers).filter(iterateUsers::contains).forEach(cdcUser ->
             {
                 for (int i : processedServers) {
@@ -65,8 +63,8 @@ public class RdfDataChecker {
                             .replaceAll("_", "-");
                     Set<String> dbServerUsers = new HashSet<>();
                     LOGGER.debug(String.format("Attempt to connect on %s with user = %s", dbServerUrl, cdcUser));
-                    try (Connection connection = DriverManager.getConnection(dbServerUrl, cdcUser, DB_PASSWORD);
-                         ResultSet userNames = connection.createStatement().executeQuery(String.format(USERS_QUERY, dvn))) { // + NO_SAMPLE_USERS_PREDICATE
+                    try (Connection connection = QueryTimeouter.getConnection(dbServerUrl, cdcUser, DB_PASSWORD);
+                         ResultSet userNames = QueryTimeouter.getResultSet(connection, String.format(USERS_QUERY, dvn))) { // + NO_SAMPLE_USERS_PREDICATE
                         LOGGER.debug("Start processing dbServer = " + dbServerUrl);
                         while (userNames.next()) {
                             dbServerUsers.add(userNames.getString(1));
@@ -81,13 +79,30 @@ public class RdfDataChecker {
                                /* new BasicCriteriaConsumer(StubbleCriteria.STUB_POI, StubbleCriteria.STUB_LOCAL_POI)
                                         .processDbUser(connection, userName, dbServerUrl);*/
                             // Specific - e.g. GatewaysCounterpartCriteriaConsumer
-                            consumer.processDbUser(connection, userName, dbServerUrl);
-                            synchronized (iterateUsers) {
-                                iterateUsers.remove(userName);
+                            try
+                            {
+                                consumer.processDbUser(connection, userName, dbServerUrl);
+                            }
+                            catch (Exception e)
+                            {
+                                LOGGER.error(String.format("Error occurred while processing result set:" +
+                                            " SourceDbUser = %s, dbServer = %s", userName, dbServerUrl), e);
+
+                            }
+                            finally {
+                                synchronized (iterateUsers) {
+                                    iterateUsers.remove(userName);
+                                }
                             }
                         });
                     } catch (Exception e) {
-//                            System.err.println(String.format("No SourceDbUser = %s, dbServer = %s", cdcUser, dbServerUrl));
+                        if (e instanceof  TimeoutException)
+                        {
+                            synchronized (iterateUsers) {
+                                iterateUsers.remove(cdcUser);
+                            }
+                            LOGGER.error(String.format("Timeout = 1 min is exceeded: SourceDbUser = %s, dbServer = %s", cdcUser, dbServerUrl));
+                        }
                     }
                     if (!dbServerUsers.isEmpty()) {
                         processedServers.remove(i);
@@ -97,7 +112,6 @@ public class RdfDataChecker {
                 }
             });
             LOGGER.debug("Remaining users: " + iterateUsers);
-//            consumer.printGatewaysForRegion(market, "CDCA_GBR_E2_E6_191G0", Sets.newHashSet(341408, 341603, 398018));
             // speed profiles
               /*  consumer.printSpeedProfiles();
                 consumer.exportToSq3();*/
@@ -107,7 +121,10 @@ public class RdfDataChecker {
             consumer.printAll();
             consumer.printOddPoi();*/
            // counterparts
-//           consumer.printGatewaysForRegion();
+//           consumer.printGatewaysForRegion(market, "CDCA_GBR_E2_E6_191G0", Sets.newHashSet(341408, 341603, 398018));
+            consumer.printGatewaysWithoutCounterPart();
+            consumer.printGatewaysForRegion("CDCA_CHL_SA_191E3");
+            consumer.printGatewaysForRegion("CDCA_CHL_NR_191E3");
         });
     }
 
@@ -127,8 +144,8 @@ public class RdfDataChecker {
                         .replaceAll("_", "-");
                 Set<String> dbServerUsers = new HashSet<>();
                 LOGGER.debug("Start processing dbServer = " + dbServerUrl);
-                try (Connection connection = DriverManager.getConnection(dbServerUrl, DB_DEFAULT_USER, DB_PASSWORD);
-                     ResultSet cdcUsers = connection.createStatement().executeQuery(String.format(USERS_QUERY, dvn))) { // + NO_SAMPLE_USERS_PREDICATE
+                try (Connection connection = QueryTimeouter.getConnection(dbServerUrl, DB_DEFAULT_USER, DB_PASSWORD);
+                     ResultSet cdcUsers = QueryTimeouter.getResultSet(connection, String.format(USERS_QUERY, dvn))) { // + NO_SAMPLE_USERS_PREDICATE
                     LOGGER.debug("Connect to dbServer = " + dbServerUrl);
                     while (cdcUsers.next()) {
                         dbServerUsers.add(cdcUsers.getString(1));
@@ -156,23 +173,19 @@ public class RdfDataChecker {
         });
     }
 
-
     public static void main(String[] args) {
         long start = System.nanoTime();
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             DriverManager.setLoginTimeout(60);
-            Set<String> targetUsers = Sets.newHashSet("CDCA_GBR_E4_E7_191G0",
-                    "CDCA_GBR_E3_CE_191G0",
-                    "CDCA_GBR_E2_E6_191G0",
-                    "CDCA_GBR_E1_191G0",
-                    "CDCA_GBR_E2_CEEA_191G0",
-                    "CDCA_GBR_E2_SOWE_191G0");
-            processTraversingUsers(Collections.emptySet() );
+            Set<String> targetUsers = Sets.newHashSet("CDCA_CHL_SA_191E3", "CDCA_CHL_NR_191E3");
+//            processTraversingUsers(targetUsers, 1, 8);
+            processTraversingUsers(Collections.emptySet());
 //          processWithDefaultUser();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
+            QueryTimeouter.shutdown();
             LOGGER.info(String.format("Time elapsed = %d s", TimeUnit.SECONDS.convert(System.nanoTime() - start, TimeUnit.NANOSECONDS)));
         }
     }
