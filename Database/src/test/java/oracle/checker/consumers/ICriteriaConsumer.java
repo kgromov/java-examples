@@ -10,7 +10,7 @@ public interface ICriteriaConsumer {
     int DEFAULT_FETCH_SIZE = 1000;
 
     @Deprecated
-    void processDbUser(String dbUser, String dbServerURL);
+    void processDbUser(String dbUser, String dbServerURL) throws Exception;
 
-    void processDbUser(Connection connection, String dbUser, String dbServerURL);
+    void processDbUser(Connection connection, String dbUser, String dbServerURL) throws Exception;
 }
