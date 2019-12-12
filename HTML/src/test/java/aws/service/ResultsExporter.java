@@ -51,31 +51,34 @@ public class ResultsExporter
 
         Set<String> allTaskNames = Sets.union(tasksFirst.keySet(), tasksSecond.keySet());
 
-        try(Connection connection = getConnection())
+        synchronized (ResultsExporter.class)
         {
-            connection.createStatement().execute(getCreateQuery(region));
-            connection.setAutoCommit(false);
-            PreparedStatement statement = connection.prepareStatement(getInsertQuery(region));
-
-            for (String taskName : allTaskNames)
+            try(Connection connection = getConnection())
             {
-                statement.setString(1, taskName);
-                // doubts about null
-                statement.setObject(2, tasksFirst.get(taskName));
-                statement.setObject(3, tasksSecond.get(taskName));
+                connection.createStatement().execute(getCreateQuery(region));
+                connection.setAutoCommit(false);
+                PreparedStatement statement = connection.prepareStatement(getInsertQuery(region));
+
+                for (String taskName : allTaskNames)
+                {
+                    statement.setString(1, taskName);
+                    // doubts about null
+                    statement.setObject(2, tasksFirst.get(taskName));
+                    statement.setObject(3, tasksSecond.get(taskName));
+                    statement.addBatch();
+                }
+                // add total
+                statement.setString(1, "Total");
+                statement.setDouble(2, first.getTotalTime().get());
+                statement.setDouble(3, second.getTotalTime().get());
                 statement.addBatch();
+                statement.executeBatch();
+                connection.commit();
+                statement.close();
             }
-            // add total
-            statement.setString(1, "Total");
-            statement.setDouble(2, first.getTotalTime().get());
-            statement.setDouble(3, second.getTotalTime().get());
-            statement.addBatch();
-            statement.executeBatch();
-            connection.commit();
-            statement.close();
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
+            catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 

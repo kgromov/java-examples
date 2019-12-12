@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -22,8 +23,9 @@ public class LogsHolder {
     private static final Function<Path, String> PATH_TO_REGION = path ->
     {
         String fileName = path.getFileName().toString();
-        int indexOfSuffix = fileName.indexOf("build_number");
-        return indexOfSuffix != -1 ? fileName.substring(0, indexOfSuffix - 1) : fileName;
+        int startIndex = fileName.indexOf('_');
+        int endIndex = fileName.indexOf("build_number");
+        return startIndex!= -1 && endIndex != -1 ? fileName.substring(startIndex + 1, endIndex - 1) : fileName;
     };
 
     private final String product;
@@ -59,9 +61,13 @@ public class LogsHolder {
             exporter.init(settings.getResultsFolder());
         }
 
-        logPairsPerRegion.forEach((region, logs) ->
+//        logPairsPerRegion.forEach((region, logs) ->
+        logPairsPerRegion.entrySet().stream().parallel().forEach(entry ->
         {
+            String region = entry.getKey();
+            Pair<Path, Path> logs = entry.getValue();
             System.out.println("\nProcess region = " + region);
+            long start = System.nanoTime();
             try {
                 // TODO: parallel
                 TasksHolder tasksHolderMap1 = new TasksHolder(region);
@@ -73,6 +79,9 @@ public class LogsHolder {
                 exporter.exportRegion(region, tasksHolderMap1, tasksHolderMap2);
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+            finally {
+                System.out.println(String.format("Json + DB converters = %d ms", TimeUnit.MILLISECONDS.convert(System.nanoTime() - start, TimeUnit.NANOSECONDS)));
             }
         });
     }

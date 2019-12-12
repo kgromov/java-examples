@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 public class Downloader {
     // TODO: probably move to enum; for WOM market is required not UR
     private static final String AWS_COPY_COMMAND = "aws s3 cp";
+    private static final String AWS_SYNC_COMMAND = "aws s3 sync";
     private final String product;
     private final String updateRegion;
     private final String sourcePath;
@@ -35,13 +36,15 @@ public class Downloader {
     // aws s3 cp <s3_path> <local_path> --recursive --exclude "*" --include "LC_*json" | --include "FB_MUC_*json"
     private String getAwsCopyCommand()
     {
-        StringBuilder commandBuilder = new StringBuilder(AWS_COPY_COMMAND);
+//        StringBuilder commandBuilder = new StringBuilder(AWS_COPY_COMMAND);
+        StringBuilder commandBuilder = new StringBuilder(AWS_SYNC_COMMAND);
         commandBuilder.append(' ')
                 .append(sourcePath)
                 .append(' ')
                 .append(destPath)
                 .append(' ')
-                .append("--recursive --exclude \"*\"")
+//                .append("--recursive --exclude \"*\"")
+                .append("--exclude \"*\"")
                 .append(' ')
                 .append("--include \"")
                 .append(product)

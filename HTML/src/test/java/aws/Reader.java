@@ -2,9 +2,16 @@ package aws;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -30,16 +37,16 @@ public class Reader {
                 }
             }*/
 
-        String logsFolder = "C:\\HERE-CARDS\\my_dev_presubmits\\14474\\iteration_1\\logs";
+        String logsFolder = "C:\\HERE-CARDS\\my_dev_presubmits\\18060\\NAR\\logs";
 //        String errorToFind = "ERROR -> TEST_QUERY_RESULTS";
         String errorToFind = "ERROR ->";
-        String errorToFind2 = "SHARED_DATA ";
+        String errorToFind2 = "Link is missing during setting restricted manoeuvre";
 
         File[] files = (new File(logsFolder)).listFiles();
-        File csvOutputFile = new File(logsFolder + "\\ ACCUMULATED_ERRORS_rap.gateway_presence.csv");
+        File csvOutputFile = new File(logsFolder + "\\ ACCUMULATED_ERRORS_MANOEUVRE.csv");
         long count = 0L;
-        String header = "UpdateRegionName;";
-        PrintWriter pw = new PrintWriter(csvOutputFile);
+        String header = "UpdateRegionName,Details";
+        Path csvOutputFilePath = Paths.get(csvOutputFile.getAbsolutePath());
         File[] var7 = files;
         int var8 = files.length;
 
@@ -49,7 +56,6 @@ public class Reader {
             if (file.isFile() && file.getName().contains("console_log")) {
                 System.out.println("Processing " + file.getName() + " file.");
                 String uRName = file.getName();
-                uRName = uRName.replaceAll("LC_", "");
                 uRName = uRName.substring(0, uRName.toUpperCase().indexOf("_BUILD_NUMBER_"));
                 FileInputStream fileInputStream = new FileInputStream(file);
                 Throwable var13 = null;
@@ -74,12 +80,14 @@ public class Reader {
                             while (in.hasNext()) {
                                 String line = in.nextLine();
                                 if (count == 0L) {
-                                    header = header + line;
-                                    pw.println(header);
+                                    System.out.println(header);
+                                    Files.write(csvOutputFilePath, header.getBytes(Charset.defaultCharset()));
                                 }
 
                                 if (line.contains(errorToFind) && line.contains(errorToFind2)) {
-                                    pw.println(uRName + ";" + line);
+                                    String data = '\n' + uRName + "," + line;
+                                    System.out.println(data);
+                                    Files.write(csvOutputFilePath, data.getBytes(Charset.defaultCharset()), StandardOpenOption.APPEND);
                                 }
 
                                 ++count;
@@ -124,7 +132,6 @@ public class Reader {
                 }
             }
         }
-
     }
 //    }
 }
