@@ -2,7 +2,6 @@ package oracle.appenders;
 
 import com.google.common.collect.ImmutableMap;
 import oracle.checker.consumers.SpeedProfilesCriteriaConsumer.SpeedProfileRow;
-import oracle.speed_profiles.SpeedProfile;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
