@@ -1,6 +1,5 @@
 package aws.model;
 
-import aws.time.TaskBean;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.util.concurrent.AtomicDouble;

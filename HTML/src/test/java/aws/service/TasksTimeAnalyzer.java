@@ -1,6 +1,5 @@
 package aws.service;
 
-import aws.model.Downloader;
 import aws.model.LogsHolder;
 import aws.model.Settings;
 import com.google.common.collect.Sets;

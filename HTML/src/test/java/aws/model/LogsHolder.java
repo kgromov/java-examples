@@ -19,7 +19,7 @@ import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKN
 
 public class LogsHolder {
     private static final String DEFAULT_VERSION1 = "map1";
-    public static final String DEFAULT_VERSION2 = "map2";
+    private static final String DEFAULT_VERSION2 = "map2";
     private static final Function<Path, String> PATH_TO_REGION = path ->
     {
         String fileName = path.getFileName().toString();

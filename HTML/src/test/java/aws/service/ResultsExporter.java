@@ -1,7 +1,7 @@
 package aws.service;
 
 import aws.model.TasksHolder;
-import aws.time.TaskBean;
+import aws.model.TaskBean;
 import com.google.common.collect.Sets;
 
 import java.io.IOException;
