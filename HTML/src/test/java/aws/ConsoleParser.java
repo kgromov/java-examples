@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -149,8 +150,7 @@ public class ConsoleParser {
         List<String> lines = new ArrayList<>();
         Files.find(Paths.get(logsFolder),
                 Short.MAX_VALUE,
-                (filePath, fileAttr) -> fileAttr.isRegularFile()
-                        && filePath.getFileName().toString().contains("console_log"))
+                (filePath, fileAttr) -> fileAttr.isRegularFile() && filePath.getFileName().toString().contains("console_log"))
                 .map(Path::toFile)
                 .sorted()
                 .parallel()
@@ -201,7 +201,33 @@ public class ConsoleParser {
     }
 
     private static void pathFindIBatch(String logsFolder, String header, Path csvOutputFilePath, String errorToFind, String errorToFind2) throws IOException{
-
+        AtomicLong count = new AtomicLong();
+        List<String> lines = new ArrayList<>();
+        List<File> files =  Files.find(Paths.get(logsFolder),
+                Short.MAX_VALUE,
+                (filePath, fileAttr) -> fileAttr.isRegularFile() && filePath.getFileName().toString().contains("console_log"))
+                .map(Path::toFile)
+                .collect(Collectors.toList());
+        int portions = files.size() / 100;
+        int leftOver = files.size() % 100;
+        if (leftOver > 0)
+        {
+            ++portions;
+        }
+        Thread [] threads = new Thread[portions];
+        for (int i = 0; i < portions; i++)
+        {
+            threads[i] = new Thread(); // Runnable or code to process subList of files
+            threads[i].start();
+        }
+        for (Thread thread : threads)
+        {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 
     private static void pathFindForkJoinPool(String logsFolder, String header, Path csvOutputFilePath, String errorToFind, String errorToFind2) throws IOException{
