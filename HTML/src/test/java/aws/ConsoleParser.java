@@ -1,5 +1,7 @@
 package aws;
 
+import lombok.Getter;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -9,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -26,7 +29,7 @@ public class ConsoleParser {
     }
 
 
-//    aws s3 cp <s3_path> <local_path> --recursive --exclude "*" --include "LC_*json" | --include "FB_MUC_*json"
+    //    aws s3 cp <s3_path> <local_path> --recursive --exclude "*" --include "LC_*json" | --include "FB_MUC_*json"
     // Akela - FB_DEU_G4_SA_SO_build_number_288121_console_log.zip: {logfile.log; error.log}  = --include "<Product>*<UR>*console_log.zip"
     // HDLC - LC_AUT_EAST_BUILD_NUMBER_288123_HD_LOGS.zip: {}           = --include "<Product>*<UR>*HD_LOGS.zip"
     public static void main(String[] args) throws IOException {
@@ -54,16 +57,14 @@ public class ConsoleParser {
         long count = 0L;
         File[] files = (new File(logsFolder)).listFiles();
         label351:
-        for (File file : files)
-        {
-            if (file.isFile() && file.getName().contains("console_log"))
-            {
+        for (File file : files) {
+            if (file.isFile() && file.getName().contains("console_log")) {
                 System.out.println("Processing " + file.getName() + " file.");
                 String uRName = file.getName().toUpperCase();
                 uRName = uRName.substring(0, uRName.toUpperCase().indexOf("_BUILD_NUMBER_"));
-                try(FileInputStream fileInputStream = new FileInputStream(file);
-                    ZipInputStream zipInputStream = new ZipInputStream(fileInputStream);
-                    Scanner in = new Scanner(zipInputStream)) // replace Scanner to more adequate class
+                try (FileInputStream fileInputStream = new FileInputStream(file);
+                     ZipInputStream zipInputStream = new ZipInputStream(fileInputStream);
+                     Scanner in = new Scanner(zipInputStream)) // replace Scanner to more adequate class
                 {
                     ZipEntry zipEntry;
                     do {
@@ -109,21 +110,19 @@ public class ConsoleParser {
                     System.out.println("Processing " + file.getName() + " file.");
                     String uRName = file.getName().toUpperCase();
                     uRName = uRName.substring(0, uRName.toUpperCase().indexOf("_BUILD_NUMBER_"));
-                    try( FileInputStream fileInputStream = new FileInputStream(file);
-                            ZipInputStream zipInputStream = new ZipInputStream(fileInputStream);
-                        Scanner in = new Scanner(zipInputStream))  // replace Scanner to more adequate class
+                    try (FileInputStream fileInputStream = new FileInputStream(file);
+                         ZipInputStream zipInputStream = new ZipInputStream(fileInputStream);
+                         Scanner in = new Scanner(zipInputStream))  // replace Scanner to more adequate class
                     {
                         ZipEntry zipEntry;
-                        while ((zipEntry = zipInputStream.getNextEntry()) != null)
-                        {
-                            if (zipEntry.getName().contains("error.log"))
-                            {
+                        while ((zipEntry = zipInputStream.getNextEntry()) != null) {
+                            if (zipEntry.getName().contains("error.log")) {
                                 break;
                             }
                         }
 
-                       while (in.hasNext()) {
-                        String line = in.nextLine();
+                        while (in.hasNext()) {
+                            String line = in.nextLine();
                             if (count.get() == 0L) {
                                 System.out.println(header);
                                 Files.write(csvOutputFilePath, header.getBytes(Charset.defaultCharset()));
@@ -172,15 +171,10 @@ public class ConsoleParser {
 
                         while (in.hasNext()) {
                             String line = in.nextLine();
-                            if (count.get() == 0L) {
-                                System.out.println(header);
-                            }
-
                             if (line.contains(errorToFind) && line.contains(errorToFind2)) {
                                 String data = uRName + "," + line;
                                 System.out.println(data);
-                                synchronized (lines)
-                                {
+                                synchronized (lines) {
                                     lines.add(data);
                                 }
                             }
@@ -193,44 +187,101 @@ public class ConsoleParser {
                         e.printStackTrace();
                     }
                 });
-        if (!lines.isEmpty())
-        {
+        if (!lines.isEmpty()) {
             lines.add(0, header);
             Files.write(csvOutputFilePath, lines);
         }
     }
 
-    private static void pathFindIBatch(String logsFolder, String header, Path csvOutputFilePath, String errorToFind, String errorToFind2) throws IOException{
-        AtomicLong count = new AtomicLong();
-        List<String> lines = new ArrayList<>();
-        List<File> files =  Files.find(Paths.get(logsFolder),
+    private static void pathFindIBatch(String logsFolder, String header, Path csvOutputFilePath, String errorToFind, String errorToFind2) throws IOException {
+          List<File> files = Files.find(Paths.get(logsFolder),
                 Short.MAX_VALUE,
                 (filePath, fileAttr) -> fileAttr.isRegularFile() && filePath.getFileName().toString().contains("console_log"))
                 .map(Path::toFile)
                 .collect(Collectors.toList());
         int portions = files.size() / 100;
         int leftOver = files.size() % 100;
-        if (leftOver > 0)
-        {
+        if (leftOver > 0) {
             ++portions;
         }
-        Thread [] threads = new Thread[portions];
-        for (int i = 0; i < portions; i++)
-        {
-            threads[i] = new Thread(); // Runnable or code to process subList of files
+        List<ZipStripe> stripes = new ArrayList<>(portions);
+        Thread[] threads = new Thread[portions];
+        for (int i = 0; i < portions; i++) {
+            ZipStripe stripe = new ZipStripe();
+            stripes.add(stripe);
+            int startIndex = portions * i + 1;
+            int endIndex =  (i == portions - 1) ? files.size()  : portions * (i + 1);
+            threads[i] = new Thread(() -> stripe.process(files.subList(startIndex, endIndex), errorToFind, errorToFind2));
             threads[i].start();
         }
-        for (Thread thread : threads)
-        {
+        for (Thread thread : threads) {
             try {
                 thread.join();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
         }
+        List<String> lines = stripes.stream()
+                .map(ZipStripe::getLines)
+                .flatMap(Collection::stream)
+                .distinct()
+                .collect(Collectors.toList());
+        if (!lines.isEmpty()) {
+            lines.add(0, header);
+            Files.write(csvOutputFilePath, lines);
+        }
     }
 
-    private static void pathFindForkJoinPool(String logsFolder, String header, Path csvOutputFilePath, String errorToFind, String errorToFind2) throws IOException{
+    private static void pathFindForkJoinPool(String logsFolder, String header, Path csvOutputFilePath, String errorToFind, String errorToFind2) throws IOException {
 
+    }
+
+    // or callable probably; try 2 methods design
+    @Getter
+    private static final class ZipStripe {
+        private final List<String> lines;
+
+        public ZipStripe() {
+            this.lines = new ArrayList<>();
+        }
+
+        public void process(List<File> filesRange, String errorToFind, String errorToFind2) {
+            filesRange.stream()
+                  /*  .sorted()
+                    .parallel()*/
+                    .forEach(file ->
+                    {
+                        System.out.println("Processing " + file.getName() + " file.");
+                        String uRName = file.getName().toUpperCase();
+                        uRName = uRName.substring(0, uRName.toUpperCase().indexOf("_BUILD_NUMBER_"));
+                        try (FileInputStream fileInputStream = new FileInputStream(file);
+                             ZipInputStream zipInputStream = new ZipInputStream(fileInputStream);
+                             Scanner in = new Scanner(zipInputStream))  // replace Scanner to more adequate class
+                        {
+                            ZipEntry zipEntry;
+                            while ((zipEntry = zipInputStream.getNextEntry()) != null) {
+                                if (zipEntry.getName().contains("error.log")) {
+                                    break;
+                                }
+                            }
+
+                            long count = 0L;
+                            while (in.hasNext()) {
+                                String line = in.nextLine();
+                                if (line.contains(errorToFind) && line.contains(errorToFind2)) {
+                                    String data = uRName + "," + line;
+                                    System.out.println(data);
+                                    lines.add(data);
+                                }
+                                ++count;
+                                if (count > 1 && count % 10000L == 0) {
+                                    System.out.println("Processed " + count + " rows.");
+                                }
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+        }
     }
 }
