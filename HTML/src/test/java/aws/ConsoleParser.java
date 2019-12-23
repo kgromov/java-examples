@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveAction;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
@@ -49,7 +51,11 @@ public class ConsoleParser {
         // 3917 ms - 33 records
 //        pathFindSequential(logsFolder, header, csvOutputFilePath, errorToFind, errorToFind2);
         // 1188 ms - 33 records
-        pathFindInParallel(logsFolder, header, csvOutputFilePath, errorToFind, errorToFind2);
+//        pathFindInParallel(logsFolder, header, csvOutputFilePath, errorToFind, errorToFind2);
+        // 1651 ms - 33 records (parallel inside = 1194 ms); {threshold: 200 = 2.2s; 100 = 1.6s; 50 = 1.3s; 25 = 1.1s}
+//        pathFindIBatch(logsFolder, header, csvOutputFilePath, errorToFind, errorToFind2);
+        // 348 ms - 33 records
+        pathFindForkJoinPool(logsFolder, header, csvOutputFilePath, errorToFind, errorToFind2);
         System.out.println(String.format("Time elapsed = %d ms", TimeUnit.MILLISECONDS.convert(System.nanoTime() - start, TimeUnit.NANOSECONDS)));
     }
 
@@ -194,14 +200,15 @@ public class ConsoleParser {
     }
 
     private static void pathFindIBatch(String logsFolder, String header, Path csvOutputFilePath, String errorToFind, String errorToFind2) throws IOException {
-          List<File> files = Files.find(Paths.get(logsFolder),
+        List<File> files = Files.find(Paths.get(logsFolder),
                 Short.MAX_VALUE,
                 (filePath, fileAttr) -> fileAttr.isRegularFile() && filePath.getFileName().toString().contains("console_log"))
                 .map(Path::toFile)
                 .collect(Collectors.toList());
-        int portions = files.size() / 100;
-        int leftOver = files.size() % 100;
-        if (leftOver > 0) {
+        int threshold = 25;
+        int portions = files.size() / threshold;
+        int leftOver = files.size() % threshold;
+        if (leftOver > 0 && leftOver > threshold >> 1) {
             ++portions;
         }
         List<ZipStripe> stripes = new ArrayList<>(portions);
@@ -209,8 +216,8 @@ public class ConsoleParser {
         for (int i = 0; i < portions; i++) {
             ZipStripe stripe = new ZipStripe();
             stripes.add(stripe);
-            int startIndex = portions * i + 1;
-            int endIndex =  (i == portions - 1) ? files.size()  : portions * (i + 1);
+            int startIndex = threshold * i;
+            int endIndex = (i == portions - 1) ? files.size() : threshold * (i + 1) - 1;
             threads[i] = new Thread(() -> stripe.process(files.subList(startIndex, endIndex), errorToFind, errorToFind2));
             threads[i].start();
         }
@@ -233,7 +240,34 @@ public class ConsoleParser {
     }
 
     private static void pathFindForkJoinPool(String logsFolder, String header, Path csvOutputFilePath, String errorToFind, String errorToFind2) throws IOException {
+        List<File> files = Files.find(Paths.get(logsFolder),
+                Short.MAX_VALUE,
+                (filePath, fileAttr) -> fileAttr.isRegularFile() && filePath.getFileName().toString().contains("console_log"))
+                .map(Path::toFile)
+                .collect(Collectors.toList());
+        ZipStripeTask task = new ZipStripeTask(files, 0, files.size(), errorToFind, errorToFind2, new ArrayList<>());
+        ForkJoinPool pool = ForkJoinPool.commonPool();
+        pool.execute(task);
 
+        do {
+            ;
+           /* System.out.printf("Main: Thread Count:%d\n", pool.getActiveThreadCount());
+            System.out.printf("Main: Thread Steal:%d\n", pool.getStealCount());
+            System.out.printf("Main: Parallelism:%d\n", pool.getParallelism());
+            try {
+                TimeUnit.MILLISECONDS.sleep(5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }*/
+        } while (!task.isDone());
+
+        pool.shutdown();
+
+        List<String> lines = task.getResult();
+        if (!lines.isEmpty()) {
+            lines.add(0, header);
+            Files.write(csvOutputFilePath, lines);
+        }
     }
 
     // or callable probably; try 2 methods design
@@ -246,9 +280,10 @@ public class ConsoleParser {
         }
 
         public void process(List<File> filesRange, String errorToFind, String errorToFind2) {
+//            AtomicLong count = new AtomicLong();
             filesRange.stream()
-                  /*  .sorted()
-                    .parallel()*/
+                      /*.sorted()
+                      .parallel()*/
                     .forEach(file ->
                     {
                         System.out.println("Processing " + file.getName() + " file.");
@@ -271,9 +306,13 @@ public class ConsoleParser {
                                 if (line.contains(errorToFind) && line.contains(errorToFind2)) {
                                     String data = uRName + "," + line;
                                     System.out.println(data);
-                                    lines.add(data);
+                                    synchronized (lines) {
+                                        lines.add(data);
+                                    }
                                 }
+//                                count.incrementAndGet();
                                 ++count;
+//                                if (count.get() > 1 && count.get() % 10000L == 0) {
                                 if (count > 1 && count % 10000L == 0) {
                                     System.out.println("Processed " + count + " rows.");
                                 }
@@ -282,6 +321,45 @@ public class ConsoleParser {
                             e.printStackTrace();
                         }
                     });
+        }
+    }
+
+    private static final class ZipStripeTask extends RecursiveAction
+    {
+        private static final int THRESHOLD = 25;
+
+        private final List<File> filesRange;
+        private final int startIndex;
+        private final int endIndex;
+        private final String errorToFind;
+        private final String errorToFind2;
+        @Getter
+        private final List<String> result;
+
+        public ZipStripeTask(List<File> filesRange, int startIndex, int endIndex, String errorToFind, String errorToFind2, List<String> result) {
+            this.filesRange = filesRange;
+            this.startIndex = startIndex;
+            this.endIndex = endIndex;
+            this.errorToFind = errorToFind;
+            this.errorToFind2 = errorToFind2;
+            this.result = result;
+        }
+
+        @Override
+        protected void compute() {
+            if (endIndex - startIndex < THRESHOLD) {
+                ZipStripe stripe = new ZipStripe();
+                stripe.process(filesRange, errorToFind, errorToFind2);
+                result.addAll(stripe.getLines());
+            } else {
+                int middle = (startIndex + endIndex) / 2;
+                System.out.printf("ZipStripeTask: Pending tasks:%s\n", getQueuedTaskCount());
+                ZipStripeTask t1 = new ZipStripeTask(filesRange.subList(startIndex, middle + 1), startIndex, middle + 1, errorToFind, errorToFind2, result);
+                ZipStripeTask t2 = new ZipStripeTask(filesRange.subList(middle + 1, endIndex), middle + 1, endIndex, errorToFind, errorToFind2, result);
+                invokeAll(t1, t2);
+                result.addAll(t1.getResult());
+                result.addAll(t2.getResult());
+            }
         }
     }
 }
