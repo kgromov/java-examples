@@ -3,8 +3,6 @@ package oracle.checker;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import oracle.checker.consumers.BasicCriteriaConsumer;
-import oracle.checker.consumers.GatewaysCounterpartCriteriaConsumer;
-import oracle.checker.consumers.PoiStubCriteriaConsumer;
 import oracle.checker.consumers.SpeedProfilesCriteriaConsumer;
 import oracle.checker.criterias.GatewaysCriteria;
 import oracle.checker.readers.TxtUsersReader;
@@ -14,8 +12,9 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -156,6 +155,54 @@ public class RdfDataChecker {
         });
     }
 
+    private static final String SELECT_KEEP_USERS_QUERY = "select username from dba_users WHERE REGEXP_LIKE (username, '^(LC_)|(FB_)|(U_3D_)')";
+    private static final String DROP_USER_QUERY = "DROP USER %s CASCADE";
+
+    private static void dropKeepUsers(int... processedServerIndexes)
+    {
+        MARKET_TO_DVN.forEach((market, dvn) ->
+        {
+            LOGGER.info(String.format("################## market = %s, dvn = %s ##################", market, dvn));
+            TxtUsersReader reader = new TxtUsersReader(market, dvn);
+            SpeedProfilesCriteriaConsumer consumer = new SpeedProfilesCriteriaConsumer(market, dvn);
+            Set<Integer> processedIndexes = processedServerIndexes.length == 0
+                    ? DEFAULT_PROCESSED_SERVER_INDEXES
+                    : Arrays.stream(processedServerIndexes).boxed().collect(Collectors.toSet());
+            for (int i : processedIndexes) {
+                String dbServerUrl = String.format(DB_SERVER_URL, market, dvn, i)
+                        // exceptional case
+                        .replaceAll("_", "-");
+                Set<String> dbKeepUsers = new HashSet<>();
+                LOGGER.debug("Start processing dbServer = " + dbServerUrl);
+                try (Connection connection = DriverManager.getConnection(dbServerUrl, DB_DEFAULT_USER, DB_PASSWORD);
+                     Statement statement = connection.createStatement();
+                     ResultSet cdcUsers = connection.createStatement().executeQuery(SELECT_KEEP_USERS_QUERY)) {
+                    LOGGER.debug("Connect to dbServer = " + dbServerUrl);
+                    while (cdcUsers.next()) {
+                        dbKeepUsers.add(cdcUsers.getString(1));
+                    }
+                    LOGGER.debug("Collected KEEP users: " + dbKeepUsers);
+                    // users
+                    for(String userName : dbKeepUsers)
+                    {
+                        LOGGER.info("Attempt to delete keep user = " + userName);
+                        try {
+                            statement.execute(String.format(DROP_USER_QUERY, userName));
+                        }
+                        catch (SQLException e)
+                        {
+                            LOGGER.error(String.format("Unable to delete user = %s, dbServer = %s. Cause: = %s", userName, dbServerUrl, e.toString()));
+                        }
+                        LOGGER.info("Drop keep user = " + userName);
+                    }
+                } catch (Exception e) {
+                    LOGGER.error(String.format("No SourceDbUser = %s, dbServer = %s. Cause: = %s", DB_DEFAULT_USER, dbServerUrl, e.toString()));
+                }
+                LOGGER.debug("Finish processing dbServer = " + dbServerUrl);
+            }
+        });
+    }
+
 
     public static void main(String[] args) {
         long start = System.nanoTime();
@@ -168,8 +215,9 @@ public class RdfDataChecker {
                     "CDCA_GBR_E1_191G0",
                     "CDCA_GBR_E2_CEEA_191G0",
                     "CDCA_GBR_E2_SOWE_191G0");
-            processTraversingUsers(Collections.emptySet() );
+//            processTraversingUsers(Collections.emptySet() );
 //          processWithDefaultUser();
+            dropKeepUsers(1, 6);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
