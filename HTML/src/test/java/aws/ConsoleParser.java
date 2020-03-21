@@ -357,8 +357,8 @@ public class ConsoleParser {
                 ZipStripeTask t1 = new ZipStripeTask(filesRange.subList(startIndex, middle + 1), startIndex, middle + 1, errorToFind, errorToFind2, result);
                 ZipStripeTask t2 = new ZipStripeTask(filesRange.subList(middle + 1, endIndex), middle + 1, endIndex, errorToFind, errorToFind2, result);
                 invokeAll(t1, t2);
-                result.addAll(t1.getResult());
                 result.addAll(t2.getResult());
+                result.addAll(t1.getResult());
             }
         }
     }

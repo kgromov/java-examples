@@ -11,8 +11,10 @@ public class BenchMarkRunner {
 //                .include(MapBenchMark.class.getSimpleName())
 //                .include(ListBenchMark.class.getSimpleName())
 //                .include(FilesCounterBenchMark.class.getSimpleName())
-                .include(EnumBenchMark.class.getSimpleName())
-                .forks(1)
+//                .include(EnumBenchMark.class.getSimpleName())
+//                .include(PairIndexBenchMark.class.getSimpleName())
+//                .include(SingularFindIndexBenchMark.class.getSimpleName())
+                .include(PluralFindIndexBenchMark.class.getSimpleName())
                 .build();
 
         new Runner(opt).run();

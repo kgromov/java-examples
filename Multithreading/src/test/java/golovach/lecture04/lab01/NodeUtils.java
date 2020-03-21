@@ -129,9 +129,9 @@ public class NodeUtils {
             tail = iterator != null ? iterator : tail;
         }
         tail.next = new Node(3, null);
-        remove(node);
+     /*   remove(node);
         remove(tail);
-        remove(tail);
+        remove(tail);*/
         System.out.println(node.toString());
         Node list = createQueue(5);
         Node list2 = createQueue2(5);
