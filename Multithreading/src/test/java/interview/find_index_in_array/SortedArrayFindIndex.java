@@ -6,8 +6,8 @@ import java.util.stream.IntStream;
  * Created by konstantin on 21.03.2020.
  */
 public class SortedArrayFindIndex implements FindIndex {
-    protected final int [] values;
-    protected final int [] originalIndexes;
+    protected final int[] values;
+    protected final int[] originalIndexes;
 
     public SortedArrayFindIndex(int[] array) {
         this.values = array;
@@ -18,7 +18,7 @@ public class SortedArrayFindIndex implements FindIndex {
     private void bubbleSort() {
         boolean sorted = false;
         int temp;
-        while(!sorted) {
+        while (!sorted) {
             sorted = true;
             for (int i = 0; i < values.length - 1; i++) {
                 if (values[i] > values[i + 1]) {
@@ -40,29 +40,21 @@ public class SortedArrayFindIndex implements FindIndex {
         return indexOfByDivision(value, 0, values.length);
     }
 
-    protected int indexOfByDivision(int value, int startIndex, int endIndex)
-    {
-        try {
-            if (value < values[startIndex] || value > values[endIndex - 1]) {
-                return -1;
-            }
-            int middle = (startIndex + endIndex) / 2 + (startIndex + endIndex) % 2;
-            if (value == values[middle]) {
-                return originalIndexes[middle];
-            }
-            if (endIndex - startIndex <= 1) {
-                return -1;
-            }
-            if (value < values[middle]) {
-                return indexOfByDivision(value, startIndex, middle);
-            } else {
-                return indexOfByDivision(value, middle + 1, endIndex);
-            }
+    protected int indexOfByDivision(int value, int startIndex, int endIndex) {
+        if (value < values[startIndex] || value > values[endIndex - 1]) {
+            return -1;
         }
-        catch (StackOverflowError e)
-        {
-            int a =1 ;
-            return 0;
+        int middle = (startIndex + endIndex) / 2 + (startIndex + endIndex) % 2;
+        if (value == values[middle]) {
+            return originalIndexes[middle];
+        }
+        if (endIndex - startIndex <= 1) {
+            return -1;
+        }
+        if (value < values[middle]) {
+            return indexOfByDivision(value, startIndex, middle);
+        } else {
+            return indexOfByDivision(value, middle + 1, endIndex);
         }
     }
 }
