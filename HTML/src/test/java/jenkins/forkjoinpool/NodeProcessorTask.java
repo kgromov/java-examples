@@ -7,14 +7,13 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
 import java.util.concurrent.TimeUnit;
 
 public class NodeProcessorTask extends RecursiveAction {
-    private static final int DEFAULT_PRODUTCR_SIZE = 10;
+    private static final int DEFAULT_PRODUCT_SIZE = 10;
 
     private NodeList xmlNodes;
     private int first;
@@ -28,7 +27,7 @@ public class NodeProcessorTask extends RecursiveAction {
 
     @Override
     protected void compute() {
-        if (last - first < DEFAULT_PRODUTCR_SIZE) {
+        if (last - first < DEFAULT_PRODUCT_SIZE) {
             processNodes();
         } else {
             int middle = (last + first) / 2;
