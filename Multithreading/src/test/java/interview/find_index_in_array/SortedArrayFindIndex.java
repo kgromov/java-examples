@@ -11,7 +11,7 @@ public class SortedArrayFindIndex implements FindIndex {
 
     public SortedArrayFindIndex(int[] array) {
         this.values = array;
-        this.originalIndexes = IntStream.range(0, array.length).boxed().mapToInt(i -> i).toArray();
+        this.originalIndexes = IntStream.range(0, array.length).toArray();
         bubbleSort();
     }
 

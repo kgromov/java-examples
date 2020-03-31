@@ -14,7 +14,9 @@ public class BenchMarkRunner {
 //                .include(EnumBenchMark.class.getSimpleName())
 //                .include(PairIndexBenchMark.class.getSimpleName())
 //                .include(SingularFindIndexBenchMark.class.getSimpleName())
-                .include(PluralFindIndexBenchMark.class.getSimpleName())
+//                .include(PluralFindIndexBenchMark.class.getSimpleName())
+//                .include(IntBoxingBenchMark.class.getSimpleName())
+                .include(IntArrayBoxingBenchMark.class.getSimpleName())
                 .build();
 
         new Runner(opt).run();
