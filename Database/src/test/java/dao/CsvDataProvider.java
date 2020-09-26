@@ -8,6 +8,11 @@ import java.util.List;
 /**
  * Created by konstantin on 23.12.2017.
  */
+
+/**
+ * @Author  Konstantin
+ * @Created 23.12.2017
+ */
 public class CsvDataProvider {
 
     public static List<List<String>> getData(String csvFile, char delimiter) {
