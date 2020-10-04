@@ -16,7 +16,8 @@ public class BenchMarkRunner {
 //                .include(SingularFindIndexBenchMark.class.getSimpleName())
 //                .include(PluralFindIndexBenchMark.class.getSimpleName())
 //                .include(IntBoxingBenchMark.class.getSimpleName())
-                .include(IntArrayBoxingBenchMark.class.getSimpleName())
+//                .include(IntArrayBoxingBenchMark.class.getSimpleName())
+                .include(AddElementToTheEndBenchmark.class.getSimpleName())
                 .build();
 
         new Runner(opt).run();

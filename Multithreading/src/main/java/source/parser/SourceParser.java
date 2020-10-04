@@ -15,8 +15,17 @@ import java.util.List;
 public class SourceParser {
     public static void main(String[] args) {
         JavaProjectBuilder  builder = new JavaProjectBuilder();
-        File sourceDir = new File("D:\\workspace\\konstantin-examples");
+        File sourceDir = new File("D:\\course_materials\\Spring\\course\\spring-examples");
         builder.addSourceTree(sourceDir);
+
+        JavaClass controller = builder.getClassByName("guru.springframework.controllers.RecipeController");
+        List<JavaAnnotation> annotations = controller.getAnnotations();
+        List<BeanProperty> beans = controller.getBeanProperties();
+
+
+        JavaClass rdfDataChecker = builder.getClassByName("oracle.checker.RdfDataChecker");
+        List<JavaField> fields = rdfDataChecker.getFields();
+
         Collection<JavaClass> classes = builder.getClasses();
         Collection<JavaModule> modules = builder.getModules();
         Collection<JavaPackage> packages = builder.getPackages();
