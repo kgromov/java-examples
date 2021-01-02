@@ -5,13 +5,14 @@ import org.apache.poi.hssf.util.CellReference;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * implement the following examples:
@@ -21,7 +22,7 @@ import java.util.logging.Logger;
  */
 
 public class ExcelUtils {
-    private static final Logger log = Logger.getLogger(ExcelUtils.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExcelUtils.class);
     public static final String pathToBuild = "C:\\ProgramData\\JetBrains\\TeamCity\\system\\artifacts\\CdsAutomation\\Check what spot are framed our offer (Chrome_ 20 invocation)";
     //    public static final String pathToBuild = "C:\\Users\\kgr\\Desktop\\test\\builds";
 //    public static final String pathToWorkbook = "C:\\ProgramData\\JetBrains\\TeamCity\\system\\artifacts\\CdsAutomation\\report\\fluent_automation_report.xlsx";
@@ -36,7 +37,7 @@ public class ExcelUtils {
             FileOutputStream fileOut = new FileOutputStream(path);
             workbook.write(fileOut);
             fileOut.close();
-            log.info("Create workbook by path\t" + path);
+            LOGGER.info("Create workbook by path {}", path);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -55,7 +56,7 @@ public class ExcelUtils {
                 cell.setCellStyle(style);
             }
             writeToWorkbook(workbook, pathToWorkbook);
-            log.info(String.format("Create workbook sheet '%s'", sheetName));
+            LOGGER.info("Create workbook sheet '{}'", sheetName);
         }
     }
 
@@ -83,7 +84,7 @@ public class ExcelUtils {
             pict.resize();
             writeToWorkbook(workbook, pathToWorkbook);
         } catch (IOException e) {
-            log.info("Unable to set image to cell cause\n" + e.getMessage());
+            LOGGER.error("Unable to set image to cell cause\n", e.getMessage());
         }
     }
 
@@ -146,7 +147,7 @@ public class ExcelUtils {
             FileOutputStream fileOut = new FileOutputStream(pathToWorkbook);
             workbook.write(fileOut);
             fileOut.close();
-            log.info("Append data to workbook\t" + pathToWorkbook);
+            LOGGER.info("Append data to workbook\t{}", pathToWorkbook);
         } catch (IOException e) {
             throw new Error("Unable to save changes to workbook\n" + e.getMessage());
         }
