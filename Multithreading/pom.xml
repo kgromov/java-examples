@@ -41,5 +41,9 @@
             <artifactId>lombok</artifactId>
             <!--<scope>runtime</scope>-->
         </dependency>
+        <dependency>
+            <groupId>classmexer</groupId>
+            <artifactId>classmexer</artifactId>
+        </dependency>
     </dependencies>
 </project>

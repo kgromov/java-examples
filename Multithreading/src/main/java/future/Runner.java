@@ -1,6 +1,9 @@
 package future;
 
+import com.javamex.classmexer.MemoryUtil;
+
 import java.nio.file.Paths;
+import java.util.Vector;
 
 /**
  * Created by konstantin on 04.04.2021.
@@ -18,6 +21,11 @@ public class Runner {
         Waiter waiter = new ParallelStreamWaiter();
         waiter.process();
         waiter = new CompletableFutureWaiter();
+        long usedBytes = MemoryUtil.memoryUsageOf(waiter);
+        long objectInBytes = MemoryUtil.memoryUsageOf(new Object());
+        long booleanInBytes = MemoryUtil.memoryUsageOf(true); // 16 bytes - the same as object
+        // old empty collection Vector has overhead of 88 bytes (ArrayList = 40 bytes)
+        long booleanWrapperInBytes = MemoryUtil.deepMemoryUsageOf(new Vector<String>());
         waiter.process();
     }
 }
